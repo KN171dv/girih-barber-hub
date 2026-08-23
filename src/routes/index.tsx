@@ -8,10 +8,11 @@ import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
+import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
-import { useMedia, useServices, useSiteSettings } from "@/lib/site-content";
+import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
@@ -73,6 +74,8 @@ function Home() {
   const { data: settings } = useSiteSettings();
   const { data: services = [] } = useServices();
   const { data: gallery = [] } = useMedia("galeria");
+  const { data: barbers = [] } = useBarbers();
+  const { data: media = [] } = useMedia();
 
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
@@ -260,6 +263,31 @@ function Home() {
             <Button asChild variant="outlineGold">
               <Link to="/servicos">Ver todos os serviços</Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* BARBEIROS */}
+      <section id="barbeiros" className="scroll-mt-24 py-24">
+        <div className="mx-auto max-w-6xl px-4">
+          <SectionLabel
+            index="03"
+            eyebrow="Equipe"
+            title="NOSSOS BARBEIROS"
+            description="Quatro profissionais, quatro estilos. Veja os trabalhos e agende com quem combina com você."
+          />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {barbers.map((barber) => (
+              <Reveal key={barber.id}>
+                <BarberCard
+                  barber={barber}
+                  works={media.filter((item) => item.barber_id === barber.id && item.is_active)}
+                />
+              </Reveal>
+            ))}
+            {barbers.length === 0 && (
+              <EditableHint>Barbeiros a cadastrar no painel administrativo</EditableHint>
+            )}
           </div>
         </div>
       </section>

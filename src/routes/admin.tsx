@@ -262,6 +262,7 @@ function AdminPage() {
             <RecordEditor
               table="barbers"
               title="Barbeiros"
+              description="Cada barbeiro tem nome, foto de perfil, especialidades, descrição e WhatsApp próprios. A galeria de trabalhos é cadastrada na aba Mídias, vinculando o ID do barbeiro."
               rows={barbers as unknown as Record<string, unknown>[]}
               fields={[
                 { name: "name", label: "Nome", type: "text" },

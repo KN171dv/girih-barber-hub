@@ -27,6 +27,7 @@ export const Route = createFileRoute("/barbeiros/")({
 
 function BarbersPage() {
   const { data: barbers = [] } = useBarbers();
+  const { data: media = [] } = useMedia();
 
   return (
     <SiteLayout>
@@ -38,7 +39,11 @@ function BarbersPage() {
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {barbers.map((barber) => (
-            <BarberCard key={barber.id} barber={barber} />
+            <BarberCard
+              key={barber.id}
+              barber={barber}
+              works={media.filter((item) => item.barber_id === barber.id && item.is_active)}
+            />
           ))}
           {barbers.length === 0 && (
             <EditableHint>Barbeiros a cadastrar no painel administrativo</EditableHint>

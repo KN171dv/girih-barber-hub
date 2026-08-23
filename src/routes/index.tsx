@@ -11,6 +11,7 @@ import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
+import { VirtualTour } from "@/components/site/VirtualTour";
 import { useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BarbeirosRouteImport } from './routes/barbeiros'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,34 +29,41 @@ const ServicosRoute = ServicosRouteImport.update({
   path: '/servicos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BarbeirosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/barbeiros': typeof BarbeirosRoute
+  '/barbeiros': typeof BarbeirosRouteWithChildren
   '/servicos': typeof ServicosRoute
+  '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/barbeiros': typeof BarbeirosRoute
   '/servicos': typeof ServicosRoute
+  '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/barbeiros': typeof BarbeirosRoute
+  '/barbeiros': typeof BarbeirosRouteWithChildren
   '/servicos': typeof ServicosRoute
+  '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/barbeiros' | '/servicos'
+  fullPaths: '/' | '/barbeiros' | '/servicos' | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/barbeiros' | '/servicos'
-  id: '__root__' | '/' | '/barbeiros' | '/servicos'
+  to: '/' | '/servicos' | '/barbeiros'
+  id: '__root__' | '/' | '/barbeiros' | '/servicos' | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BarbeirosRoute: typeof BarbeirosRoute
+  BarbeirosRoute: typeof BarbeirosRouteWithChildren
   ServicosRoute: typeof ServicosRoute
 }
 
@@ -82,12 +90,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/barbeiros/': {
+      id: '/barbeiros/'
+      path: '/'
+      fullPath: '/barbeiros/'
+      preLoaderRoute: typeof BarbeirosIndexRouteImport
+      parentRoute: typeof BarbeirosRoute
+    }
   }
 }
 
+interface BarbeirosRouteChildren {
+  BarbeirosIndexRoute: typeof BarbeirosIndexRoute
+}
+
+const BarbeirosRouteChildren: BarbeirosRouteChildren = {
+  BarbeirosIndexRoute: BarbeirosIndexRoute,
+}
+
+const BarbeirosRouteWithChildren = BarbeirosRoute._addFileChildren(
+  BarbeirosRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BarbeirosRoute: BarbeirosRoute,
+  BarbeirosRoute: BarbeirosRouteWithChildren,
   ServicosRoute: ServicosRoute,
 }
 export const routeTree = rootRouteImport

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BarbeirosRouteImport } from './routes/barbeiros'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
+import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,16 +35,23 @@ const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
   path: '/',
   getParentRoute: () => BarbeirosRoute,
 } as any)
+const BarbeirosSlugRoute = BarbeirosSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BarbeirosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
@@ -51,14 +59,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/barbeiros' | '/servicos' | '/barbeiros/'
+  fullPaths:
+    '/' | '/barbeiros' | '/servicos' | '/barbeiros/$slug' | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/servicos' | '/barbeiros'
-  id: '__root__' | '/' | '/barbeiros' | '/servicos' | '/barbeiros/'
+  to: '/' | '/servicos' | '/barbeiros/$slug' | '/barbeiros'
+  id:
+    | '__root__'
+    | '/'
+    | '/barbeiros'
+    | '/servicos'
+    | '/barbeiros/$slug'
+    | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,14 +113,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BarbeirosIndexRouteImport
       parentRoute: typeof BarbeirosRoute
     }
+    '/barbeiros/$slug': {
+      id: '/barbeiros/$slug'
+      path: '/$slug'
+      fullPath: '/barbeiros/$slug'
+      preLoaderRoute: typeof BarbeirosSlugRouteImport
+      parentRoute: typeof BarbeirosRoute
+    }
   }
 }
 
 interface BarbeirosRouteChildren {
+  BarbeirosSlugRoute: typeof BarbeirosSlugRoute
   BarbeirosIndexRoute: typeof BarbeirosIndexRoute
 }
 
 const BarbeirosRouteChildren: BarbeirosRouteChildren = {
+  BarbeirosSlugRoute: BarbeirosSlugRoute,
   BarbeirosIndexRoute: BarbeirosIndexRoute,
 }
 

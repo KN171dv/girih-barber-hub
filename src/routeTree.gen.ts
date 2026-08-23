@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BarbeirosRouteImport } from './routes/barbeiros'
 import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as LocalizacaoRouteImport } from './routes/localizacao'
+import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
@@ -36,6 +37,11 @@ const EntrarRoute = EntrarRouteImport.update({
 const LocalizacaoRoute = LocalizacaoRouteImport.update({
   id: '/localizacao',
   path: '/localizacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaContaRoute = MinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanosRoute = PlanosRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/barbeiros'
     | '/entrar'
     | '/localizacao'
+    | '/minha-conta'
     | '/planos'
     | '/servicos'
     | '/barbeiros/$slug'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/entrar'
     | '/localizacao'
+    | '/minha-conta'
     | '/planos'
     | '/servicos'
     | '/barbeiros/$slug'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/barbeiros'
     | '/entrar'
     | '/localizacao'
+    | '/minha-conta'
     | '/planos'
     | '/servicos'
     | '/barbeiros/$slug'
@@ -126,6 +138,7 @@ export interface RootRouteChildren {
   BarbeirosRoute: typeof BarbeirosRouteWithChildren
   EntrarRoute: typeof EntrarRoute
   LocalizacaoRoute: typeof LocalizacaoRoute
+  MinhaContaRoute: typeof MinhaContaRoute
   PlanosRoute: typeof PlanosRoute
   ServicosRoute: typeof ServicosRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       path: '/localizacao'
       fullPath: '/localizacao'
       preLoaderRoute: typeof LocalizacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-conta': {
+      id: '/minha-conta'
+      path: '/minha-conta'
+      fullPath: '/minha-conta'
+      preLoaderRoute: typeof MinhaContaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planos': {
@@ -210,6 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   BarbeirosRoute: BarbeirosRouteWithChildren,
   EntrarRoute: EntrarRoute,
   LocalizacaoRoute: LocalizacaoRoute,
+  MinhaContaRoute: MinhaContaRoute,
   PlanosRoute: PlanosRoute,
   ServicosRoute: ServicosRoute,
 }

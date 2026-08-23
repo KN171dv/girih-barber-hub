@@ -8,10 +8,11 @@ import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
+import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
-import { useMedia, useServices, useSiteSettings } from "@/lib/site-content";
+import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
@@ -73,6 +74,8 @@ function Home() {
   const { data: settings } = useSiteSettings();
   const { data: services = [] } = useServices();
   const { data: gallery = [] } = useMedia("galeria");
+  const { data: barbers = [] } = useBarbers();
+  const { data: media = [] } = useMedia();
 
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;

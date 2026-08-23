@@ -249,45 +249,18 @@ function Home() {
       {/* LOCALIZAÇÃO */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading eyebrow="Onde estamos" title="Rio das Ostras, RJ" />
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="surface-card space-y-4 p-6">
-            <p className="flex gap-2 text-muted-foreground">
-              <MapPin className="mt-1 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-              {location?.address || <EditableHint>Endereço a cadastrar</EditableHint>}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild variant="gold" disabled={!location?.directions_url}>
-                <a
-                  href={location?.directions_url || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Navigation aria-hidden="true" /> Traçar rota
-                </a>
-              </Button>
-              <Button asChild variant="outlineGold">
-                <Link to="/localizacao">
-                  <Play aria-hidden="true" /> Mais detalhes
-                </Link>
-              </Button>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-border">
-            {location?.map_embed_url ? (
-              <iframe
-                src={location.map_embed_url}
-                title="Mapa da Girih Barbearia"
-                loading="lazy"
-                className="h-[320px] w-full"
-              />
-            ) : (
-              <div className="flex h-[320px] items-center justify-center bg-surface/60">
-                <EditableHint>Mapa a cadastrar no painel</EditableHint>
-              </div>
-            )}
-          </div>
+        <div className="mt-8">
+          <MapSection />
+        </div>
+        <div className="mt-6">
+          <Button asChild variant="outlineGold">
+            <Link to="/localizacao">Mais detalhes da localização</Link>
+          </Button>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FaqSection />
     </SiteLayout>
   );
 }

@@ -126,6 +126,9 @@ function Home() {
         </div>
       </section>
 
+      {/* EXPERIÊNCIA */}
+      <ExperienceSection />
+
       {/* SERVIÇOS */}
       <section className="border-y border-border/60 bg-surface/30 py-20">
         <div className="mx-auto max-w-6xl px-4">

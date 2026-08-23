@@ -11,6 +11,7 @@ const NAV = [
   { hash: "", label: "Início" },
   { hash: "barbearia", label: "A Barbearia" },
   { hash: "servicos", label: "Serviços" },
+  { hash: "barbeiros", label: "Barbeiros" },
   { hash: "galeria", label: "Galeria" },
   { hash: "contato", label: "Contato" },
 ] as const;

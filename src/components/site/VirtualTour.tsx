@@ -23,55 +23,55 @@ export function VirtualTour({ index = "05" }: { index?: string }) {
   );
 
   return (
-    <section
-      id="espaco"
-      className="scroll-mt-24 border-y border-border/60 bg-surface/30 py-24"
-    >
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.35fr] lg:items-center">
-          <Reveal>
-            <SectionLabel
-              index={index}
-              eyebrow="Visita virtual"
-              title={
-                <>
-                  CONHEÇA NOSSO <span className="text-gradient-gold">ESPAÇO</span>
-                </>
-              }
-              description="Arraste para girar o panorama 360° e percorra a barbearia antes mesmo de chegar: o lounge de espera, o ambiente climatizado e as cadeiras de atendimento."
-            />
-            {externalUrl && (
-              <div className="mt-8">
-                <Button asChild variant="outlineGold">
-                  <a href={externalUrl} target="_blank" rel="noreferrer">
-                    <Maximize2 aria-hidden="true" /> Abrir em tela cheia
-                  </a>
-                </Button>
-              </div>
-            )}
-          </Reveal>
+    <section id="espaco" className="scroll-mt-24 border-y border-border/60 bg-surface/30">
+      <div className="mx-auto max-w-6xl px-4 pt-24 pb-10">
+        <Reveal>
+          <SectionLabel
+            index={index}
+            eyebrow="Visita virtual"
+            title={
+              <>
+                CONHEÇA NOSSO <span className="text-gradient-gold">ESPAÇO</span>
+              </>
+            }
+            description="Arraste para girar o panorama 360° e percorra a barbearia antes mesmo de chegar."
+            align="center"
+          />
+        </Reveal>
+      </div>
 
-          <Reveal delay={120}>
-            <div className="overflow-hidden rounded-2xl border border-border shadow-elegant">
-              {embedUrl ? (
-                <iframe
-                  src={embedUrl}
-                  title="Panorama 360° da Gireh Barber Shop"
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="h-[320px] w-full sm:h-[440px]"
-                />
-              ) : (
-                <div className="flex h-[320px] flex-col items-center justify-center gap-3 bg-background/60 text-center">
-                  <Compass className="h-8 w-8 text-primary" aria-hidden="true" />
-                  <EditableHint>Link do panorama 360° a cadastrar no painel</EditableHint>
+      <Reveal delay={120}>
+        <div className="relative w-full">
+          {embedUrl ? (
+            <>
+              <iframe
+                src={embedUrl}
+                title="Panorama 360° da Gireh Barber Shop"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                className="block h-[70vh] min-h-[420px] w-full border-y border-border"
+              />
+              {externalUrl && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-6">
+                  <Button asChild variant="outlineGold" className="pointer-events-auto backdrop-blur">
+                    <a href={externalUrl} target="_blank" rel="noreferrer">
+                      <Maximize2 aria-hidden="true" /> Abrir em tela cheia
+                    </a>
+                  </Button>
                 </div>
               )}
+            </>
+          ) : (
+            <div className="flex h-[420px] flex-col items-center justify-center gap-3 border-y border-border bg-background/60 text-center">
+              <Compass className="h-8 w-8 text-primary" aria-hidden="true" />
+              <EditableHint>Link do panorama 360° a cadastrar no painel</EditableHint>
             </div>
-          </Reveal>
+          )}
         </div>
-      </div>
+      </Reveal>
+      <div className="h-14" />
     </section>
   );
 }
+

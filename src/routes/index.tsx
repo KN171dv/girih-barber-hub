@@ -309,11 +309,14 @@ function Home() {
         </div>
       </section>
 
+      {/* CONHEÇA NOSSO ESPAÇO — PANORAMA 360° */}
+      <VirtualTour index="05" />
+
       {/* LOCALIZAÇÃO / CONTATO */}
       <section id="contato" className="scroll-mt-24 py-24">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="05"
+            index="06"
             eyebrow="Contato"
             title="VENHA NOS VISITAR"
             description={

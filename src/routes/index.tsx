@@ -96,6 +96,9 @@ function Home() {
         </div>
       </section>
 
+      {/* FAIXA DE INFORMAÇÕES */}
+      <InfoStrip />
+
       {/* SOBRE */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">

@@ -1,4 +1,4 @@
-const BRAND = "Girih Barbearia";
+const BRAND = "Gireh Barber";
 
 export function onlyDigits(value: string | null | undefined) {
   return (value ?? "").replace(/\D/g, "");

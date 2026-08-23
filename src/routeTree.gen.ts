@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BarbeirosRouteImport } from './routes/barbeiros'
 import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as LocalizacaoRouteImport } from './routes/localizacao'
@@ -22,6 +23,11 @@ import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BarbeirosRoute = BarbeirosRouteImport.update({
@@ -67,6 +73,7 @@ const BarbeirosSlugRoute = BarbeirosSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -89,6 +97,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
@@ -102,6 +111,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/barbeiros'
     | '/entrar'
     | '/localizacao'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/entrar'
     | '/localizacao'
     | '/minha-conta'
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/barbeiros'
     | '/entrar'
     | '/localizacao'
@@ -135,6 +147,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   BarbeirosRoute: typeof BarbeirosRouteWithChildren
   EntrarRoute: typeof EntrarRoute
   LocalizacaoRoute: typeof LocalizacaoRoute
@@ -150,6 +163,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/barbeiros': {
@@ -227,6 +247,7 @@ const BarbeirosRouteWithChildren = BarbeirosRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   BarbeirosRoute: BarbeirosRouteWithChildren,
   EntrarRoute: EntrarRoute,
   LocalizacaoRoute: LocalizacaoRoute,

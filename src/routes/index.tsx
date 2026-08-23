@@ -1,34 +1,68 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Instagram, MessageCircle, Navigation, MapPin, Clock, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { SectionHeading } from "@/components/site/SectionHeading";
+import { SectionLabel } from "@/components/site/SectionLabel";
+import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
 import { ServiceCard } from "@/components/site/ServiceCard";
-import { BarberCard } from "@/components/site/BarberCard";
-import { PlanCard } from "@/components/site/PlanCard";
+import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
-import { InfoStrip } from "@/components/site/InfoStrip";
 import { FaqSection } from "@/components/site/FaqSection";
-import { VirtualTour } from "@/components/site/VirtualTour";
 import { MapSection } from "@/components/site/MapSection";
-import { useBarbers, useMedia, usePlans, useServices, useSiteSettings } from "@/lib/site-content";
+import { useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
-import heroImage from "@/assets/placeholder-hero.jpg";
+
+const PHOTOS = {
+  facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
+  bench: "/__l5e/assets-v1/5b54da88-7296-4cbd-8478-fcc2b61c675d/image-2.png",
+  salon: "/__l5e/assets-v1/054af43b-54a3-4b87-825f-54908cbcc4aa/image-3.png",
+  cut1: "/__l5e/assets-v1/9f074a80-73db-4814-96bd-b737d0023bff/image-4.png",
+  cut2: "/__l5e/assets-v1/58f19a46-f10a-4f4c-8d12-fe410b9c2369/image-5.png",
+  cut3: "/__l5e/assets-v1/9482cdef-33b6-479c-b409-abc1c811950f/image-6.png",
+  facadeDay: "/__l5e/assets-v1/f5716d88-2e85-41de-8470-d7e809ca9e0c/image-7.png",
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Girih Barbearia — Barbearia premium em Rio das Ostras, RJ" },
+      { title: "Gireh Barber Shop — Barbearia em Rio das Ostras, RJ" },
       {
         name: "description",
         content:
-          "Girih Barbearia em Rio das Ostras (RJ): cortes, barba e cuidados masculinos com atendimento de alto padrão. Agende pelo WhatsApp.",
+          "Barbearia em Rio das Ostras (RJ): cortes, barba e acabamento com atendimento de alto padrão na Gireh Barber Shop. Agende seu horário pelo WhatsApp.",
       },
-      { property: "og:title", content: "Girih Barbearia — Rio das Ostras, RJ" },
+      { property: "og:title", content: "Gireh Barber Shop — Barbearia em Rio das Ostras, RJ" },
       {
         property: "og:description",
-        content: "Experiência premium em corte, barba e cuidados masculinos em Rio das Ostras.",
+        content:
+          "Seu estilo, sua identidade. Barbearia masculina de alto padrão em Rio das Ostras — RJ.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "HairSalon",
+          name: "Gireh Barber Shop",
+          description: "Barbearia masculina em Rio das Ostras, RJ.",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Alameda Campomar, 49",
+            addressLocality: "Rio das Ostras",
+            addressRegion: "RJ",
+            addressCountry: "BR",
+          },
+          geo: { "@type": "GeoCoordinates", latitude: -22.5573108, longitude: -41.9796738 },
+          telephone: "+5522998367510",
+          sameAs: ["https://www.instagram.com/girehbarber/"],
+        }),
       },
     ],
   }),
@@ -38,91 +72,165 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { data: settings } = useSiteSettings();
   const { data: services = [] } = useServices();
-  const { data: barbers = [] } = useBarbers();
-  const { data: plans = [] } = usePlans();
   const { data: gallery = [] } = useMedia("galeria");
 
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
+  const contact = settings?.contact;
+  const hours = settings?.hours.items ?? [];
+
+  const photos =
+    gallery.length > 0
+      ? gallery
+          .filter((item) => item.media_type !== "video")
+          .map((item) => ({ url: item.url, title: item.title || "Gireh Barber Shop" }))
+      : [
+          { url: PHOTOS.facadeDay, title: "Fachada" },
+          { url: PHOTOS.salon, title: "Salão" },
+          { url: PHOTOS.cut2, title: "Atendimento" },
+          { url: PHOTOS.bench, title: "Bancada" },
+        ];
 
   return (
     <SiteLayout>
       {/* HERO */}
-      <section className="relative isolate overflow-hidden">
-        {settings?.brand.hero_media_url ? (
-          <img
-            src={settings.brand.hero_media_url}
-            alt=""
-            className="absolute inset-0 -z-10 h-full w-full object-cover"
-          />
-        ) : (
-          <img
-            src={heroImage}
-            alt=""
-            width={1600}
-            height={1008}
-            className="absolute inset-0 -z-10 h-full w-full object-cover"
-          />
-        )}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/70 via-background/80 to-background" />
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-24 sm:py-36">
+      <section className="relative isolate flex min-h-[92vh] items-end overflow-hidden">
+        <img
+          src={settings?.brand.hero_media_url || PHOTOS.facadeNight}
+          alt="Fachada da Gireh Barber Shop em Rio das Ostras"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/80 to-background/45" />
+        <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:pb-28">
           <p className="eyebrow fade-up">Rio das Ostras · RJ</p>
-          <h1 className="fade-up max-w-3xl text-5xl leading-[0.95] sm:text-7xl">
+          <h1 className="fade-up mt-4 max-w-4xl text-[2.9rem] leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
             {settings?.brand.hero_title || (
               <>
-                <span className="text-gradient-gold">Girih Barbearia</span>
-                <br /> tradição, precisão e cuidado masculino
+                SEU ESTILO.
+                <br />
+                <span className="text-gradient-gold">SUA IDENTIDADE.</span>
               </>
             )}
           </h1>
-          <p className="fade-up max-w-xl text-lg text-muted-foreground">
-            {settings?.brand.hero_subtitle || (
-              <EditableHint>Texto de destaque editável no painel administrativo</EditableHint>
-            )}
+          <p className="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {settings?.brand.hero_subtitle ||
+              "Mais do que um corte. Uma experiência feita para quem valoriza estilo, presença e cuidado."}
           </p>
-          <div className="fade-up flex flex-wrap gap-3">
-            <Button asChild variant="gold" size="xl" disabled={!wa}>
-              <a href={wa ?? "#"} target="_blank" rel="noreferrer">
-                Agendar agora
-              </a>
-            </Button>
+          <div className="fade-up mt-9 flex flex-wrap gap-3">
+            {wa && (
+              <Button asChild variant="gold" size="xl">
+                <a href={wa} target="_blank" rel="noreferrer">
+                  <MessageCircle aria-hidden="true" /> Agendar no WhatsApp
+                </a>
+              </Button>
+            )}
             <Button asChild variant="outlineGold" size="xl">
-              <Link to="/barbeiros">Conheça os barbeiros</Link>
-            </Button>
-            <Button asChild variant="ghost" size="xl">
-              <Link to="/planos">Ver planos</Link>
+              <Link to="/" hash="barbearia">
+                Conhecer a Barbearia
+              </Link>
             </Button>
           </div>
         </div>
       </section>
 
       {/* FAIXA DE INFORMAÇÕES */}
-      <InfoStrip />
-
-      {/* SOBRE */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <SectionHeading
-            eyebrow="A barbearia"
-            title={settings?.brand.about_title || "Um espaço feito para o seu tempo"}
-            description={
-              settings?.brand.about_text || (
-                <EditableHint>
-                  Apresentação da barbearia a ser preenchida no painel administrativo.
-                </EditableHint>
-              )
-            }
-          />
-          <div className="surface-card overflow-hidden">
-            <img
-              src={heroImage}
-              alt="Ambiente da Girih Barbearia"
-              loading="lazy"
-              width={1600}
-              height={1008}
-              className="h-full w-full object-cover"
-            />
+      <section className="border-y border-primary/20 bg-surface/40">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-3 md:items-center">
+          <div className="flex min-w-0 gap-3">
+            <MapPin className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="eyebrow">Onde estamos</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {location?.address
+                  ? `${location.address} — ${location.city}/${location.state}`
+                  : <EditableHint>Endereço a cadastrar</EditableHint>}
+              </p>
+            </div>
           </div>
+          <div className="flex min-w-0 gap-3">
+            <Clock className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="eyebrow">Horários</p>
+              <ul className="mt-1 space-y-0.5 text-sm text-muted-foreground">
+                {hours.length === 0 && (
+                  <li>
+                    <EditableHint>Horários a cadastrar</EditableHint>
+                  </li>
+                )}
+                {hours.map((item, index) => (
+                  <li key={`${item.day}-${index}`}>
+                    {item.day}: <span className="text-foreground">{item.hours}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="md:justify-self-end">
+            {location?.directions_url && (
+              <Button asChild variant="outlineGold" size="lg">
+                <a href={location.directions_url} target="_blank" rel="noreferrer">
+                  <Navigation aria-hidden="true" /> Como chegar
+                </a>
+              </Button>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* A BARBEARIA */}
+      <section id="barbearia" className="scroll-mt-24 py-24">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+          <Reveal className="relative">
+            <div className="overflow-hidden rounded-2xl border border-border/70">
+              <img
+                src={PHOTOS.salon}
+                alt="Salão interno da Gireh Barber Shop"
+                loading="lazy"
+                className="h-[340px] w-full object-cover sm:h-[460px]"
+              />
+            </div>
+            <div className="absolute -bottom-10 right-2 hidden w-52 overflow-hidden rounded-2xl border border-primary/30 shadow-elegant sm:block lg:-right-8 lg:w-64">
+              <img
+                src={PHOTOS.bench}
+                alt="Bancada de trabalho da barbearia"
+                loading="lazy"
+                className="h-40 w-full object-cover lg:h-48"
+              />
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <SectionLabel
+              index="01"
+              eyebrow="A Barbearia"
+              title={settings?.brand.about_title || "TRADIÇÃO E PRECISÃO EM CADA DETALHE"}
+              description={
+                settings?.brand.about_text ||
+                "Na Gireh Barber, cada detalhe importa. Do ambiente ao acabamento final, nossa proposta é proporcionar uma experiência completa para quem busca cuidar do visual com estilo e personalidade."
+              }
+            />
+            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border/60 pt-8">
+              <div>
+                <dt className="eyebrow">Ambiente</dt>
+                <dd className="mt-1 text-sm text-muted-foreground">
+                  Climatizado, com som ambiente e lounge de espera.
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow">Atendimento</dt>
+                <dd className="mt-1 text-sm text-muted-foreground">
+                  Profissionais atentos ao acabamento e ao seu tempo.
+                </dd>
+              </div>
+            </dl>
+            {wa && (
+              <Button asChild variant="gold" className="mt-8">
+                <a href={wa} target="_blank" rel="noreferrer">
+                  Agendar horário <ArrowRight aria-hidden="true" />
+                </a>
+              </Button>
+            )}
+          </Reveal>
         </div>
       </section>
 
@@ -130,28 +238,25 @@ function Home() {
       <ExperienceSection />
 
       {/* SERVIÇOS */}
-      <section className="border-y border-border/60 bg-surface/30 py-20">
+      <section id="servicos" className="scroll-mt-24 border-y border-border/60 bg-surface/30 py-24">
         <div className="mx-auto max-w-6xl px-4">
-          <SectionHeading
+          <SectionLabel
+            index="02"
             eyebrow="Serviços"
-            title="Cortes, barba e cuidados"
-            description="Cada serviço com foto, descrição, duração e valor — tudo editável no painel."
+            title="CORTE, BARBA E ACABAMENTO"
+            description="Serviços e valores mantidos pela barbearia — atualizados diretamente no painel administrativo."
           />
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.slice(0, 3).map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                fallbackWhatsapp={settings?.contact.whatsapp}
-              />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => (
+              <Reveal key={service.id}>
+                <ServiceCard service={service} fallbackWhatsapp={contact?.whatsapp} />
+              </Reveal>
             ))}
             {services.length === 0 && (
-              <p className="text-muted-foreground">
-                <EditableHint>Nenhum serviço cadastrado ainda.</EditableHint>
-              </p>
+              <EditableHint>Serviços a cadastrar no painel administrativo</EditableHint>
             )}
           </div>
-          <div className="mt-8">
+          <div className="mt-10">
             <Button asChild variant="outlineGold">
               <Link to="/servicos">Ver todos os serviços</Link>
             </Button>
@@ -159,87 +264,83 @@ function Home() {
         </div>
       </section>
 
-      {/* BARBEIROS */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading eyebrow="Equipe" title="Nossos barbeiros" />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {barbers.map((barber) => (
-            <BarberCard key={barber.id} barber={barber} />
+      {/* GALERIA */}
+      <section id="galeria" className="scroll-mt-24 py-24">
+        <div className="mx-auto max-w-6xl px-4">
+          <SectionLabel
+            index="03"
+            eyebrow="Galeria"
+            title="O ESPAÇO E O TRABALHO"
+            description="Fotos reais da barbearia, do ambiente e do dia a dia no atendimento."
+          />
+          <Reveal className="mt-12">
+            <GalleryGrid photos={photos} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* INSTAGRAM */}
+      <section className="border-y border-border/60 bg-surface/30 py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="min-w-0">
+            <SectionLabel index="04" eyebrow="Instagram" title="ACOMPANHE @GIREHBARBER" />
+            <p className="mt-4 max-w-xl text-muted-foreground">
+              Novidades, cortes do dia e bastidores da barbearia direto no nosso perfil.
+            </p>
+          </div>
+          {contact?.instagram && (
+            <Button asChild variant="gold" size="xl">
+              <a href={contact.instagram} target="_blank" rel="noreferrer">
+                <Instagram aria-hidden="true" /> Seguir no Instagram
+              </a>
+            </Button>
+          )}
+        </div>
+        <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
+          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src) => (
+            <img
+              key={src}
+              src={src}
+              alt="Publicação da Gireh Barber Shop"
+              loading="lazy"
+              className="aspect-square w-full rounded-xl border border-border/70 object-cover"
+            />
           ))}
         </div>
       </section>
 
-      {/* GALERIA */}
-      <section className="border-y border-border/60 bg-surface/30 py-20">
+      {/* LOCALIZAÇÃO / CONTATO */}
+      <section id="contato" className="scroll-mt-24 py-24">
         <div className="mx-auto max-w-6xl px-4">
-          <SectionHeading
-            eyebrow="Galeria"
-            title="Fotos e vídeos"
-            description="Espaço reservado para as mídias reais da barbearia."
+          <SectionLabel
+            index="05"
+            eyebrow="Contato"
+            title="VENHA NOS VISITAR"
+            description={
+              location?.address
+                ? `${location.address} — ${location.city}/${location.state}`
+                : "Endereço a cadastrar no painel administrativo."
+            }
           />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {gallery.length === 0 && (
-              <div className="surface-card flex h-56 items-center justify-center p-6 text-center">
-                <EditableHint>Envie fotos e vídeos pelo painel administrativo</EditableHint>
-              </div>
+          <div id="localizacao" className="mt-10 scroll-mt-24">
+            <MapSection />
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {wa && (
+              <Button asChild variant="gold" size="lg">
+                <a href={wa} target="_blank" rel="noreferrer">
+                  <MessageCircle aria-hidden="true" /> Falar no WhatsApp
+                </a>
+              </Button>
             )}
-            {gallery.map((item) =>
-              item.media_type === "video" ? (
-                <video
-                  key={item.id}
-                  src={item.url}
-                  poster={item.thumbnail_url || undefined}
-                  controls
-                  preload="none"
-                  className="h-56 w-full rounded-xl border border-border object-cover"
-                />
-              ) : (
-                <img
-                  key={item.id}
-                  src={item.url}
-                  alt={item.title || "Foto da Girih Barbearia"}
-                  loading="lazy"
-                  className="h-56 w-full rounded-xl border border-border object-cover"
-                />
-              ),
+            {location?.directions_url && (
+              <Button asChild variant="outlineGold" size="lg">
+                <a href={location.directions_url} target="_blank" rel="noreferrer">
+                  <Navigation aria-hidden="true" /> Traçar rota
+                </a>
+              </Button>
             )}
           </div>
-        </div>
-      </section>
-
-      {/* 360 */}
-      <VirtualTour />
-
-      {/* PLANOS */}
-      <section className="border-y border-border/60 bg-surface/30 py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <SectionHeading eyebrow="Assinaturas" title="Planos mensais" />
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {plans.slice(0, 3).map((plan) => (
-              <PlanCard key={plan.id} plan={plan} />
-            ))}
-            {plans.length === 0 && (
-              <EditableHint>Planos a cadastrar no painel administrativo</EditableHint>
-            )}
-          </div>
-          <div className="mt-8">
-            <Button asChild variant="gold">
-              <Link to="/planos">Ver planos e assinar</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* LOCALIZAÇÃO */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading eyebrow="Onde estamos" title="Rio das Ostras, RJ" />
-        <div className="mt-8">
-          <MapSection />
-        </div>
-        <div className="mt-6">
-          <Button asChild variant="outlineGold">
-            <Link to="/localizacao">Mais detalhes da localização</Link>
-          </Button>
         </div>
       </section>
 

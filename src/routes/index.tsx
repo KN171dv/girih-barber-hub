@@ -264,6 +264,31 @@ function Home() {
         </div>
       </section>
 
+      {/* BARBEIROS */}
+      <section id="barbeiros" className="scroll-mt-24 py-24">
+        <div className="mx-auto max-w-6xl px-4">
+          <SectionLabel
+            index="03"
+            eyebrow="Equipe"
+            title="NOSSOS BARBEIROS"
+            description="Quatro profissionais, quatro estilos. Veja os trabalhos e agende com quem combina com você."
+          />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {barbers.map((barber) => (
+              <Reveal key={barber.id}>
+                <BarberCard
+                  barber={barber}
+                  works={media.filter((item) => item.barber_id === barber.id && item.is_active)}
+                />
+              </Reveal>
+            ))}
+            {barbers.length === 0 && (
+              <EditableHint>Barbeiros a cadastrar no painel administrativo</EditableHint>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* GALERIA */}
       <section id="galeria" className="scroll-mt-24 py-24">
         <div className="mx-auto max-w-6xl px-4">

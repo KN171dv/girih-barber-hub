@@ -14,16 +14,442 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      barbers: {
+        Row: {
+          bio: string
+          created_at: string
+          id: string
+          instagram: string
+          is_active: boolean
+          name: string
+          photo_url: string
+          role_title: string
+          slug: string
+          sort_order: number
+          specialties: string[]
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          bio?: string
+          created_at?: string
+          id?: string
+          instagram?: string
+          is_active?: boolean
+          name?: string
+          photo_url?: string
+          role_title?: string
+          slug: string
+          sort_order?: number
+          specialties?: string[]
+          updated_at?: string
+          whatsapp?: string
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          id?: string
+          instagram?: string
+          is_active?: boolean
+          name?: string
+          photo_url?: string
+          role_title?: string
+          slug?: string
+          sort_order?: number
+          specialties?: string[]
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      credit_usages: {
+        Row: {
+          barber_id: string | null
+          credits: number
+          id: string
+          notes: string
+          service_id: string | null
+          subscription_id: string
+          used_at: string
+        }
+        Insert: {
+          barber_id?: string | null
+          credits?: number
+          id?: string
+          notes?: string
+          service_id?: string | null
+          subscription_id: string
+          used_at?: string
+        }
+        Update: {
+          barber_id?: string | null
+          credits?: number
+          id?: string
+          notes?: string
+          service_id?: string | null
+          subscription_id?: string
+          used_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_usages_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_usages_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_usages_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_items: {
+        Row: {
+          barber_id: string | null
+          caption: string
+          collection: string
+          created_at: string
+          id: string
+          is_active: boolean
+          media_type: string
+          sort_order: number
+          thumbnail_url: string
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          barber_id?: string | null
+          caption?: string
+          collection?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          sort_order?: number
+          thumbnail_url?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Update: {
+          barber_id?: string | null
+          caption?: string
+          collection?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          sort_order?: number
+          thumbnail_url?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_items_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          benefits: string[]
+          billing_period: string
+          created_at: string
+          credits: number | null
+          highlight: boolean
+          id: string
+          included_services: string[]
+          is_active: boolean
+          name: string
+          price_cents: number | null
+          price_label: string
+          rules: string
+          sort_order: number
+          summary: string
+          updated_at: string
+        }
+        Insert: {
+          benefits?: string[]
+          billing_period?: string
+          created_at?: string
+          credits?: number | null
+          highlight?: boolean
+          id?: string
+          included_services?: string[]
+          is_active?: boolean
+          name?: string
+          price_cents?: number | null
+          price_label?: string
+          rules?: string
+          sort_order?: number
+          summary?: string
+          updated_at?: string
+        }
+        Update: {
+          benefits?: string[]
+          billing_period?: string
+          created_at?: string
+          credits?: number | null
+          highlight?: boolean
+          id?: string
+          included_services?: string[]
+          is_active?: boolean
+          name?: string
+          price_cents?: number | null
+          price_label?: string
+          rules?: string
+          sort_order?: number
+          summary?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          phone?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          duration_minutes: number | null
+          id: string
+          image_url: string
+          is_active: boolean
+          name: string
+          price_cents: number | null
+          price_label: string
+          sort_order: number
+          updated_at: string
+          whatsapp_override: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          duration_minutes?: number | null
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name?: string
+          price_cents?: number | null
+          price_label?: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_override?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          duration_minutes?: number | null
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name?: string
+          price_cents?: number | null
+          price_label?: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_override?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      subscription_payments: {
+        Row: {
+          amount_cents: number | null
+          created_at: string
+          due_date: string | null
+          id: string
+          method: string
+          paid_at: string | null
+          reference: string
+          status: string
+          subscription_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents?: number | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          method?: string
+          paid_at?: string | null
+          reference?: string
+          status?: string
+          subscription_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          method?: string
+          paid_at?: string | null
+          reference?: string
+          status?: string
+          subscription_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_payments_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          credits_total: number | null
+          credits_used: number
+          customer_name: string
+          customer_phone: string
+          expires_at: string | null
+          id: string
+          notes: string
+          plan_id: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          credits_total?: number | null
+          credits_used?: number
+          customer_name?: string
+          customer_phone?: string
+          expires_at?: string | null
+          id?: string
+          notes?: string
+          plan_id?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          credits_total?: number | null
+          credits_used?: number
+          customer_name?: string
+          customer_phone?: string
+          expires_at?: string | null
+          id?: string
+          notes?: string
+          plan_id?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff" | "client"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +576,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff", "client"],
+    },
   },
 } as const

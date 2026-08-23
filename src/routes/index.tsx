@@ -11,7 +11,6 @@ import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
-import { VirtualTour } from "@/components/site/VirtualTour";
 import { useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
@@ -310,14 +309,11 @@ function Home() {
         </div>
       </section>
 
-      {/* CONHEÇA NOSSO ESPAÇO — PANORAMA 360° */}
-      <VirtualTour index="05" />
-
       {/* LOCALIZAÇÃO / CONTATO */}
       <section id="contato" className="scroll-mt-24 py-24">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="06"
+            index="05"
             eyebrow="Contato"
             title="VENHA NOS VISITAR"
             description={

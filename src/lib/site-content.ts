@@ -60,6 +60,8 @@ export type SiteSettings = {
   contact: Contact;
   location: LocationInfo;
   hours: Hours;
+  experience: Experience;
+  faq: Faq;
   notifications: NotificationSettings;
   payments: PaymentSettings;
 };
@@ -89,11 +91,15 @@ export const defaultSettings: SiteSettings = {
     city: "Rio das Ostras",
     state: "RJ",
     zip: "",
+    latitude: "",
+    longitude: "",
     map_embed_url: "",
     directions_url: "",
     panorama_360_url: "",
   },
-  hours: { items: [] },
+  hours: { items: [], note: "" },
+  experience: { title: "A experiência Girih", subtitle: "", items: [] },
+  faq: { items: [] },
   notifications: {
     enabled: false,
     channels: [],
@@ -104,6 +110,7 @@ export const defaultSettings: SiteSettings = {
   },
   payments: { provider: "", enabled: false, instructions: "" },
 };
+
 
 export type Service = {
   id: string;

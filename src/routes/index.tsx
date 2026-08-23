@@ -202,29 +202,7 @@ function Home() {
       </section>
 
       {/* 360 */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading
-          eyebrow="Conheça nosso espaço"
-          title="Panorama 360°"
-          description="Cole o link público do panorama 360° do Google Maps no painel para exibir aqui."
-        />
-        <div className="mt-8 overflow-hidden rounded-2xl border border-border">
-          {location?.panorama_360_url ? (
-            <iframe
-              src={location.panorama_360_url}
-              title="Panorama 360° da Girih Barbearia"
-              loading="lazy"
-              allowFullScreen
-              className="h-[420px] w-full"
-            />
-          ) : (
-            <div className="flex h-[280px] flex-col items-center justify-center gap-3 bg-surface/60 text-center">
-              <Compass className="h-8 w-8 text-primary" aria-hidden="true" />
-              <EditableHint>Link do panorama 360° a cadastrar no painel</EditableHint>
-            </div>
-          )}
-        </div>
-      </section>
+      <VirtualTour />
 
       {/* PLANOS */}
       <section className="border-y border-border/60 bg-surface/30 py-20">

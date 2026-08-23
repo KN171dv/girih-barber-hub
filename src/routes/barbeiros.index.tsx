@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { BarberCard } from "@/components/site/BarberCard";
 import { EditableHint } from "@/components/site/EditableHint";
 import { InfoStrip } from "@/components/site/InfoStrip";
-import { useBarbers } from "@/lib/site-content";
+import { useBarbers, useMedia } from "@/lib/site-content";
 
 export const Route = createFileRoute("/barbeiros/")({
   head: () => ({

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Navigation, Play, Compass } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
@@ -7,6 +7,11 @@ import { EditableHint } from "@/components/site/EditableHint";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { BarberCard } from "@/components/site/BarberCard";
 import { PlanCard } from "@/components/site/PlanCard";
+import { ExperienceSection } from "@/components/site/ExperienceSection";
+import { InfoStrip } from "@/components/site/InfoStrip";
+import { FaqSection } from "@/components/site/FaqSection";
+import { VirtualTour } from "@/components/site/VirtualTour";
+import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, usePlans, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 import heroImage from "@/assets/placeholder-hero.jpg";
@@ -91,6 +96,9 @@ function Home() {
         </div>
       </section>
 
+      {/* FAIXA DE INFORMAÇÕES */}
+      <InfoStrip />
+
       {/* SOBRE */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
@@ -117,6 +125,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* EXPERIÊNCIA */}
+      <ExperienceSection />
 
       {/* SERVIÇOS */}
       <section className="border-y border-border/60 bg-surface/30 py-20">
@@ -197,29 +208,7 @@ function Home() {
       </section>
 
       {/* 360 */}
-      <section className="mx-auto max-w-6xl px-4 py-20">
-        <SectionHeading
-          eyebrow="Conheça nosso espaço"
-          title="Panorama 360°"
-          description="Cole o link público do panorama 360° do Google Maps no painel para exibir aqui."
-        />
-        <div className="mt-8 overflow-hidden rounded-2xl border border-border">
-          {location?.panorama_360_url ? (
-            <iframe
-              src={location.panorama_360_url}
-              title="Panorama 360° da Girih Barbearia"
-              loading="lazy"
-              allowFullScreen
-              className="h-[420px] w-full"
-            />
-          ) : (
-            <div className="flex h-[280px] flex-col items-center justify-center gap-3 bg-surface/60 text-center">
-              <Compass className="h-8 w-8 text-primary" aria-hidden="true" />
-              <EditableHint>Link do panorama 360° a cadastrar no painel</EditableHint>
-            </div>
-          )}
-        </div>
-      </section>
+      <VirtualTour />
 
       {/* PLANOS */}
       <section className="border-y border-border/60 bg-surface/30 py-20">
@@ -244,45 +233,18 @@ function Home() {
       {/* LOCALIZAÇÃO */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <SectionHeading eyebrow="Onde estamos" title="Rio das Ostras, RJ" />
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="surface-card space-y-4 p-6">
-            <p className="flex gap-2 text-muted-foreground">
-              <MapPin className="mt-1 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-              {location?.address || <EditableHint>Endereço a cadastrar</EditableHint>}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild variant="gold" disabled={!location?.directions_url}>
-                <a
-                  href={location?.directions_url || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Navigation aria-hidden="true" /> Traçar rota
-                </a>
-              </Button>
-              <Button asChild variant="outlineGold">
-                <Link to="/localizacao">
-                  <Play aria-hidden="true" /> Mais detalhes
-                </Link>
-              </Button>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-border">
-            {location?.map_embed_url ? (
-              <iframe
-                src={location.map_embed_url}
-                title="Mapa da Girih Barbearia"
-                loading="lazy"
-                className="h-[320px] w-full"
-              />
-            ) : (
-              <div className="flex h-[320px] items-center justify-center bg-surface/60">
-                <EditableHint>Mapa a cadastrar no painel</EditableHint>
-              </div>
-            )}
-          </div>
+        <div className="mt-8">
+          <MapSection />
+        </div>
+        <div className="mt-6">
+          <Button asChild variant="outlineGold">
+            <Link to="/localizacao">Mais detalhes da localização</Link>
+          </Button>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FaqSection />
     </SiteLayout>
   );
 }

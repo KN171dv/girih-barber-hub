@@ -11,7 +11,7 @@ export function ServiceCard({
   fallbackWhatsapp,
 }: {
   service: Service;
-  fallbackWhatsapp?: string;
+  fallbackWhatsapp?: string | undefined;
 }) {
   const price = formatPrice(service.price_cents, service.price_label);
   const duration = formatDuration(service.duration_minutes);

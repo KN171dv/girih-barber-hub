@@ -10,33 +10,150 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BarbeirosRouteImport } from './routes/barbeiros'
+import { Route as EntrarRouteImport } from './routes/entrar'
+import { Route as LocalizacaoRouteImport } from './routes/localizacao'
+import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as PlanosRouteImport } from './routes/planos'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
+import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarbeirosRoute = BarbeirosRouteImport.update({
+  id: '/barbeiros',
+  path: '/barbeiros',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntrarRoute = EntrarRouteImport.update({
+  id: '/entrar',
+  path: '/entrar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocalizacaoRoute = LocalizacaoRouteImport.update({
+  id: '/localizacao',
+  path: '/localizacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaContaRoute = MinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanosRoute = PlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BarbeirosRoute,
+} as any)
+const BarbeirosSlugRoute = BarbeirosSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BarbeirosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/barbeiros': typeof BarbeirosRouteWithChildren
+  '/entrar': typeof EntrarRoute
+  '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
+  '/planos': typeof PlanosRoute
+  '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/entrar': typeof EntrarRoute
+  '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
+  '/planos': typeof PlanosRoute
+  '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/barbeiros': typeof BarbeirosRouteWithChildren
+  '/entrar': typeof EntrarRoute
+  '/localizacao': typeof LocalizacaoRoute
+  '/minha-conta': typeof MinhaContaRoute
+  '/planos': typeof PlanosRoute
+  '/servicos': typeof ServicosRoute
+  '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/barbeiros'
+    | '/entrar'
+    | '/localizacao'
+    | '/minha-conta'
+    | '/planos'
+    | '/servicos'
+    | '/barbeiros/$slug'
+    | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/entrar'
+    | '/localizacao'
+    | '/minha-conta'
+    | '/planos'
+    | '/servicos'
+    | '/barbeiros/$slug'
+    | '/barbeiros'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/barbeiros'
+    | '/entrar'
+    | '/localizacao'
+    | '/minha-conta'
+    | '/planos'
+    | '/servicos'
+    | '/barbeiros/$slug'
+    | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  BarbeirosRoute: typeof BarbeirosRouteWithChildren
+  EntrarRoute: typeof EntrarRoute
+  LocalizacaoRoute: typeof LocalizacaoRoute
+  MinhaContaRoute: typeof MinhaContaRoute
+  PlanosRoute: typeof PlanosRoute
+  ServicosRoute: typeof ServicosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +165,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barbeiros': {
+      id: '/barbeiros'
+      path: '/barbeiros'
+      fullPath: '/barbeiros'
+      preLoaderRoute: typeof BarbeirosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entrar': {
+      id: '/entrar'
+      path: '/entrar'
+      fullPath: '/entrar'
+      preLoaderRoute: typeof EntrarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/localizacao': {
+      id: '/localizacao'
+      path: '/localizacao'
+      fullPath: '/localizacao'
+      preLoaderRoute: typeof LocalizacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-conta': {
+      id: '/minha-conta'
+      path: '/minha-conta'
+      fullPath: '/minha-conta'
+      preLoaderRoute: typeof MinhaContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planos': {
+      id: '/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof PlanosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/barbeiros/': {
+      id: '/barbeiros/'
+      path: '/'
+      fullPath: '/barbeiros/'
+      preLoaderRoute: typeof BarbeirosIndexRouteImport
+      parentRoute: typeof BarbeirosRoute
+    }
+    '/barbeiros/$slug': {
+      id: '/barbeiros/$slug'
+      path: '/$slug'
+      fullPath: '/barbeiros/$slug'
+      preLoaderRoute: typeof BarbeirosSlugRouteImport
+      parentRoute: typeof BarbeirosRoute
+    }
   }
 }
 
+interface BarbeirosRouteChildren {
+  BarbeirosSlugRoute: typeof BarbeirosSlugRoute
+  BarbeirosIndexRoute: typeof BarbeirosIndexRoute
+}
+
+const BarbeirosRouteChildren: BarbeirosRouteChildren = {
+  BarbeirosSlugRoute: BarbeirosSlugRoute,
+  BarbeirosIndexRoute: BarbeirosIndexRoute,
+}
+
+const BarbeirosRouteWithChildren = BarbeirosRoute._addFileChildren(
+  BarbeirosRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  BarbeirosRoute: BarbeirosRouteWithChildren,
+  EntrarRoute: EntrarRoute,
+  LocalizacaoRoute: LocalizacaoRoute,
+  MinhaContaRoute: MinhaContaRoute,
+  PlanosRoute: PlanosRoute,
+  ServicosRoute: ServicosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

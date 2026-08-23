@@ -27,13 +27,21 @@ export type LocationInfo = {
   city: string;
   state: string;
   zip: string;
+  latitude: string;
+  longitude: string;
   map_embed_url: string;
   directions_url: string;
   panorama_360_url: string;
 };
 
 export type HourItem = { day: string; hours: string };
-export type Hours = { items: HourItem[] };
+export type Hours = { items: HourItem[]; note: string };
+
+export type ExperienceItem = { icon: string; title: string; text: string };
+export type Experience = { title: string; subtitle: string; items: ExperienceItem[] };
+
+export type FaqItem = { question: string; answer: string };
+export type Faq = { items: FaqItem[] };
 
 export type NotificationSettings = {
   enabled: boolean;
@@ -44,6 +52,7 @@ export type NotificationSettings = {
   expiry_message: string;
 };
 
+
 export type PaymentSettings = { provider: string; enabled: boolean; instructions: string };
 
 export type SiteSettings = {
@@ -51,6 +60,8 @@ export type SiteSettings = {
   contact: Contact;
   location: LocationInfo;
   hours: Hours;
+  experience: Experience;
+  faq: Faq;
   notifications: NotificationSettings;
   payments: PaymentSettings;
 };
@@ -80,11 +91,15 @@ export const defaultSettings: SiteSettings = {
     city: "Rio das Ostras",
     state: "RJ",
     zip: "",
+    latitude: "",
+    longitude: "",
     map_embed_url: "",
     directions_url: "",
     panorama_360_url: "",
   },
-  hours: { items: [] },
+  hours: { items: [], note: "" },
+  experience: { title: "A experiência Girih", subtitle: "", items: [] },
+  faq: { items: [] },
   notifications: {
     enabled: false,
     channels: [],
@@ -95,6 +110,7 @@ export const defaultSettings: SiteSettings = {
   },
   payments: { provider: "", enabled: false, instructions: "" },
 };
+
 
 export type Service = {
   id: string;

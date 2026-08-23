@@ -92,7 +92,7 @@ function Home() {
         ];
 
   return (
-    <SiteLayout>
+    <SiteLayout flush>
       {/* HERO */}
       <section className="relative isolate flex min-h-[92vh] items-end overflow-hidden">
         <img

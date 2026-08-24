@@ -21,6 +21,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAgendaRouteImport } from './routes/admin.agenda'
 import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 
@@ -84,6 +85,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminServicosRoute = AdminServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin': typeof AdminIndexRoute
   '/barbeiros': typeof BarbeirosIndexRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
     | '/admin/'
     | '/barbeiros/'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
     | '/admin'
     | '/barbeiros'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
     | '/admin/'
     | '/barbeiros/'
@@ -288,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/servicos': {
+      id: '/admin/servicos'
+      path: '/servicos'
+      fullPath: '/admin/servicos'
+      preLoaderRoute: typeof AdminServicosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/barbeiros/': {
       id: '/barbeiros/'
       path: '/'
@@ -309,6 +328,7 @@ interface AdminRouteChildren {
   AdminAgendaRoute: typeof AdminAgendaRoute
   AdminClientesRoute: typeof AdminClientesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminServicosRoute: typeof AdminServicosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -316,6 +336,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAgendaRoute: AdminAgendaRoute,
   AdminClientesRoute: AdminClientesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminServicosRoute: AdminServicosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

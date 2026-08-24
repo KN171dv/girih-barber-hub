@@ -404,6 +404,8 @@ export type Database = {
           created_at: string
           description: string
           duration_minutes: number | null
+          highlight: boolean
+          highlight_label: string
           id: string
           image_url: string
           is_active: boolean
@@ -418,6 +420,8 @@ export type Database = {
           created_at?: string
           description?: string
           duration_minutes?: number | null
+          highlight?: boolean
+          highlight_label?: string
           id?: string
           image_url?: string
           is_active?: boolean
@@ -432,6 +436,8 @@ export type Database = {
           created_at?: string
           description?: string
           duration_minutes?: number | null
+          highlight?: boolean
+          highlight_label?: string
           id?: string
           image_url?: string
           is_active?: boolean

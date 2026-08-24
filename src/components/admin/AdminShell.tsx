@@ -23,13 +23,13 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/agenda", label: "Agenda", icon: CalendarDays },
-  { to: "/admin/clientes", label: "Clientes", icon: Users },
-  { to: "/admin/servicos", label: "Serviços", icon: Scissors },
-  { to: "/admin/equipe", label: "Equipe", icon: UserCog },
-  { to: "/admin/financeiro", label: "Financeiro", icon: Wallet },
-  { to: "/admin/conteudo", label: "Conteúdo do site", icon: ImageIcon },
-  { to: "/admin/configuracoes", label: "Configurações", icon: Settings },
+  { to: "/admin/agenda", label: "Agenda", icon: CalendarDays, exact: false },
+  { to: "/admin/clientes", label: "Clientes", icon: Users, exact: false },
+  { to: "/admin/servicos", label: "Serviços", icon: Scissors, exact: false },
+  { to: "/admin/equipe", label: "Equipe", icon: UserCog, exact: false },
+  { to: "/admin/financeiro", label: "Financeiro", icon: Wallet, exact: false },
+  { to: "/admin/conteudo", label: "Conteúdo do site", icon: ImageIcon, exact: false },
+  { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
 ] as const;
 
 export function useAdminProfile() {

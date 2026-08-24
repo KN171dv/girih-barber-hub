@@ -18,6 +18,7 @@ import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAgendaRouteImport } from './routes/admin.agenda'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
@@ -67,6 +68,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAgendaRoute = AdminAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
     | '/admin/login'
     | '/barbeiros/$slug'
     | '/admin/'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
     | '/admin/login'
     | '/barbeiros/$slug'
     | '/admin'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
     | '/admin/login'
     | '/barbeiros/$slug'
     | '/admin/'
@@ -243,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/agenda': {
+      id: '/admin/agenda'
+      path: '/agenda'
+      fullPath: '/admin/agenda'
+      preLoaderRoute: typeof AdminAgendaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -268,11 +287,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAgendaRoute: typeof AdminAgendaRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAgendaRoute: AdminAgendaRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

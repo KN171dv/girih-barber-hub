@@ -17,6 +17,15 @@ import { Route as LocalizacaoRouteImport } from './routes/localizacao'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAgendaRouteImport } from './routes/admin.agenda'
+import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminConteudoRouteImport } from './routes/admin.conteudo'
+import { Route as AdminEquipeRouteImport } from './routes/admin.equipe'
+import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 
@@ -60,6 +69,51 @@ const ServicosRoute = ServicosRouteImport.update({
   path: '/servicos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAgendaRoute = AdminAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminClientesRoute = AdminClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConteudoRoute = AdminConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEquipeRoute = AdminEquipeRouteImport.update({
+  id: '/equipe',
+  path: '/equipe',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFinanceiroRoute = AdminFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicosRoute = AdminServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,38 +127,64 @@ const BarbeirosSlugRoute = BarbeirosSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
+  '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
+  '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agenda': typeof AdminAgendaRoute
+  '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRouteTypes {
@@ -118,18 +198,35 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
+    | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/conteudo'
+    | '/admin/equipe'
+    | '/admin/financeiro'
+    | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
+    | '/admin/'
     | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/entrar'
     | '/localizacao'
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
+    | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/conteudo'
+    | '/admin/equipe'
+    | '/admin/financeiro'
+    | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
+    | '/admin'
     | '/barbeiros'
   id:
     | '__root__'
@@ -141,13 +238,22 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/agenda'
+    | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/conteudo'
+    | '/admin/equipe'
+    | '/admin/financeiro'
+    | '/admin/login'
+    | '/admin/servicos'
     | '/barbeiros/$slug'
+    | '/admin/'
     | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BarbeirosRoute: typeof BarbeirosRouteWithChildren
   EntrarRoute: typeof EntrarRoute
   LocalizacaoRoute: typeof LocalizacaoRoute
@@ -214,6 +320,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/agenda': {
+      id: '/admin/agenda'
+      path: '/agenda'
+      fullPath: '/admin/agenda'
+      preLoaderRoute: typeof AdminAgendaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/clientes': {
+      id: '/admin/clientes'
+      path: '/clientes'
+      fullPath: '/admin/clientes'
+      preLoaderRoute: typeof AdminClientesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/conteudo': {
+      id: '/admin/conteudo'
+      path: '/conteudo'
+      fullPath: '/admin/conteudo'
+      preLoaderRoute: typeof AdminConteudoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/equipe': {
+      id: '/admin/equipe'
+      path: '/equipe'
+      fullPath: '/admin/equipe'
+      preLoaderRoute: typeof AdminEquipeRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/financeiro': {
+      id: '/admin/financeiro'
+      path: '/financeiro'
+      fullPath: '/admin/financeiro'
+      preLoaderRoute: typeof AdminFinanceiroRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/servicos': {
+      id: '/admin/servicos'
+      path: '/servicos'
+      fullPath: '/admin/servicos'
+      preLoaderRoute: typeof AdminServicosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/barbeiros/': {
       id: '/barbeiros/'
       path: '/'
@@ -231,6 +400,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminAgendaRoute: typeof AdminAgendaRoute
+  AdminClientesRoute: typeof AdminClientesRoute
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminConteudoRoute: typeof AdminConteudoRoute
+  AdminEquipeRoute: typeof AdminEquipeRoute
+  AdminFinanceiroRoute: typeof AdminFinanceiroRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminServicosRoute: typeof AdminServicosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAgendaRoute: AdminAgendaRoute,
+  AdminClientesRoute: AdminClientesRoute,
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminConteudoRoute: AdminConteudoRoute,
+  AdminEquipeRoute: AdminEquipeRoute,
+  AdminFinanceiroRoute: AdminFinanceiroRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminServicosRoute: AdminServicosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface BarbeirosRouteChildren {
   BarbeirosSlugRoute: typeof BarbeirosSlugRoute
   BarbeirosIndexRoute: typeof BarbeirosIndexRoute
@@ -247,7 +442,7 @@ const BarbeirosRouteWithChildren = BarbeirosRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   BarbeirosRoute: BarbeirosRouteWithChildren,
   EntrarRoute: EntrarRoute,
   LocalizacaoRoute: LocalizacaoRoute,

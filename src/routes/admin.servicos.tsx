@@ -27,6 +27,8 @@ function ServicesAdminPage() {
           { name: "price_label", label: "Preço (texto alternativo)", type: "text" },
           { name: "image_url", label: "Foto (URL)", type: "text" },
           { name: "whatsapp_override", label: "WhatsApp específico", type: "text" },
+          { name: "highlight", label: "Destaque visual", type: "boolean" },
+          { name: "highlight_label", label: "Selo do destaque", type: "text", help: "Ex.: COMPLETO" },
           { name: "sort_order", label: "Ordem", type: "number" },
           { name: "is_active", label: "Ativo", type: "boolean" },
           { name: "description", label: "Descrição", type: "textarea" },

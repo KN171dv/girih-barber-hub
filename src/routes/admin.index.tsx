@@ -62,7 +62,7 @@ function DashboardPage() {
 
   return (
     <AdminShell
-      title={`Olá, ${profile?.display_name || "ADM"} 👋`}
+      title={`Olá, ${profile?.display_name || "ADM"}`}
       subtitle="Confira o movimento da Gireh Barber."
       actions={
         <Button variant="gold" onClick={() => setDialogOpen(true)}>

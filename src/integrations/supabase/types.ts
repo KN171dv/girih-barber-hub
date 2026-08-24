@@ -14,6 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          access_level: string
+          auth_email: string
+          auth_user_id: string | null
+          created_at: string
+          display_name: string
+          id: string
+          is_active: boolean
+          last_login_at: string | null
+          password_hash: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          access_level?: string
+          auth_email: string
+          auth_user_id?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          last_login_at?: string | null
+          password_hash: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          access_level?: string
+          auth_email?: string
+          auth_user_id?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          last_login_at?: string | null
+          password_hash?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          barber_id: string | null
+          client_id: string | null
+          created_at: string
+          customer_name: string
+          customer_phone: string
+          duration_minutes: number
+          id: string
+          notes: string
+          price_cents: number
+          scheduled_date: string
+          service_id: string | null
+          source: string
+          start_time: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          barber_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          customer_name?: string
+          customer_phone?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string
+          price_cents?: number
+          scheduled_date?: string
+          service_id?: string | null
+          source?: string
+          start_time?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          barber_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          customer_name?: string
+          customer_phone?: string
+          duration_minutes?: number
+          id?: string
+          notes?: string
+          price_cents?: number
+          scheduled_date?: string
+          service_id?: string | null
+          source?: string
+          start_time?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_barber_id_fkey"
+            columns: ["barber_id"]
+            isOneToOne: false
+            referencedRelation: "barbers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       barbers: {
         Row: {
           bio: string
@@ -59,6 +177,39 @@ export type Database = {
           specialties?: string[]
           updated_at?: string
           whatsapp?: string
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string
+          phone: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string
+          phone?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string
+          phone?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -440,7 +591,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      set_admin_password: {
+        Args: { _id: string; _password: string; _username: string }
+        Returns: undefined
+      }
+      verify_admin_login: {
+        Args: { _password: string; _username: string }
+        Returns: {
+          access_level: string
+          auth_email: string
+          auth_user_id: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "staff" | "client"

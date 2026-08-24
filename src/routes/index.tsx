@@ -12,7 +12,7 @@ import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
-import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
+import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
@@ -72,7 +72,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: settings } = useSiteSettings();
-  const { data: services = [] } = useServices();
   const { data: gallery = [] } = useMedia("galeria");
   const { data: barbers = [] } = useBarbers();
   const { data: media = [] } = useMedia();

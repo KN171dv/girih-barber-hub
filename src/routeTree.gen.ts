@@ -17,6 +17,7 @@ import { Route as LocalizacaoRouteImport } from './routes/localizacao'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
 
@@ -60,6 +61,11 @@ const ServicosRoute = ServicosRouteImport.update({
   path: '/servicos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BarbeirosIndexRoute = BarbeirosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,37 +79,40 @@ const BarbeirosSlugRoute = BarbeirosSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/barbeiros': typeof BarbeirosRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
   '/planos': typeof PlanosRoute
   '/servicos': typeof ServicosRoute
+  '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/login'
     | '/barbeiros/$slug'
     | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/login'
     | '/barbeiros/$slug'
     | '/barbeiros'
   id:
@@ -141,13 +152,14 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/planos'
     | '/servicos'
+    | '/admin/login'
     | '/barbeiros/$slug'
     | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BarbeirosRoute: typeof BarbeirosRouteWithChildren
   EntrarRoute: typeof EntrarRoute
   LocalizacaoRoute: typeof LocalizacaoRoute
@@ -214,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/barbeiros/': {
       id: '/barbeiros/'
       path: '/'
@@ -231,6 +250,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface BarbeirosRouteChildren {
   BarbeirosSlugRoute: typeof BarbeirosSlugRoute
   BarbeirosIndexRoute: typeof BarbeirosIndexRoute
@@ -247,7 +276,7 @@ const BarbeirosRouteWithChildren = BarbeirosRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   BarbeirosRoute: BarbeirosRouteWithChildren,
   EntrarRoute: EntrarRoute,
   LocalizacaoRoute: LocalizacaoRoute,

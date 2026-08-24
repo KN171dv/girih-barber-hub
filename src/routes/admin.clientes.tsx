@@ -23,7 +23,7 @@ import {
   useSaveClient,
   type Client,
 } from "@/lib/booking";
-import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { whatsappLink } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/admin/clientes")({
   component: ClientsPage,
@@ -105,7 +105,7 @@ function ClientsPage() {
               {client.phone && (
                 <Button asChild size="sm" variant="outline">
                   <a
-                    href={buildWhatsAppLink(client.phone, `Olá, ${client.name}!`)}
+                    href={whatsappLink(client.phone, `Olá, ${client.name}!`) ?? "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

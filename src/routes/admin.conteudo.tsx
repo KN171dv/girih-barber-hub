@@ -28,8 +28,8 @@ function ContentAdminPage() {
             { name: "hero_title", label: "Título do hero", type: "text" },
             { name: "hero_media_url", label: "Imagem/vídeo do hero (URL)", type: "text" },
             { name: "hero_subtitle", label: "Subtítulo do hero", type: "textarea" },
-            { name: "about_title", label: "Título "A Barbearia"", type: "text" },
-            { name: "about_text", label: "Texto "A Barbearia"", type: "textarea" },
+            { name: "about_title", label: "Título — A Barbearia", type: "text" },
+            { name: "about_text", label: "Texto — A Barbearia", type: "textarea" },
           ]}
         />
 

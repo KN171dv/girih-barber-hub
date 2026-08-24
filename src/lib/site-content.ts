@@ -121,6 +121,8 @@ export type Service = {
   price_label: string;
   image_url: string;
   whatsapp_override: string;
+  highlight: boolean;
+  highlight_label: string;
   sort_order: number;
   is_active: boolean;
 };

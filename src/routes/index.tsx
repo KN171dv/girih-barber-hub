@@ -6,13 +6,13 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionLabel } from "@/components/site/SectionLabel";
 import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
-import { ServiceCard } from "@/components/site/ServiceCard";
+import { ServicesShowcase } from "@/components/site/ServicesShowcase";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
-import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
+import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
@@ -72,7 +72,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: settings } = useSiteSettings();
-  const { data: services = [] } = useServices();
   const { data: gallery = [] } = useMedia("galeria");
   const { data: barbers = [] } = useBarbers();
   const { data: media = [] } = useMedia();
@@ -241,31 +240,7 @@ function Home() {
       <ExperienceSection />
 
       {/* SERVIÇOS */}
-      <section id="servicos" className="scroll-mt-24 border-y border-border/60 bg-surface/30 py-24">
-        <div className="mx-auto max-w-6xl px-4">
-          <SectionLabel
-            index="02"
-            eyebrow="Serviços"
-            title="CORTE, BARBA E ACABAMENTO"
-            description="Serviços e valores mantidos pela barbearia — atualizados diretamente no painel administrativo."
-          />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => (
-              <Reveal key={service.id}>
-                <ServiceCard service={service} fallbackWhatsapp={contact?.whatsapp} />
-              </Reveal>
-            ))}
-            {services.length === 0 && (
-              <EditableHint>Serviços a cadastrar no painel administrativo</EditableHint>
-            )}
-          </div>
-          <div className="mt-10">
-            <Button asChild variant="outlineGold">
-              <Link to="/servicos">Ver todos os serviços</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <ServicesShowcase index="02" />
 
       {/* BARBEIROS */}
       <section id="barbeiros" className="scroll-mt-24 py-24">

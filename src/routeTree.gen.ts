@@ -17,6 +17,7 @@ import { Route as LocalizacaoRouteImport } from './routes/localizacao'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
 import { Route as BarbeirosSlugRouteImport } from './routes/barbeiros.$slug'
@@ -61,6 +62,11 @@ const ServicosRoute = ServicosRouteImport.update({
   path: '/servicos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -88,11 +94,11 @@ export interface FileRoutesByFullPath {
   '/servicos': typeof ServicosRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/entrar': typeof EntrarRoute
   '/localizacao': typeof LocalizacaoRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -100,6 +106,7 @@ export interface FileRoutesByTo {
   '/servicos': typeof ServicosRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/barbeiros': typeof BarbeirosIndexRoute
 }
 export interface FileRoutesById {
@@ -114,6 +121,7 @@ export interface FileRoutesById {
   '/servicos': typeof ServicosRoute
   '/admin/login': typeof AdminLoginRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/barbeiros/': typeof BarbeirosIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,11 +137,11 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/login'
     | '/barbeiros/$slug'
+    | '/admin/'
     | '/barbeiros/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/entrar'
     | '/localizacao'
     | '/minha-conta'
@@ -141,6 +149,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/login'
     | '/barbeiros/$slug'
+    | '/admin'
     | '/barbeiros'
   id:
     | '__root__'
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/login'
     | '/barbeiros/$slug'
+    | '/admin/'
     | '/barbeiros/'
   fileRoutesById: FileRoutesById
 }
@@ -226,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -252,10 +269,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

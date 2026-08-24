@@ -21,6 +21,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAgendaRouteImport } from './routes/admin.agenda'
 import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
 import { Route as AdminEquipeRouteImport } from './routes/admin.equipe'
+import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as BarbeirosIndexRouteImport } from './routes/barbeiros.index'
@@ -86,6 +87,11 @@ const AdminEquipeRoute = AdminEquipeRouteImport.update({
   path: '/equipe',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFinanceiroRoute = AdminFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   '/admin/agenda': typeof AdminAgendaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/barbeiros/$slug': typeof BarbeirosSlugRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/equipe'
+    | '/admin/financeiro'
     | '/admin/login'
     | '/admin/servicos'
     | '/barbeiros/$slug'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/equipe'
+    | '/admin/financeiro'
     | '/admin/login'
     | '/admin/servicos'
     | '/barbeiros/$slug'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/admin/agenda'
     | '/admin/clientes'
     | '/admin/equipe'
+    | '/admin/financeiro'
     | '/admin/login'
     | '/admin/servicos'
     | '/barbeiros/$slug'
@@ -312,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEquipeRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/financeiro': {
+      id: '/admin/financeiro'
+      path: '/financeiro'
+      fullPath: '/admin/financeiro'
+      preLoaderRoute: typeof AdminFinanceiroRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -347,6 +366,7 @@ interface AdminRouteChildren {
   AdminAgendaRoute: typeof AdminAgendaRoute
   AdminClientesRoute: typeof AdminClientesRoute
   AdminEquipeRoute: typeof AdminEquipeRoute
+  AdminFinanceiroRoute: typeof AdminFinanceiroRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminServicosRoute: typeof AdminServicosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -356,6 +376,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAgendaRoute: AdminAgendaRoute,
   AdminClientesRoute: AdminClientesRoute,
   AdminEquipeRoute: AdminEquipeRoute,
+  AdminFinanceiroRoute: AdminFinanceiroRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminServicosRoute: AdminServicosRoute,
   AdminIndexRoute: AdminIndexRoute,

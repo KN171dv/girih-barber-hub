@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram, MessageCircle, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "./BrandLogo";
 import { useSiteSettings } from "@/lib/site-content";
@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { hash: "", label: "Início" },
-  { hash: "barbearia", label: "Barbearia" },
+  { hash: "barbearia", label: "A Barbearia" },
   { hash: "servicos", label: "Serviços" },
   { hash: "barbeiros", label: "Barbeiros" },
   { hash: "galeria", label: "Galeria" },
@@ -23,6 +23,9 @@ export function SiteHeader() {
   const { data: settings } = useSiteSettings();
   const { isAdmin } = useAuth();
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
+  const instagram = settings?.contact.instagram;
+  const location = settings?.location;
+  const firstHours = settings?.hours.items?.[0];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -36,10 +39,57 @@ export function SiteHeader() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-border/70 bg-background/85 backdrop-blur-xl"
-          : "border-b border-transparent bg-gradient-to-b from-background/70 to-transparent",
+          ? "border-b border-border/70 bg-background/90 backdrop-blur-xl"
+          : "border-b border-border/20 bg-gradient-to-b from-background/80 to-transparent",
       )}
     >
+      {/* Faixa superior informativa (some ao rolar) */}
+      <div
+        className={cn(
+          "hidden overflow-hidden border-b border-border/30 transition-all duration-300 lg:block",
+          scrolled ? "max-h-0 border-transparent opacity-0" : "max-h-12 opacity-100",
+        )}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+          <div className="flex min-w-0 items-center gap-6">
+            {(location?.city || location?.address) && (
+              <span className="inline-flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                {location?.city ? `${location.city}${location.state ? ` — ${location.state}` : ""}` : location?.address}
+              </span>
+            )}
+            {firstHours && (
+              <span className="inline-flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                {firstHours.day}: {firstHours.hours}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-5">
+            {instagram && (
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+              >
+                <Instagram className="h-3.5 w-3.5" aria-hidden="true" /> Instagram
+              </a>
+            )}
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+              >
+                <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> WhatsApp
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div
         className={cn(
           "mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 transition-all duration-300 lg:flex lg:justify-between lg:gap-8",
@@ -64,7 +114,7 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Navegação principal" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Navegação principal" className="hidden items-center gap-6 lg:flex xl:gap-8">
           {NAV.map((item) => (
             <Link
               key={item.label}
@@ -86,21 +136,30 @@ export function SiteHeader() {
           {wa && (
             <Button asChild variant="gold" size="sm" className="tracking-[0.16em]">
               <a href={wa} target="_blank" rel="noreferrer">
-                AGENDAR HORÁRIO
+                AGENDAR AGORA
               </a>
             </Button>
           )}
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 text-foreground transition-colors hover:border-primary hover:text-primary lg:hidden"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          {wa && (
+            <Button asChild variant="gold" size="sm" className="h-9 px-3 text-[10px] tracking-[0.14em]">
+              <a href={wa} target="_blank" rel="noreferrer">
+                AGENDAR
+              </a>
+            </Button>
+          )}
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 text-foreground transition-colors hover:border-primary hover:text-primary"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -126,13 +185,18 @@ export function SiteHeader() {
                 Painel administrativo
               </Link>
             )}
-            {wa && (
-              <Button asChild variant="gold" className="my-4 h-12 tracking-[0.16em]">
-                <a href={wa} target="_blank" rel="noreferrer">
-                  AGENDAR HORÁRIO
+            <div className="flex items-center gap-5 py-4 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              {instagram && (
+                <a href={instagram} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                  <Instagram className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Instagram
                 </a>
-              </Button>
-            )}
+              )}
+              {wa && (
+                <a href={wa} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                  <MessageCircle className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> WhatsApp
+                </a>
+              )}
+            </div>
           </nav>
         </div>
       )}

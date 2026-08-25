@@ -269,10 +269,51 @@
   }
 }
 
+/* Ken Burns alternado para o slideshow do hero */
+@utility kb-in {
+  will-change: transform;
+  transform-origin: 55% 45%;
+  animation: kb-in 22s ease-out both infinite alternate;
+}
+
+@utility kb-out {
+  will-change: transform;
+  transform-origin: 45% 55%;
+  animation: kb-out 22s ease-out both infinite alternate;
+}
+
+@keyframes kb-in {
+  from {
+    transform: scale(1.04) translate3d(-0.8%, 0.6%, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(0.8%, -0.8%, 0);
+  }
+}
+
+@keyframes kb-out {
+  from {
+    transform: scale(1.16) translate3d(0.8%, -0.6%, 0);
+  }
+  to {
+    transform: scale(1.04) translate3d(-0.8%, 0.8%, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .kb-in,
+  .kb-out {
+    animation-duration: 30s;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ken-burns {
+  .ken-burns,
+  .kb-in,
+  .kb-out {
     animation: none !important;
     transform: scale(1.02) !important;
   }
 }
+
 

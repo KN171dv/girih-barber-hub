@@ -13,12 +13,12 @@ import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { PlansShowcase } from "@/components/site/PlansShowcase";
 import { FinalCta } from "@/components/site/FinalCta";
-import { HeroBackdrop } from "@/components/site/HeroBackdrop";
+import { HeroSlideshow } from "@/components/site/HeroSlideshow";
 
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
-import { generalMessage, whatsappLink } from "@/lib/whatsapp";
+import { generalMessage, onlyDigits, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
   facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
@@ -29,6 +29,13 @@ const PHOTOS = {
   cut3: "/__l5e/assets-v1/9482cdef-33b6-479c-b409-abc1c811950f/image-6.png",
   facadeDay: "/__l5e/assets-v1/f5716d88-2e85-41de-8470-d7e809ca9e0c/image-7.png",
 };
+
+function formatPhone(value: string) {
+  const digits = onlyDigits(value).replace(/^55/, "");
+  if (digits.length === 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  if (digits.length === 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return value;
+}
 
 const TITLE = "Gireh Barber Shop | Barbearia em Rio das Ostras – RJ";
 const DESCRIPTION =
@@ -82,6 +89,21 @@ function Home() {
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
   const contact = settings?.contact;
+  const heroHours = settings?.hours.items?.[0];
+  const heroMedia = settings?.brand.hero_media_url;
+  const heroVideo = heroMedia && /\.(mp4|webm|mov)(\?|$)/i.test(heroMedia) ? heroMedia : null;
+
+  const heroSlidesRaw = [
+    ...(heroMedia && !heroVideo ? [{ url: heroMedia, alt: "Gireh Barber Shop" }] : []),
+    { url: PHOTOS.facadeNight, alt: "Fachada da Gireh Barber Shop à noite" },
+    { url: PHOTOS.salon, alt: "Salão interno da Gireh Barber Shop" },
+    { url: PHOTOS.cut1, alt: "Barbeiro atendendo cliente na Gireh" },
+    { url: PHOTOS.bench, alt: "Bancada de trabalho da Gireh" },
+    { url: PHOTOS.facadeDay, alt: "Fachada da Gireh Barber Shop durante o dia" },
+  ];
+  const heroSlides = heroSlidesRaw.filter(
+    (slide, index) => heroSlidesRaw.findIndex((s) => s.url === slide.url) === index,
+  );
 
   const photos =
     gallery.length > 0
@@ -98,14 +120,17 @@ function Home() {
   return (
     <SiteLayout flush>
       {/* HERO */}
-      <section className="relative isolate flex min-h-[92vh] items-end overflow-hidden">
-        <HeroBackdrop
-          src={settings?.brand.hero_media_url || PHOTOS.facadeNight}
-          alt="Fachada da Gireh Barber Shop em Rio das Ostras"
-        />
+      <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
+        <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
 
-        <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:pb-28">
-          <p className="eyebrow fade-up">Gireh Barber Shop · Rio das Ostras</p>
+        <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-32 sm:pb-20">
+          <div className="fade-up flex items-center gap-4">
+            <span className="h-px w-12 bg-primary sm:w-20" aria-hidden="true" />
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-xs">
+              11 anos de estilo, tradição e excelência
+            </p>
+          </div>
+          <p className="eyebrow fade-up mt-4">Gireh Barber Shop · Desde 2015</p>
           <h1 className="fade-up mt-5 max-w-4xl text-[2.75rem] uppercase leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
             {settings?.brand.hero_title || (
               <>
@@ -117,13 +142,13 @@ function Home() {
           </h1>
           <p className="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {settings?.brand.hero_subtitle ||
-              "Mais que um corte. Uma experiência pensada para quem valoriza presença, estilo e cuidado em cada detalhe."}
+              "Corte, barba e acabamento com padrão de excelência em Rio das Ostras. Um ambiente pensado para quem valoriza presença, estilo e cuidado em cada detalhe."}
           </p>
           <div className="fade-up mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {wa && (
               <Button asChild variant="gold" size="xl" className="tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
-                  <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
+                  <MessageCircle aria-hidden="true" /> AGENDAR AGORA
                 </a>
               </Button>
             )}
@@ -133,8 +158,35 @@ function Home() {
               </Link>
             </Button>
           </div>
+
+          {/* Linha inferior com informações reais */}
+          <div className="fade-up mt-12 border-t border-border/50 pt-6">
+            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3">
+              <div className="min-w-0">
+                <dt className="text-primary">Onde estamos</dt>
+                <dd className="mt-2 truncate text-foreground">
+                  {location?.city
+                    ? `${location.city}${location.state ? ` — ${location.state}` : ""}`
+                    : "Rio das Ostras — RJ"}
+                </dd>
+              </div>
+              {heroHours && (
+                <div className="min-w-0">
+                  <dt className="text-primary">{heroHours.day}</dt>
+                  <dd className="mt-2 truncate text-foreground">{heroHours.hours}</dd>
+                </div>
+              )}
+              {contact?.whatsapp && (
+                <div className="min-w-0">
+                  <dt className="text-primary">WhatsApp</dt>
+                  <dd className="mt-2 truncate text-foreground">{formatPhone(contact.whatsapp)}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
         </div>
       </section>
+
 
       {/* INFORMAÇÕES RÁPIDAS */}
       <QuickInfoBar />
@@ -240,8 +292,8 @@ function Home() {
           )}
         </div>
         <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
-          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src) => (
-            <div key={src} className="overflow-hidden rounded-xl border border-border/70">
+          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src, i) => (
+            <div key={`${src}-${i}`} className="overflow-hidden rounded-xl border border-border/70">
               <img
                 src={src}
                 alt="Atendimento e ambiente da Gireh Barber Shop"

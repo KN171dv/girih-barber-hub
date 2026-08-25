@@ -49,7 +49,7 @@ export function GalleryGrid({ photos }: { photos: GalleryPhoto[] }) {
       <div className="grid auto-rows-[190px] grid-cols-1 gap-3 sm:auto-rows-[210px] sm:grid-cols-3 lg:auto-rows-[240px] lg:grid-cols-4">
         {photos.map((photo, index) => (
           <button
-            key={photo.url}
+            key={`${photo.url}-${index}`}
             type="button"
             onClick={() => setOpen(index)}
             aria-label={`Ampliar foto: ${photo.title}`}

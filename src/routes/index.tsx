@@ -18,7 +18,7 @@ import { HeroSlideshow } from "@/components/site/HeroSlideshow";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
-import { generalMessage, whatsappLink } from "@/lib/whatsapp";
+import { generalMessage, onlyDigits, whatsappLink } from "@/lib/whatsapp";
 
 const PHOTOS = {
   facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
@@ -29,6 +29,13 @@ const PHOTOS = {
   cut3: "/__l5e/assets-v1/9482cdef-33b6-479c-b409-abc1c811950f/image-6.png",
   facadeDay: "/__l5e/assets-v1/f5716d88-2e85-41de-8470-d7e809ca9e0c/image-7.png",
 };
+
+function formatPhone(value: string) {
+  const digits = onlyDigits(value).replace(/^55/, "");
+  if (digits.length === 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  if (digits.length === 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return value;
+}
 
 const TITLE = "Gireh Barber Shop | Barbearia em Rio das Ostras – RJ";
 const DESCRIPTION =
@@ -172,7 +179,7 @@ function Home() {
               {contact?.whatsapp && (
                 <div className="min-w-0">
                   <dt className="text-primary">WhatsApp</dt>
-                  <dd className="mt-2 truncate text-foreground">{contact.whatsapp}</dd>
+                  <dd className="mt-2 truncate text-foreground">{formatPhone(contact.whatsapp)}</dd>
                 </div>
               )}
             </dl>

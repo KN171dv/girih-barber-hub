@@ -10,13 +10,16 @@ export function FinalCta({ backgroundUrl }: { backgroundUrl: string }) {
 
   return (
     <section className="relative isolate overflow-hidden border-y border-border/60">
-      <img
-        src={backgroundUrl}
-        alt="Ambiente da Gireh Barber Shop"
-        loading="lazy"
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
-      />
+      <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+        <img
+          src={backgroundUrl}
+          alt=""
+          loading="lazy"
+          className="ken-burns h-full w-full object-cover"
+        />
+      </div>
       <div className="absolute inset-0 -z-10 bg-background/85" aria-hidden="true" />
+
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:py-28">
         <p className="eyebrow">Seu próximo corte começa aqui.</p>
         <h2 className="mt-4 text-4xl uppercase leading-[1.02] sm:text-6xl">

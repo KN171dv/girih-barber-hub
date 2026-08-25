@@ -86,7 +86,7 @@ function Home() {
   const heroMedia = settings?.brand.hero_media_url;
   const heroVideo = heroMedia && /\.(mp4|webm|mov)(\?|$)/i.test(heroMedia) ? heroMedia : null;
 
-  const heroSlides = [
+  const heroSlidesRaw = [
     ...(heroMedia && !heroVideo ? [{ url: heroMedia, alt: "Gireh Barber Shop" }] : []),
     { url: PHOTOS.facadeNight, alt: "Fachada da Gireh Barber Shop à noite" },
     { url: PHOTOS.salon, alt: "Salão interno da Gireh Barber Shop" },
@@ -94,6 +94,9 @@ function Home() {
     { url: PHOTOS.bench, alt: "Bancada de trabalho da Gireh" },
     { url: PHOTOS.facadeDay, alt: "Fachada da Gireh Barber Shop durante o dia" },
   ];
+  const heroSlides = heroSlidesRaw.filter(
+    (slide, index) => heroSlidesRaw.findIndex((s) => s.url === slide.url) === index,
+  );
 
   const photos =
     gallery.length > 0

@@ -237,3 +237,42 @@
     transform: scale(1);
   }
 }
+
+/* Ken Burns contínuo: movimento lento e elegante no background principal */
+@utility ken-burns {
+  will-change: transform;
+  transform-origin: 60% 45%;
+  animation: ken-burns 48s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.04) translate3d(-0.6%, 0.6%, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(0.8%, -1%, 0);
+  }
+}
+
+/* No celular, movimento mais discreto */
+@media (max-width: 767px) {
+  .ken-burns {
+    animation-duration: 60s;
+  }
+  @keyframes ken-burns {
+    from {
+      transform: scale(1.03) translate3d(-0.3%, 0.3%, 0);
+    }
+    to {
+      transform: scale(1.08) translate3d(0.3%, -0.4%, 0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ken-burns {
+    animation: none !important;
+    transform: scale(1.02) !important;
+  }
+}
+

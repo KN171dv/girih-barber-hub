@@ -21,7 +21,7 @@ const ICONS: Record<string, typeof Sparkles> = {
 export function ExperienceSection() {
   const { data: settings } = useSiteSettings();
   const experience = settings?.experience;
-  const items = experience?.items ?? [];
+  const items = (experience?.items ?? []).filter((item) => (item.title || item.text || '').trim());
 
   return (
     <section className="relative overflow-hidden border-y border-border/60 bg-surface/20 py-24">
@@ -44,7 +44,7 @@ export function ExperienceSection() {
             {items.map((item, index) => {
               const Icon = ICONS[item.icon] ?? Sparkles;
               return (
-                <Reveal key={`${item.title}-${index}`} delay={index * 80}>
+                <Reveal key={`${item.title}-${index}`} delay={index * 80} className="h-full">
                   <article className="group relative h-full overflow-hidden bg-background p-8 transition-colors duration-300 hover:bg-surface/50">
                     <span
                       aria-hidden="true"

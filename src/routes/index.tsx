@@ -292,7 +292,7 @@ function Home() {
           )}
         </div>
         <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
-          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src) => (
+          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src, i) => (
             <div key={`${src}-${i}`} className="overflow-hidden rounded-xl border border-border/70">
               <img
                 src={src}

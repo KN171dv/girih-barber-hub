@@ -72,7 +72,7 @@ export function HeroSlideshow({
         ) : (
           images.map((image, index) => (
             <img
-              key={image.url}
+              key={`${image.url}-${index}`}
               src={image.url}
               alt=""
               fetchPriority={index === 0 ? "high" : "low"}

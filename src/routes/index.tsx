@@ -13,6 +13,8 @@ import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { PlansShowcase } from "@/components/site/PlansShowcase";
 import { FinalCta } from "@/components/site/FinalCta";
+import { HeroBackdrop } from "@/components/site/HeroBackdrop";
+
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";

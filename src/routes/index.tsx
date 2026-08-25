@@ -83,8 +83,11 @@ function Home() {
   const location = settings?.location;
   const contact = settings?.contact;
   const heroHours = settings?.hours.items?.[0];
+  const heroMedia = settings?.brand.hero_media_url;
+  const heroVideo = heroMedia && /\.(mp4|webm|mov)(\?|$)/i.test(heroMedia) ? heroMedia : null;
 
   const heroSlides = [
+    ...(heroMedia && !heroVideo ? [{ url: heroMedia, alt: "Gireh Barber Shop" }] : []),
     { url: PHOTOS.facadeNight, alt: "Fachada da Gireh Barber Shop à noite" },
     { url: PHOTOS.salon, alt: "Salão interno da Gireh Barber Shop" },
     { url: PHOTOS.cut1, alt: "Barbeiro atendendo cliente na Gireh" },
@@ -108,7 +111,7 @@ function Home() {
     <SiteLayout flush>
       {/* HERO */}
       <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
-        <HeroSlideshow images={heroSlides} videoUrl={settings?.brand.hero_media_url ?? null} />
+        <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
 
         <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-32 sm:pb-20">
           <div className="fade-up flex items-center gap-4">

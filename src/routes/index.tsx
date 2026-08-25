@@ -13,7 +13,7 @@ import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { PlansShowcase } from "@/components/site/PlansShowcase";
 import { FinalCta } from "@/components/site/FinalCta";
-import { HeroBackdrop } from "@/components/site/HeroBackdrop";
+import { HeroSlideshow } from "@/components/site/HeroSlideshow";
 
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
@@ -82,6 +82,15 @@ function Home() {
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
   const contact = settings?.contact;
+  const heroHours = settings?.hours.items?.[0];
+
+  const heroSlides = [
+    { url: PHOTOS.facadeNight, alt: "Fachada da Gireh Barber Shop à noite" },
+    { url: PHOTOS.salon, alt: "Salão interno da Gireh Barber Shop" },
+    { url: PHOTOS.cut1, alt: "Barbeiro atendendo cliente na Gireh" },
+    { url: PHOTOS.bench, alt: "Bancada de trabalho da Gireh" },
+    { url: PHOTOS.facadeDay, alt: "Fachada da Gireh Barber Shop durante o dia" },
+  ];
 
   const photos =
     gallery.length > 0

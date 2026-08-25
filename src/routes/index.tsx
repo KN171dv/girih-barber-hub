@@ -13,6 +13,8 @@ import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
 import { PlansShowcase } from "@/components/site/PlansShowcase";
 import { FinalCta } from "@/components/site/FinalCta";
+import { HeroBackdrop } from "@/components/site/HeroBackdrop";
+
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
@@ -97,16 +99,11 @@ function Home() {
     <SiteLayout flush>
       {/* HERO */}
       <section className="relative isolate flex min-h-[92vh] items-end overflow-hidden">
-        <img
+        <HeroBackdrop
           src={settings?.brand.hero_media_url || PHOTOS.facadeNight}
           alt="Fachada da Gireh Barber Shop em Rio das Ostras"
-          fetchPriority="high"
-          className="hero-zoom absolute inset-0 -z-10 h-full w-full object-cover"
         />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/85 to-background/40"
-          aria-hidden="true"
-        />
+
         <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:pb-28">
           <p className="eyebrow fade-up">Gireh Barber Shop · Rio das Ostras</p>
           <h1 className="fade-up mt-5 max-w-4xl text-[2.75rem] uppercase leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">

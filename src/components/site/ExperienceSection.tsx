@@ -1,5 +1,6 @@
-import { Snowflake, Music, Sofa, Coffee, Sparkles } from "lucide-react";
-import { SectionHeading } from "./SectionHeading";
+import { Snowflake, Music, Sofa, Coffee, Sparkles, Scissors, Star } from "lucide-react";
+import { SectionLabel } from "./SectionLabel";
+import { Reveal } from "./Reveal";
 import { EditableHint } from "./EditableHint";
 import { useSiteSettings } from "@/lib/site-content";
 
@@ -8,43 +9,67 @@ const ICONS: Record<string, typeof Sparkles> = {
   music: Music,
   sofa: Sofa,
   coffee: Coffee,
+  scissors: Scissors,
+  star: Star,
+  sparkles: Sparkles,
 };
 
+/**
+ * "A experiência Gireh" — apresentação premium dos diferenciais.
+ * Os dados continuam vindo de site_settings.experience (painel administrativo).
+ */
 export function ExperienceSection() {
   const { data: settings } = useSiteSettings();
   const experience = settings?.experience;
   const items = experience?.items ?? [];
 
   return (
-    <section className="border-y border-border/60 bg-surface/30 py-20">
+    <section className="relative overflow-hidden border-y border-border/60 bg-surface/20 py-24">
       <div className="mx-auto max-w-6xl px-4">
-        <SectionHeading
-          eyebrow="Ambiente"
-          title={experience?.title || "A experiência Girih"}
+        <SectionLabel
+          eyebrow="A Experiência"
+          title={experience?.title || "A EXPERIÊNCIA GIREH"}
           description={
-            experience?.subtitle || (
-              <EditableHint>Texto da experiência editável no painel</EditableHint>
-            )
+            experience?.subtitle ||
+            "Não é apenas sobre cortar o cabelo. É sobre como você chega e como você sai."
           }
-          align="center"
         />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.length === 0 && (
-            <EditableHint>Itens da experiência a cadastrar no painel</EditableHint>
-          )}
-          {items.map((item, index) => {
-            const Icon = ICONS[item.icon] ?? Sparkles;
-            return (
-              <article key={`${item.title}-${index}`} className="surface-card p-7">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-primary/40 bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <h3 className="mt-5 text-2xl">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
-              </article>
-            );
-          })}
-        </div>
+
+        {items.length === 0 ? (
+          <div className="mt-10">
+            <EditableHint>Diferenciais a cadastrar no painel administrativo</EditableHint>
+          </div>
+        ) : (
+          <div className="mt-14 grid gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item, index) => {
+              const Icon = ICONS[item.icon] ?? Sparkles;
+              return (
+                <Reveal key={`${item.title}-${index}`} delay={index * 80}>
+                  <article className="group relative h-full overflow-hidden bg-background p-8 transition-colors duration-300 hover:bg-surface/50">
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -right-2 -top-6 select-none font-display text-[6rem] leading-none text-foreground/[0.04] transition-colors duration-300 group-hover:text-primary/10"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <Icon
+                      className="h-6 w-6 text-primary transition-transform duration-300 group-hover:-translate-y-0.5"
+                      aria-hidden="true"
+                    />
+                    <h3 className="mt-6 text-2xl uppercase tracking-[0.08em]">{item.title}</h3>
+                    <span
+                      aria-hidden="true"
+                      className="mt-4 block h-px w-10 bg-primary/50 transition-all duration-300 group-hover:w-16"
+                    />
+                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                      {item.text}
+                    </p>
+                  </article>
+                </Reveal>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

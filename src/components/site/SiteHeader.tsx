@@ -55,7 +55,7 @@ export function SiteHeader() {
           <BrandLogo
             imgClassName={cn(
               "transition-all duration-300",
-              scrolled ? "max-h-9" : "max-h-11 sm:max-h-12",
+              scrolled ? "max-h-12" : "max-h-14 sm:max-h-16",
             )}
             textClassName={cn(
               "transition-all duration-300",

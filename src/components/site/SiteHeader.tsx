@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "./BrandLogo";
 import { useSiteSettings } from "@/lib/site-content";
 import { whatsappLink, generalMessage } from "@/lib/whatsapp";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,11 +10,11 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { hash: "", label: "Início" },
-  { hash: "barbearia", label: "A Barbearia" },
+  { hash: "barbearia", label: "Barbearia" },
   { hash: "servicos", label: "Serviços" },
   { hash: "barbeiros", label: "Barbeiros" },
   { hash: "galeria", label: "Galeria" },
-  { hash: "contato", label: "Contato" },
+  { hash: "localizacao", label: "Localização" },
 ] as const;
 
 export function SiteHeader() {
@@ -22,7 +23,6 @@ export function SiteHeader() {
   const { data: settings } = useSiteSettings();
   const { isAdmin } = useAuth();
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
-  const brandName = settings?.brand.name || "Gireh Barber Shop";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -34,38 +34,43 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-border/70 bg-background/90 backdrop-blur-xl"
-          : "border-b border-transparent bg-background/20 backdrop-blur-sm",
+          ? "border-b border-border/70 bg-background/85 backdrop-blur-xl"
+          : "border-b border-transparent bg-gradient-to-b from-background/70 to-transparent",
       )}
     >
       <div
         className={cn(
-          "mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 transition-all duration-500 lg:flex lg:justify-between",
+          "mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 transition-all duration-300 lg:flex lg:justify-between lg:gap-8",
           scrolled ? "h-16" : "h-20",
         )}
       >
-        <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setOpen(false)}>
-          {settings?.brand.logo_url ? (
-            <img
-              src={settings.brand.logo_url}
-              alt={brandName}
-              className="h-9 w-auto object-contain"
-            />
-          ) : null}
-          <span className="truncate font-display text-2xl leading-none tracking-[0.12em] sm:text-3xl">
-            Gīreh <span className="text-primary/90">Barber</span>
-          </span>
+        <Link
+          to="/"
+          aria-label="Gireh Barber Shop — início"
+          className="flex min-w-0 items-center"
+          onClick={() => setOpen(false)}
+        >
+          <BrandLogo
+            imgClassName={cn(
+              "transition-all duration-300",
+              scrolled ? "max-h-9" : "max-h-11 sm:max-h-12",
+            )}
+            textClassName={cn(
+              "transition-all duration-300",
+              scrolled ? "text-2xl" : "text-2xl sm:text-3xl",
+            )}
+          />
         </Link>
 
-        <nav aria-label="Navegação principal" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Navegação principal" className="hidden items-center gap-7 lg:flex">
           {NAV.map((item) => (
             <Link
               key={item.label}
               to="/"
               {...(item.hash ? { hash: item.hash } : {})}
-              className="relative text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
+              className="relative py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-200 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:scale-x-100"
             >
               {item.label}
             </Link>
@@ -79,9 +84,9 @@ export function SiteHeader() {
             </Button>
           )}
           {wa && (
-            <Button asChild variant="gold" size="sm">
+            <Button asChild variant="gold" size="sm" className="tracking-[0.16em]">
               <a href={wa} target="_blank" rel="noreferrer">
-                Agendar horário
+                AGENDAR HORÁRIO
               </a>
             </Button>
           )}
@@ -89,7 +94,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 text-foreground lg:hidden"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 text-foreground transition-colors hover:border-primary hover:text-primary lg:hidden"
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -100,7 +105,7 @@ export function SiteHeader() {
 
       {open && (
         <div className="border-t border-border/60 bg-background/98 backdrop-blur-xl lg:hidden">
-          <nav aria-label="Navegação móvel" className="mx-auto flex max-w-6xl flex-col px-4 py-3">
+          <nav aria-label="Navegação móvel" className="mx-auto flex max-w-6xl flex-col px-4 py-2">
             {NAV.map((item) => (
               <Link
                 key={item.label}
@@ -122,9 +127,9 @@ export function SiteHeader() {
               </Link>
             )}
             {wa && (
-              <Button asChild variant="gold" className="my-4">
+              <Button asChild variant="gold" className="my-4 h-12 tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
-                  Agendar pelo WhatsApp
+                  AGENDAR HORÁRIO
                 </a>
               </Button>
             )}

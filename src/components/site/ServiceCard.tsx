@@ -37,14 +37,16 @@ export function ServiceCard({
       )}
 
       {service.image_url ? (
+        <div className="overflow-hidden">
         <img
           src={service.image_url}
           alt={service.name || "Serviço da Gireh Barber"}
           loading="lazy"
           width={1200}
           height={900}
-          className="h-44 w-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+          className="h-44 w-full object-cover opacity-90 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:opacity-100"
         />
+        </div>
       ) : (
         <div className="flex h-24 items-end border-b border-border/60 bg-surface/40 p-6">
           <Scissors className="h-6 w-6 text-primary/70" aria-hidden="true" />
@@ -72,11 +74,11 @@ export function ServiceCard({
         {href ? (
           <Button
             asChild
-            variant={highlighted ? "default" : "outlineGold"}
-            className="mt-4 h-12 w-full text-sm tracking-[0.18em]"
+            variant={highlighted ? "gold" : "outlineGold"}
+            className="mt-4 h-12 w-full text-xs tracking-[0.16em]"
           >
             <a href={href} target="_blank" rel="noreferrer">
-              <Sparkles aria-hidden="true" /> AGENDAR
+              <Sparkles aria-hidden="true" /> AGENDAR ESTE SERVIÇO
             </a>
           </Button>
         ) : (

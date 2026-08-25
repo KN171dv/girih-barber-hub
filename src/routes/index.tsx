@@ -1,15 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Instagram, MessageCircle, Navigation, MapPin, Clock, ArrowRight } from "lucide-react";
+import { Instagram, MessageCircle, Navigation, ArrowRight, View } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionLabel } from "@/components/site/SectionLabel";
 import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
+import { QuickInfoBar } from "@/components/site/QuickInfoBar";
 import { ServicesShowcase } from "@/components/site/ServicesShowcase";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { BarberCard } from "@/components/site/BarberCard";
 import { ExperienceSection } from "@/components/site/ExperienceSection";
+import { PlansShowcase } from "@/components/site/PlansShowcase";
+import { FinalCta } from "@/components/site/FinalCta";
 import { FaqSection } from "@/components/site/FaqSection";
 import { MapSection } from "@/components/site/MapSection";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
@@ -25,26 +28,24 @@ const PHOTOS = {
   facadeDay: "/__l5e/assets-v1/f5716d88-2e85-41de-8470-d7e809ca9e0c/image-7.png",
 };
 
+const TITLE = "Gireh Barber Shop | Barbearia em Rio das Ostras – RJ";
+const DESCRIPTION =
+  "Barbearia em Rio das Ostras (RJ): corte, barba e acabamento com atendimento de alto padrão na Gireh Barber Shop. Agende seu horário pelo WhatsApp.";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Gireh Barber Shop — Barbearia em Rio das Ostras, RJ" },
-      {
-        name: "description",
-        content:
-          "Barbearia em Rio das Ostras (RJ): cortes, barba e acabamento com atendimento de alto padrão na Gireh Barber Shop. Agende seu horário pelo WhatsApp.",
-      },
-      { property: "og:title", content: "Gireh Barber Shop — Barbearia em Rio das Ostras, RJ" },
-      {
-        property: "og:description",
-        content:
-          "Seu estilo, sua identidade. Barbearia masculina de alto padrão em Rio das Ostras — RJ.",
-      },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://girih-barber-hub.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://girih-barber-hub.lovable.app/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -79,7 +80,6 @@ function Home() {
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
   const contact = settings?.contact;
-  const hours = settings?.hours.items ?? [];
 
   const photos =
     gallery.length > 0
@@ -100,12 +100,16 @@ function Home() {
         <img
           src={settings?.brand.hero_media_url || PHOTOS.facadeNight}
           alt="Fachada da Gireh Barber Shop em Rio das Ostras"
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          fetchPriority="high"
+          className="hero-zoom absolute inset-0 -z-10 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/80 to-background/45" />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/85 to-background/40"
+          aria-hidden="true"
+        />
         <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:pb-28">
-          <p className="eyebrow fade-up">Rio das Ostras · RJ</p>
-          <h1 className="fade-up mt-4 max-w-4xl text-[2.9rem] leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
+          <p className="eyebrow fade-up">Gireh Barber Shop · Rio das Ostras</p>
+          <h1 className="fade-up mt-5 max-w-4xl text-[2.75rem] uppercase leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
             {settings?.brand.hero_title || (
               <>
                 SEU ESTILO.
@@ -116,87 +120,38 @@ function Home() {
           </h1>
           <p className="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {settings?.brand.hero_subtitle ||
-              "Mais do que um corte. Uma experiência feita para quem valoriza estilo, presença e cuidado."}
+              "Mais que um corte. Uma experiência pensada para quem valoriza presença, estilo e cuidado em cada detalhe."}
           </p>
-          <div className="fade-up mt-9 flex flex-wrap gap-3">
+          <div className="fade-up mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {wa && (
-              <Button asChild variant="gold" size="xl">
+              <Button asChild variant="gold" size="xl" className="tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
-                  <MessageCircle aria-hidden="true" /> Agendar no WhatsApp
+                  <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
                 </a>
               </Button>
             )}
-            <Button asChild variant="outlineGold" size="xl">
+            <Button asChild variant="outlineGold" size="xl" className="tracking-[0.16em]">
               <Link to="/" hash="barbearia">
-                Conhecer a Barbearia
+                CONHECER A BARBEARIA
               </Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* FAIXA DE INFORMAÇÕES */}
-      <section className="border-y border-primary/20 bg-surface/40">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-3 md:items-center">
-          <div className="flex min-w-0 gap-3">
-            <MapPin className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="eyebrow">Onde estamos</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {location?.address
-                  ? `${location.address} — ${location.city}/${location.state}`
-                  : <EditableHint>Endereço a cadastrar</EditableHint>}
-              </p>
-            </div>
-          </div>
-          <div className="flex min-w-0 gap-3">
-            <Clock className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="eyebrow">Horários</p>
-              <ul className="mt-1 space-y-0.5 text-sm text-muted-foreground">
-                {hours.length === 0 && (
-                  <li>
-                    <EditableHint>Horários a cadastrar</EditableHint>
-                  </li>
-                )}
-                {hours.map((item, index) => (
-                  <li key={`${item.day}-${index}`}>
-                    {item.day}: <span className="text-foreground">{item.hours}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="md:justify-self-end">
-            {location?.directions_url && (
-              <Button asChild variant="outlineGold" size="lg">
-                <a href={location.directions_url} target="_blank" rel="noreferrer">
-                  <Navigation aria-hidden="true" /> Como chegar
-                </a>
-              </Button>
-            )}
-          </div>
-        </div>
-      </section>
+      {/* INFORMAÇÕES RÁPIDAS */}
+      <QuickInfoBar />
 
-      {/* A BARBEARIA */}
-      <section id="barbearia" className="scroll-mt-24 py-24">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+      {/* 01 — A BARBEARIA */}
+      <section id="barbearia" className="scroll-mt-24 py-24 sm:py-28">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
           <Reveal className="relative">
-            <div className="overflow-hidden rounded-2xl border border-border/70">
+            <div className="group overflow-hidden rounded-2xl border border-border/70">
               <img
                 src={PHOTOS.salon}
-                alt="Salão interno da Gireh Barber Shop"
+                alt="Salão interno da Gireh Barber Shop, com cadeiras de barbeiro"
                 loading="lazy"
-                className="h-[340px] w-full object-cover sm:h-[460px]"
-              />
-            </div>
-            <div className="absolute -bottom-10 right-2 hidden w-52 overflow-hidden rounded-2xl border border-primary/30 shadow-elegant sm:block lg:-right-8 lg:w-64">
-              <img
-                src={PHOTOS.bench}
-                alt="Bancada de trabalho da barbearia"
-                loading="lazy"
-                className="h-40 w-full object-cover lg:h-48"
+                className="h-[360px] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] sm:h-[520px]"
               />
             </div>
           </Reveal>
@@ -205,30 +160,16 @@ function Home() {
             <SectionLabel
               index="01"
               eyebrow="A Barbearia"
-              title={settings?.brand.about_title || "TRADIÇÃO E PRECISÃO EM CADA DETALHE"}
+              title={settings?.brand.about_title || "TRADIÇÃO, ESTILO E PRECISÃO EM CADA DETALHE"}
               description={
                 settings?.brand.about_text ||
-                "Na Gireh Barber, cada detalhe importa. Do ambiente ao acabamento final, nossa proposta é proporcionar uma experiência completa para quem busca cuidar do visual com estilo e personalidade."
+                "Na Gireh, cada detalhe faz parte da experiência. Do ambiente ao acabamento final, criamos um espaço para quem entende que cuidar do visual também é cuidar da própria presença."
               }
             />
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border/60 pt-8">
-              <div>
-                <dt className="eyebrow">Ambiente</dt>
-                <dd className="mt-1 text-sm text-muted-foreground">
-                  Climatizado, com som ambiente e lounge de espera.
-                </dd>
-              </div>
-              <div>
-                <dt className="eyebrow">Atendimento</dt>
-                <dd className="mt-1 text-sm text-muted-foreground">
-                  Profissionais atentos ao acabamento e ao seu tempo.
-                </dd>
-              </div>
-            </dl>
             {wa && (
-              <Button asChild variant="gold" className="mt-8">
+              <Button asChild variant="gold" size="lg" className="mt-10 tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
-                  Agendar horário <ArrowRight aria-hidden="true" />
+                  AGENDAR HORÁRIO <ArrowRight aria-hidden="true" />
                 </a>
               </Button>
             )}
@@ -236,14 +177,14 @@ function Home() {
         </div>
       </section>
 
-      {/* EXPERIÊNCIA */}
+      {/* A EXPERIÊNCIA GIREH */}
       <ExperienceSection />
 
-      {/* SERVIÇOS */}
-      <ServicesShowcase index="02" />
+      {/* 02 — SERVIÇOS */}
+      <ServicesShowcase index="02" showCta={false} />
 
-      {/* BARBEIROS */}
-      <section id="barbeiros" className="scroll-mt-24 py-24">
+      {/* 03 — EQUIPE */}
+      <section id="barbeiros" className="scroll-mt-24 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
             index="03"
@@ -252,8 +193,8 @@ function Home() {
             description="Quatro profissionais, quatro estilos. Veja os trabalhos e agende com quem combina com você."
           />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {barbers.map((barber) => (
-              <Reveal key={barber.id}>
+            {barbers.map((barber, index) => (
+              <Reveal key={barber.id} delay={index * 70}>
                 <BarberCard
                   barber={barber}
                   works={media.filter((item) => item.barber_id === barber.id && item.is_active)}
@@ -267,14 +208,14 @@ function Home() {
         </div>
       </section>
 
-      {/* GALERIA */}
-      <section id="galeria" className="scroll-mt-24 py-24">
+      {/* 04 — GALERIA */}
+      <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="03"
+            index="04"
             eyebrow="Galeria"
             title="O ESPAÇO E O TRABALHO"
-            description="Fotos reais da barbearia, do ambiente e do dia a dia no atendimento."
+            description="Um pouco da nossa rotina, do ambiente e dos trabalhos feitos todos os dias na Gireh."
           />
           <Reveal className="mt-12">
             <GalleryGrid photos={photos} />
@@ -282,43 +223,49 @@ function Home() {
         </div>
       </section>
 
-      {/* INSTAGRAM */}
-      <section className="border-y border-border/60 bg-surface/30 py-20">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-center">
+      {/* 05 — INSTAGRAM */}
+      <section className="py-24 sm:py-28">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
-            <SectionLabel index="04" eyebrow="Instagram" title="ACOMPANHE @GIREHBARBER" />
-            <p className="mt-4 max-w-xl text-muted-foreground">
-              Novidades, cortes do dia e bastidores da barbearia direto no nosso perfil.
-            </p>
+            <SectionLabel
+              index="05"
+              eyebrow="Instagram"
+              title="ACOMPANHE A GIREH"
+              description="Cortes, transformações, bastidores e o dia a dia da barbearia."
+            />
           </div>
           {contact?.instagram && (
-            <Button asChild variant="gold" size="xl">
+            <Button asChild variant="outlineGold" size="xl" className="tracking-[0.16em]">
               <a href={contact.instagram} target="_blank" rel="noreferrer">
-                <Instagram aria-hidden="true" /> Seguir no Instagram
+                <Instagram aria-hidden="true" /> SEGUIR NO INSTAGRAM
               </a>
             </Button>
           )}
         </div>
         <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
           {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src) => (
-            <img
-              key={src}
-              src={src}
-              alt="Publicação da Gireh Barber Shop"
-              loading="lazy"
-              className="aspect-square w-full rounded-xl border border-border/70 object-cover"
-            />
+            <div key={src} className="overflow-hidden rounded-xl border border-border/70">
+              <img
+                src={src}
+                alt="Atendimento e ambiente da Gireh Barber Shop"
+                loading="lazy"
+                className="aspect-square w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]"
+              />
+            </div>
           ))}
         </div>
       </section>
 
-      {/* LOCALIZAÇÃO / CONTATO */}
-      <section id="contato" className="scroll-mt-24 py-24">
+      {/* PLANOS */}
+      <PlansShowcase />
+
+      {/* 06 — LOCALIZAÇÃO */}
+      <section id="contato" className="scroll-mt-24 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="05"
-            eyebrow="Contato"
-            title="VENHA NOS VISITAR"
+            index="06"
+            eyebrow="Localização"
+            title="VENHA VIVER A EXPERIÊNCIA GIREH"
             description={
               location?.address
                 ? `${location.address} — ${location.city}/${location.state}`
@@ -328,18 +275,25 @@ function Home() {
           <div id="localizacao" className="mt-10 scroll-mt-24">
             <MapSection />
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {wa && (
-              <Button asChild variant="gold" size="lg">
-                <a href={wa} target="_blank" rel="noreferrer">
-                  <MessageCircle aria-hidden="true" /> Falar no WhatsApp
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            {location?.directions_url && (
+              <Button asChild variant="gold" size="lg" className="tracking-[0.16em]">
+                <a href={location.directions_url} target="_blank" rel="noreferrer">
+                  <Navigation aria-hidden="true" /> COMO CHEGAR
                 </a>
               </Button>
             )}
-            {location?.directions_url && (
-              <Button asChild variant="outlineGold" size="lg">
-                <a href={location.directions_url} target="_blank" rel="noreferrer">
-                  <Navigation aria-hidden="true" /> Traçar rota
+            {wa && (
+              <Button asChild variant="outlineGold" size="lg" className="tracking-[0.16em]">
+                <a href={wa} target="_blank" rel="noreferrer">
+                  <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
+                </a>
+              </Button>
+            )}
+            {location?.panorama_360_url && (
+              <Button asChild variant="ghost" size="lg" className="tracking-[0.16em]">
+                <a href={location.panorama_360_url} target="_blank" rel="noreferrer">
+                  <View aria-hidden="true" /> CONHEÇA NOSSO ESPAÇO EM 360°
                 </a>
               </Button>
             )}
@@ -349,6 +303,9 @@ function Home() {
 
       {/* FAQ */}
       <FaqSection />
+
+      {/* CTA FINAL */}
+      <FinalCta backgroundUrl={PHOTOS.facadeNight} />
     </SiteLayout>
   );
 }

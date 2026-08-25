@@ -28,9 +28,9 @@ export function ServicesShowcase({
       <div className="mx-auto max-w-6xl px-4">
         <SectionLabel
           index={index}
-          eyebrow="Serviços & Preços"
-          title="NOSSOS SERVIÇOS"
-          description="Seu estilo merece atenção aos detalhes."
+          eyebrow="Serviços"
+          title="CORTE, BARBA E CUIDADO EM CADA DETALHE"
+          description="Escolha seu serviço e agende seu horário."
         />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

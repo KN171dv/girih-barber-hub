@@ -1,7 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, MessageCircle, MapPin } from "lucide-react";
+import { BrandLogo } from "./BrandLogo";
 import { useSiteSettings } from "@/lib/site-content";
 import { whatsappLink, generalMessage } from "@/lib/whatsapp";
+
+const NAV = [
+  { hash: "", label: "Início" },
+  { hash: "barbearia", label: "Barbearia" },
+  { hash: "servicos", label: "Serviços" },
+  { hash: "barbeiros", label: "Barbeiros" },
+  { hash: "galeria", label: "Galeria" },
+  { hash: "localizacao", label: "Localização" },
+] as const;
 
 export function SiteFooter() {
   const { data: settings } = useSiteSettings();
@@ -11,13 +21,11 @@ export function SiteFooter() {
   const wa = whatsappLink(contact?.whatsapp, generalMessage());
 
   return (
-    <footer className="border-t border-border/60 bg-surface/30">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="sm:col-span-2">
-          <p className="font-display text-3xl tracking-[0.12em]">
-            Gīreh <span className="text-primary/90">Barber</span>
-          </p>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+    <footer className="border-t border-border/60 bg-surface/25">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="min-w-0">
+          <BrandLogo imgClassName="max-h-12" textClassName="text-3xl" />
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
             {brand?.tagline || "Barbearia em Rio das Ostras — RJ"}
           </p>
           <div className="mt-6 flex gap-3">
@@ -26,8 +34,8 @@ export function SiteFooter() {
                 href={contact.instagram}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Instagram da Gireh Barber"
-                className="rounded-full border border-border p-2.5 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                aria-label="Instagram da Gireh Barber Shop"
+                className="rounded-full border border-border p-2.5 text-muted-foreground transition-colors duration-300 hover:border-primary hover:text-primary"
               >
                 <Instagram className="h-4 w-4" />
               </a>
@@ -37,8 +45,8 @@ export function SiteFooter() {
                 href={wa}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="WhatsApp da Gireh Barber"
-                className="rounded-full border border-border p-2.5 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                aria-label="WhatsApp da Gireh Barber Shop"
+                className="rounded-full border border-border p-2.5 text-muted-foreground transition-colors duration-300 hover:border-primary hover:text-primary"
               >
                 <MessageCircle className="h-4 w-4" />
               </a>
@@ -46,70 +54,69 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <nav aria-label="Links do rodapé">
-          <p className="eyebrow">Navegue</p>
+        <nav aria-label="Links do rodapé" className="min-w-0">
+          <p className="eyebrow">Navegação</p>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
-            <li>
-              <Link to="/" className="hover:text-primary">Início</Link>
-            </li>
-            <li>
-              <Link to="/" hash="servicos" className="hover:text-primary">Serviços</Link>
-            </li>
-            <li>
-              <Link to="/" hash="galeria" className="hover:text-primary">Galeria</Link>
-            </li>
-            <li>
-              <Link to="/" hash="localizacao" className="hover:text-primary">Localização</Link>
-            </li>
-            {contact?.instagram && (
-              <li>
-                <a href={contact.instagram} target="_blank" rel="noreferrer" className="hover:text-primary">
-                  Instagram
-                </a>
+            {NAV.map((item) => (
+              <li key={item.label}>
+                <Link
+                  to="/"
+                  {...(item.hash ? { hash: item.hash } : {})}
+                  className="transition-colors duration-200 hover:text-primary"
+                >
+                  {item.label}
+                </Link>
               </li>
-            )}
+            ))}
+          </ul>
+        </nav>
+
+        <div className="min-w-0">
+          <p className="eyebrow">Contato</p>
+          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
             {wa && (
               <li>
-                <a href={wa} target="_blank" rel="noreferrer" className="hover:text-primary">
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors duration-200 hover:text-primary"
+                >
+                  <MessageCircle className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                   WhatsApp
                 </a>
               </li>
             )}
-          </ul>
-        </nav>
-
-        <div>
-          <p className="eyebrow">Contato</p>
-          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+            {contact?.instagram && (
+              <li>
+                <a
+                  href={contact.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors duration-200 hover:text-primary"
+                >
+                  <Instagram className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  Instagram
+                </a>
+              </li>
+            )}
             {location?.address && (
               <li className="flex gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                 <span>
                   {location.address}
-                  <br />
-                  {location.city} — {location.state}
-                  {location.zip ? `, ${location.zip}` : ""}
+                  {location.city ? ` — ${location.city}/${location.state}` : ""}
                 </span>
-              </li>
-            )}
-            {contact?.phone && (
-              <li className="flex gap-2">
-                <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>{contact.phone}</span>
-              </li>
-            )}
-            {contact?.instagram && (
-              <li className="flex gap-2">
-                <Instagram className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>@girehbarber</span>
               </li>
             )}
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {brand?.name || "Gireh Barber Shop"} — Rio das Ostras, RJ.
+      <div className="border-t border-border/50">
+        <p className="mx-auto max-w-6xl px-4 py-6 text-center text-xs tracking-[0.12em] text-muted-foreground">
+          © 2026 Gireh Barber Shop. Todos os direitos reservados.
+        </p>
       </div>
     </footer>
   );

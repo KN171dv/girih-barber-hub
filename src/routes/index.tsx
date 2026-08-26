@@ -133,22 +133,22 @@ function Home() {
           />
         )}
 
-        <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-32 sm:pb-20">
-          <div className="fade-up flex items-center gap-4">
+        <div className="mx-auto w-full max-w-6xl px-5 pb-12 pt-28 text-center sm:px-4 sm:pb-20 sm:pt-32 sm:text-left">
+          <div className="fade-up flex items-center justify-center gap-3 sm:justify-start sm:gap-4">
             <span className="h-px w-12 bg-primary sm:w-20" aria-hidden="true" />
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
               Gireh Barber Shop · Desde 2015
             </p>
           </div>
-          <h1 className="fade-up mt-6 max-w-4xl text-[2.4rem] leading-[1.02] tracking-[0.01em] sm:text-6xl lg:text-7xl">
+          <h1 className="fade-up mx-auto mt-5 max-w-4xl text-[2rem] leading-[1.08] tracking-[0.01em] sm:mx-0 sm:mt-6 sm:text-6xl sm:leading-[1.02] lg:text-7xl">
             11 Anos de Estilo,
             <br />
             <span className="text-gradient-gold">Tradição e Excelência</span>
           </h1>
-          <p className="fade-up mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="fade-up mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mx-0 sm:mt-5 sm:text-lg">
             A Arte de Ser Clássico, a Liberdade de Ser Moderno
           </p>
-          <div className="fade-up mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="fade-up mt-7 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
             {wa && (
               <Button asChild variant="gold" size="xl" className="tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
@@ -164,10 +164,10 @@ function Home() {
           </div>
 
           {/* Linha inferior com informações reais */}
-          <div className="fade-up mt-12 border-t border-border/50 pt-6">
-            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3 sm:divide-x sm:divide-border/50">
+          <div className="fade-up mt-9 border-t border-border/50 pt-5 sm:mt-12 sm:pt-6">
+            <dl className="grid gap-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:grid-cols-3 sm:gap-5 sm:divide-x sm:divide-border/50 sm:text-[11px] sm:tracking-[0.2em]">
               <div className="min-w-0 sm:pr-6">
-                <dt className="flex items-center gap-2 text-primary">
+                <dt className="flex items-center justify-center gap-2 text-primary sm:justify-start">
                   <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> Onde estamos
                 </dt>
                 <dd className="mt-2 truncate text-foreground">
@@ -178,7 +178,7 @@ function Home() {
               </div>
               {heroHours && (
                 <div className="min-w-0 sm:px-6">
-                  <dt className="flex items-center gap-2 text-primary">
+                  <dt className="flex items-center justify-center gap-2 text-primary sm:justify-start">
                     <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Horário
                   </dt>
                   <dd className="mt-2 truncate text-foreground">
@@ -188,7 +188,7 @@ function Home() {
               )}
               {contact?.whatsapp && (
                 <div className="min-w-0 sm:pl-6">
-                  <dt className="flex items-center gap-2 text-primary">
+                  <dt className="flex items-center justify-center gap-2 text-primary sm:justify-start">
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> Agendamento
                   </dt>
                   <dd className="mt-2 truncate text-foreground">{formatPhone(contact.whatsapp)}</dd>
@@ -202,14 +202,14 @@ function Home() {
 
       {/* 01 — A BARBEARIA */}
       <section id="barbearia" className="scroll-mt-24 section-y">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
           <Reveal className="relative">
             <div className="group overflow-hidden rounded-2xl border border-border/70">
               <img
                 src={PHOTOS.salon}
                 alt="Salão interno da Gireh Barber Shop, com cadeiras de barbeiro"
                 loading="lazy"
-                className="h-[360px] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] sm:h-[520px]"
+                className="h-[260px] w-full object-cover sm:h-[360px] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] sm:h-[520px]"
               />
             </div>
           </Reveal>
@@ -225,7 +225,7 @@ function Home() {
               }
             />
             {wa && (
-              <Button asChild variant="gold" size="lg" className="mt-10 tracking-[0.16em]">
+              <Button asChild variant="gold" size="lg" className="mt-7 w-full tracking-[0.16em] sm:mt-10 sm:w-auto">
                 <a href={wa} target="_blank" rel="noreferrer">
                   AGENDAR HORÁRIO <ArrowRight aria-hidden="true" />
                 </a>
@@ -247,7 +247,7 @@ function Home() {
             title="NOSSOS BARBEIROS"
             description="Quatro profissionais, quatro estilos. Veja os trabalhos e agende com quem combina com você."
           />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {barbers.map((barber, index) => (
               <Reveal key={barber.id} delay={index * 70}>
                 <BarberCard
@@ -275,7 +275,7 @@ function Home() {
             title="O ESPAÇO E O TRABALHO"
             description="Um pouco da nossa rotina, do ambiente e dos trabalhos feitos todos os dias na Gireh."
           />
-          <Reveal className="mt-12">
+          <Reveal className="mt-8 sm:mt-12">
             <GalleryGrid photos={photos} />
           </Reveal>
         </div>
@@ -283,7 +283,7 @@ function Home() {
 
       {/* 06 — INSTAGRAM */}
       <section className="section-y">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
               index="06"
@@ -293,14 +293,14 @@ function Home() {
             />
           </div>
           {contact?.instagram && (
-            <Button asChild variant="outlineGold" size="xl" className="tracking-[0.16em]">
+            <Button asChild variant="outlineGold" size="xl" className="w-full tracking-[0.16em] lg:w-auto">
               <a href={contact.instagram} target="_blank" rel="noreferrer">
                 <Instagram aria-hidden="true" /> SEGUIR NO INSTAGRAM
               </a>
             </Button>
           )}
         </div>
-        <div className="mx-auto mt-12 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-4">
+        <div className="mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:mt-12 sm:grid-cols-4">
           {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src, i) => (
             <div key={`${src}-${i}`} className="overflow-hidden rounded-xl border border-border/70">
               <img
@@ -321,7 +321,7 @@ function Home() {
       <section id="contato" className="scroll-mt-24 section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel index="07" eyebrow="Localização" title="VENHA VIVER A EXPERIÊNCIA GIREH" />
-          <div id="localizacao" className="mt-10 scroll-mt-24">
+          <div id="localizacao" className="mt-8 scroll-mt-24 sm:mt-10">
             <LocationBlock />
           </div>
         </div>

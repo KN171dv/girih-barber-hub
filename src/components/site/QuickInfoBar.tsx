@@ -19,7 +19,7 @@ export function QuickInfoBar() {
 
   return (
     <section className="border-y border-border/60 bg-surface/25">
-      <div className="mx-auto grid max-w-6xl gap-6 divide-y divide-border/60 px-4 py-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
+      <div className="mx-auto grid max-w-6xl gap-5 divide-y divide-border/60 px-4 py-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-y-0">
         <div className="flex min-w-0 items-start gap-3 md:pr-8">
           <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="min-w-0">
@@ -34,7 +34,7 @@ export function QuickInfoBar() {
           </div>
         </div>
 
-        <div className="flex min-w-0 items-start gap-3 pt-6 md:px-8 md:pt-0">
+        <div className="flex min-w-0 items-start gap-3 pt-5 md:px-8 md:pt-0">
           <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
@@ -50,7 +50,7 @@ export function QuickInfoBar() {
           </div>
         </div>
 
-        <div className="flex min-w-0 items-start gap-3 pt-6 md:pl-8 md:pt-0">
+        <div className="flex min-w-0 items-start gap-3 pt-5 md:pl-8 md:pt-0">
           <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">

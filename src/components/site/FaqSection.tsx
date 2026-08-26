@@ -13,12 +13,12 @@ export function FaqSection() {
   if (items.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-24">
+    <section className="mx-auto max-w-3xl px-4 section-y">
       <div className="text-center">
         <span className="eyebrow">Dúvidas</span>
-        <h2 className="mt-3 text-4xl uppercase leading-[1.05] sm:text-5xl">Dúvidas frequentes</h2>
+        <h2 className="mt-3 text-[1.9rem] uppercase leading-[1.08] sm:text-4xl lg:text-5xl">Dúvidas frequentes</h2>
       </div>
-      <Accordion type="single" collapsible className="mt-10 w-full">
+      <Accordion type="single" collapsible className="mt-8 w-full sm:mt-10">
         {items.map((item, index) => (
           <AccordionItem
             key={`${item.question}-${index}`}

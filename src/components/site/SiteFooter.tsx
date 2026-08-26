@@ -22,13 +22,13 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-border/60 bg-surface/25">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
-        <div className="min-w-0">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 text-center sm:grid-cols-2 sm:gap-10 sm:py-16 sm:text-left lg:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="flex min-w-0 flex-col items-center sm:items-start">
           <BrandLogo imgClassName="max-h-12" textClassName="text-3xl" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
             {brand?.tagline || "Barbearia em Rio das Ostras — RJ"}
           </p>
-          <div className="mt-6 flex gap-3">
+          <div className="mt-5 flex justify-center gap-3 sm:mt-6 sm:justify-start">
             {contact?.instagram && (
               <a
                 href={contact.instagram}
@@ -80,7 +80,7 @@ export function SiteFooter() {
                   href={wa}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 transition-colors duration-200 hover:text-primary"
+                  className="inline-flex items-center justify-center gap-2 transition-colors duration-200 hover:text-primary"
                 >
                   <MessageCircle className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                   WhatsApp
@@ -93,7 +93,7 @@ export function SiteFooter() {
                   href={contact.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 transition-colors duration-200 hover:text-primary"
+                  className="inline-flex items-center justify-center gap-2 transition-colors duration-200 hover:text-primary"
                 >
                   <Instagram className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                   Instagram
@@ -101,7 +101,7 @@ export function SiteFooter() {
               </li>
             )}
             {location?.address && (
-              <li className="flex gap-2">
+              <li className="flex justify-center gap-2 sm:justify-start">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                 <span>
                   {location.address}

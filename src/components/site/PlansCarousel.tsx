@@ -2,6 +2,7 @@ import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "./SectionLabel";
 import { Reveal } from "./Reveal";
+import { EditableHint } from "./EditableHint";
 import {
   Carousel,
   CarouselContent,
@@ -23,12 +24,10 @@ export function PlansCarousel({ index }: { index?: string | undefined }) {
   const { data: settings } = useSiteSettings();
   const whatsapp = settings?.contact.whatsapp;
 
-  if (plans.length === 0) return null;
-
   return (
     <section
       id="planos"
-      className="scroll-mt-24 border-y border-border/60 bg-surface/20 py-24 sm:py-28"
+      className="section-y scroll-mt-24 border-y border-border/60 bg-surface/20"
     >
       <div className="mx-auto max-w-6xl px-4">
         <SectionLabel
@@ -38,25 +37,34 @@ export function PlansCarousel({ index }: { index?: string | undefined }) {
           description="Mais praticidade para quem mantém o estilo sempre em dia. Escolha o plano que combina com a sua rotina."
         />
 
-        <Reveal className="mt-12">
-          <Carousel opts={{ align: "start", loop: plans.length > 3 }} className="w-full">
-            <CarouselContent className="-ml-4">
-              {plans.map((plan) => (
-                <CarouselItem
-                  key={plan.id}
-                  className="basis-[86%] pl-4 sm:basis-1/2 lg:basis-1/3"
-                >
-                  <PlanSlide plan={plan} whatsapp={whatsapp} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+        {plans.length === 0 ? (
+          <div className="mt-8 sm:mt-10">
+            <EditableHint>Planos a cadastrar no painel administrativo</EditableHint>
+          </div>
+        ) : (
+          <Reveal className="mt-8 sm:mt-10 lg:mt-12">
+            <Carousel
+              opts={{ align: "start", loop: plans.length > 3, dragFree: false, containScroll: "trimSnaps" }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-3 sm:-ml-4">
+                {plans.map((plan) => (
+                  <CarouselItem
+                    key={plan.id}
+                    className="basis-[88%] pl-3 sm:basis-1/2 sm:pl-4 lg:basis-1/3"
+                  >
+                    <PlanSlide plan={plan} whatsapp={whatsapp} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
 
-            <div className="mt-8 flex items-center justify-end gap-3">
-              <CarouselPrevious className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
-              <CarouselNext className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
-            </div>
-          </Carousel>
-        </Reveal>
+              <div className="mt-6 flex items-center justify-center gap-3 sm:mt-8 sm:justify-end">
+                <CarouselPrevious className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
+                <CarouselNext className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
+              </div>
+            </Carousel>
+          </Reveal>
+        )}
       </div>
     </section>
   );
@@ -70,19 +78,19 @@ function PlanSlide({ plan, whatsapp }: { plan: Plan; whatsapp?: string | undefin
   return (
     <article
       className={cn(
-        "flex h-full flex-col gap-6 rounded-2xl border border-border/70 bg-background/70 p-8 transition-colors duration-300 hover:border-primary/50",
-        plan.highlight && "border-primary/50",
+        "flex h-full flex-col gap-5 rounded-2xl border border-border/70 bg-background/70 p-6 text-center transition-colors duration-300 hover:border-primary/50 sm:gap-6 sm:p-8 sm:text-left",
+        plan.highlight && "border-primary/50 shadow-gold",
       )}
     >
       <div>
-        <h3 className="text-3xl uppercase tracking-[0.06em]">{plan.name}</h3>
+        <h3 className="text-2xl uppercase tracking-[0.06em] sm:text-3xl">{plan.name}</h3>
         {plan.summary && (
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{plan.summary}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:mt-3">{plan.summary}</p>
         )}
       </div>
 
       {price && (
-        <p className="flex items-end gap-2">
+        <p className="flex items-end justify-center gap-2 sm:justify-start">
           <span className="font-display text-4xl leading-none text-primary">{price}</span>
           {plan.billing_period && (
             <span className="pb-1 text-sm text-muted-foreground">/{plan.billing_period}</span>
@@ -91,7 +99,7 @@ function PlanSlide({ plan, whatsapp }: { plan: Plan; whatsapp?: string | undefin
       )}
 
       {items.length > 0 && (
-        <ul className="flex-1 space-y-2.5 text-sm text-muted-foreground">
+        <ul className="flex-1 space-y-2.5 text-left text-sm text-muted-foreground">
           {items.map((item, i) => (
             <li key={`${item}-${i}`} className="flex gap-2">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />

@@ -16,14 +16,14 @@ export function LocationBlock() {
   const panorama = location?.panorama_360_url;
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="flex flex-col gap-7 rounded-2xl border border-border/70 bg-surface/25 p-8">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-5 sm:gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="flex flex-col gap-6 rounded-2xl border border-border/70 bg-surface/25 p-5 sm:gap-7 sm:p-8">
           <div className="flex gap-3">
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
             <div className="min-w-0">
               <p className="eyebrow">Endereço</p>
-              <p className="mt-2 text-base text-foreground">
+              <p className="mt-2 break-words text-base text-foreground">
                 {location?.address || <EditableHint>Endereço a cadastrar</EditableHint>}
               </p>
               {location?.city && (
@@ -46,7 +46,7 @@ export function LocationBlock() {
                   </li>
                 )}
                 {hours.map((item, index) => (
-                  <li key={`${item.day}-${index}`} className="flex justify-between gap-6">
+                  <li key={`${item.day}-${index}`} className="flex flex-wrap justify-between gap-x-4 gap-y-0.5">
                     <span>{item.day}</span>
                     <span className="text-foreground">{item.hours}</span>
                   </li>
@@ -92,7 +92,7 @@ export function LocationBlock() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-border/70">
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-border/70">
           {location?.map_embed_url ? (
             <iframe
               src={location.map_embed_url}

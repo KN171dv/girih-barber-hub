@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Instagram, MessageCircle, Navigation, ArrowRight, View } from "lucide-react";
+import { Instagram, MessageCircle, ArrowRight, MapPin, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -10,15 +10,17 @@ import { QuickInfoBar } from "@/components/site/QuickInfoBar";
 import { ServicesShowcase } from "@/components/site/ServicesShowcase";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { BarberCard } from "@/components/site/BarberCard";
-import { ExperienceSection } from "@/components/site/ExperienceSection";
-import { PlansShowcase } from "@/components/site/PlansShowcase";
+import { PlansCarousel } from "@/components/site/PlansCarousel";
 import { FinalCta } from "@/components/site/FinalCta";
 import { HeroSlideshow } from "@/components/site/HeroSlideshow";
+import { HeroVideoBackdrop } from "@/components/site/HeroVideoBackdrop";
 
 import { FaqSection } from "@/components/site/FaqSection";
-import { MapSection } from "@/components/site/MapSection";
+import { LocationBlock } from "@/components/site/LocationBlock";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, onlyDigits, whatsappLink } from "@/lib/whatsapp";
+
+const HERO_VIDEO_ID = "YSxPC0wdCQI";
 
 const PHOTOS = {
   facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
@@ -233,9 +235,6 @@ function Home() {
         </div>
       </section>
 
-      {/* A EXPERIÊNCIA GIREH */}
-      <ExperienceSection />
-
       {/* 02 — SERVIÇOS */}
       <ServicesShowcase index="02" showCta={false} />
 
@@ -264,11 +263,14 @@ function Home() {
         </div>
       </section>
 
-      {/* 04 — GALERIA */}
+      {/* 04 — PLANOS & ASSINATURAS */}
+      <PlansCarousel index="04" />
+
+      {/* 05 — GALERIA */}
       <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="04"
+            index="05"
             eyebrow="Galeria"
             title="O ESPAÇO E O TRABALHO"
             description="Um pouco da nossa rotina, do ambiente e dos trabalhos feitos todos os dias na Gireh."
@@ -279,12 +281,12 @@ function Home() {
         </div>
       </section>
 
-      {/* 05 — INSTAGRAM */}
+      {/* 06 — INSTAGRAM */}
       <section className="py-24 sm:py-28">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
-              index="05"
+              index="06"
               eyebrow="Instagram"
               title="ACOMPANHE A GIREH"
               description="Cortes, transformações, bastidores e o dia a dia da barbearia."
@@ -312,47 +314,15 @@ function Home() {
         </div>
       </section>
 
-      {/* PLANOS */}
-      <PlansShowcase />
+      {/* FAIXA DE INFORMAÇÕES */}
+      <QuickInfoBar />
 
-      {/* 06 — LOCALIZAÇÃO */}
+      {/* 07 — LOCALIZAÇÃO */}
       <section id="contato" className="scroll-mt-24 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
-          <SectionLabel
-            index="06"
-            eyebrow="Localização"
-            title="VENHA VIVER A EXPERIÊNCIA GIREH"
-            description={
-              location?.address
-                ? `${location.address} — ${location.city}/${location.state}`
-                : "Endereço a cadastrar no painel administrativo."
-            }
-          />
+          <SectionLabel index="07" eyebrow="Localização" title="VENHA VIVER A EXPERIÊNCIA GIREH" />
           <div id="localizacao" className="mt-10 scroll-mt-24">
-            <MapSection />
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            {location?.directions_url && (
-              <Button asChild variant="gold" size="lg" className="tracking-[0.16em]">
-                <a href={location.directions_url} target="_blank" rel="noreferrer">
-                  <Navigation aria-hidden="true" /> COMO CHEGAR
-                </a>
-              </Button>
-            )}
-            {wa && (
-              <Button asChild variant="outlineGold" size="lg" className="tracking-[0.16em]">
-                <a href={wa} target="_blank" rel="noreferrer">
-                  <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
-                </a>
-              </Button>
-            )}
-            {location?.panorama_360_url && (
-              <Button asChild variant="ghost" size="lg" className="tracking-[0.16em]">
-                <a href={location.panorama_360_url} target="_blank" rel="noreferrer">
-                  <View aria-hidden="true" /> CONHEÇA NOSSO ESPAÇO EM 360°
-                </a>
-              </Button>
-            )}
+            <LocationBlock />
           </div>
         </div>
       </section>

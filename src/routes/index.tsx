@@ -121,28 +121,30 @@ function Home() {
     <SiteLayout flush>
       {/* HERO */}
       <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
-        <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
+        {heroVideo ? (
+          <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
+        ) : (
+          <HeroVideoBackdrop
+            videoId={HERO_VIDEO_ID}
+            fallbackImage={heroSlides[0]?.url ?? PHOTOS.facadeNight}
+            fallbackAlt="Ambiente da Gireh Barber Shop"
+          />
+        )}
 
         <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-32 sm:pb-20">
           <div className="fade-up flex items-center gap-4">
             <span className="h-px w-12 bg-primary sm:w-20" aria-hidden="true" />
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-xs">
-              11 anos de estilo, tradição e excelência
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
+              Gireh Barber Shop · Desde 2015
             </p>
           </div>
-          <p className="eyebrow fade-up mt-4">Gireh Barber Shop · Desde 2015</p>
-          <h1 className="fade-up mt-5 max-w-4xl text-[2.75rem] uppercase leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
-            {settings?.brand.hero_title || (
-              <>
-                SEU ESTILO.
-                <br />
-                <span className="text-gradient-gold">SUA IDENTIDADE.</span>
-              </>
-            )}
+          <h1 className="fade-up mt-6 max-w-4xl text-[2.4rem] leading-[1.02] tracking-[0.01em] sm:text-6xl lg:text-7xl">
+            11 Anos de Estilo,
+            <br />
+            <span className="text-gradient-gold">Tradição e Excelência</span>
           </h1>
-          <p className="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {settings?.brand.hero_subtitle ||
-              "Corte, barba e acabamento com padrão de excelência em Rio das Ostras. Um ambiente pensado para quem valoriza presença, estilo e cuidado em cada detalhe."}
+          <p className="fade-up mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            A Arte de Ser Clássico, a Liberdade de Ser Moderno
           </p>
           <div className="fade-up mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {wa && (
@@ -161,9 +163,11 @@ function Home() {
 
           {/* Linha inferior com informações reais */}
           <div className="fade-up mt-12 border-t border-border/50 pt-6">
-            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3">
-              <div className="min-w-0">
-                <dt className="text-primary">Onde estamos</dt>
+            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3 sm:divide-x sm:divide-border/50">
+              <div className="min-w-0 sm:pr-6">
+                <dt className="flex items-center gap-2 text-primary">
+                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> Onde estamos
+                </dt>
                 <dd className="mt-2 truncate text-foreground">
                   {location?.city
                     ? `${location.city}${location.state ? ` — ${location.state}` : ""}`
@@ -171,14 +175,20 @@ function Home() {
                 </dd>
               </div>
               {heroHours && (
-                <div className="min-w-0">
-                  <dt className="text-primary">{heroHours.day}</dt>
-                  <dd className="mt-2 truncate text-foreground">{heroHours.hours}</dd>
+                <div className="min-w-0 sm:px-6">
+                  <dt className="flex items-center gap-2 text-primary">
+                    <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Horário
+                  </dt>
+                  <dd className="mt-2 truncate text-foreground">
+                    {heroHours.day}: {heroHours.hours}
+                  </dd>
                 </div>
               )}
               {contact?.whatsapp && (
-                <div className="min-w-0">
-                  <dt className="text-primary">WhatsApp</dt>
+                <div className="min-w-0 sm:pl-6">
+                  <dt className="flex items-center gap-2 text-primary">
+                    <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> Agendamento
+                  </dt>
                   <dd className="mt-2 truncate text-foreground">{formatPhone(contact.whatsapp)}</dd>
                 </div>
               )}
@@ -187,9 +197,6 @@ function Home() {
         </div>
       </section>
 
-
-      {/* INFORMAÇÕES RÁPIDAS */}
-      <QuickInfoBar />
 
       {/* 01 — A BARBEARIA */}
       <section id="barbearia" className="scroll-mt-24 py-24 sm:py-28">

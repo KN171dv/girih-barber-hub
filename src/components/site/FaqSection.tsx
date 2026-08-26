@@ -13,7 +13,7 @@ export function FaqSection() {
   if (items.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-24">
+    <section className="mx-auto max-w-3xl px-4">
       <div className="text-center">
         <span className="eyebrow">Dúvidas</span>
         <h2 className="mt-3 text-4xl uppercase leading-[1.05] sm:text-5xl">Dúvidas frequentes</h2>

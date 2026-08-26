@@ -20,7 +20,7 @@ export function FinalCta({ backgroundUrl }: { backgroundUrl: string }) {
       </div>
       <div className="absolute inset-0 -z-10 bg-background/85" aria-hidden="true" />
 
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:py-28">
+      <div className="mx-auto max-w-3xl px-4 text-center sm:py-28">
         <p className="eyebrow">Seu próximo corte começa aqui.</p>
         <h2 className="mt-4 text-4xl uppercase leading-[1.02] sm:text-6xl">
           Pronto para renovar o visual?

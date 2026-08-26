@@ -201,7 +201,7 @@ function Home() {
 
 
       {/* 01 — A BARBEARIA */}
-      <section id="barbearia" className="scroll-mt-24 py-24 sm:py-28">
+      <section id="barbearia" className="scroll-mt-24 section-y">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
           <Reveal className="relative">
             <div className="group overflow-hidden rounded-2xl border border-border/70">
@@ -239,7 +239,7 @@ function Home() {
       <ServicesShowcase index="02" showCta={false} />
 
       {/* 03 — EQUIPE */}
-      <section id="barbeiros" className="scroll-mt-24 py-24 sm:py-28">
+      <section id="barbeiros" className="scroll-mt-24 section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
             index="03"
@@ -267,7 +267,7 @@ function Home() {
       <PlansCarousel index="04" />
 
       {/* 05 — GALERIA */}
-      <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 py-24 sm:py-28">
+      <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
             index="05"
@@ -282,7 +282,7 @@ function Home() {
       </section>
 
       {/* 06 — INSTAGRAM */}
-      <section className="py-24 sm:py-28">
+      <section className="section-y">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
@@ -318,7 +318,7 @@ function Home() {
       <QuickInfoBar />
 
       {/* 07 — LOCALIZAÇÃO */}
-      <section id="contato" className="scroll-mt-24 py-24 sm:py-28">
+      <section id="contato" className="scroll-mt-24 section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel index="07" eyebrow="Localização" title="VENHA VIVER A EXPERIÊNCIA GIREH" />
           <div id="localizacao" className="mt-10 scroll-mt-24">

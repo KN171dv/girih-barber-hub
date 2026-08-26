@@ -51,7 +51,7 @@ export function HeroVideoBackdrop({
         <div
           className={cn(
             "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000",
-            "h-[max(100%,56.25vw)] w-[max(100%,177.7778vh)]",
+            "h-[max(115%,64vw)] w-[max(115%,204vh)]",
             ready ? "opacity-100" : "opacity-0",
           )}
         >
@@ -68,7 +68,7 @@ export function HeroVideoBackdrop({
       )}
 
       {/* Overlay cinematográfico */}
-      <div className="absolute inset-0 bg-background/55" />
+      <div className="absolute inset-0 bg-background/45" />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/25" />
       <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/40 to-transparent" />
       <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background/90 to-transparent" />

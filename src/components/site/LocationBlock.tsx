@@ -16,9 +16,9 @@ export function LocationBlock() {
   const panorama = location?.panorama_360_url;
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="flex flex-col gap-7 rounded-2xl border border-border/70 bg-surface/25 p-8">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="grid gap-5 sm:gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="flex flex-col gap-6 rounded-2xl border border-border/70 bg-surface/25 p-5 sm:gap-7 sm:p-8">
           <div className="flex gap-3">
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
             <div className="min-w-0">

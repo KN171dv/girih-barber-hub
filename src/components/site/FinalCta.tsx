@@ -22,13 +22,13 @@ export function FinalCta({ backgroundUrl }: { backgroundUrl: string }) {
 
       <div className="mx-auto max-w-3xl px-4 text-center section-y">
         <p className="eyebrow">Seu próximo corte começa aqui.</p>
-        <h2 className="mt-4 text-4xl uppercase leading-[1.02] sm:text-6xl">
+        <h2 className="mt-3 text-[2rem] uppercase leading-[1.08] sm:mt-4 sm:text-5xl sm:leading-[1.02] lg:text-6xl">
           Pronto para renovar o visual?
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">
           Escolha seu barbeiro, agende seu horário e deixe o resto com a Gireh.
         </p>
-        <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:mt-9 sm:flex-row">
           {wa && (
             <Button asChild variant="gold" size="xl" className="tracking-[0.16em]">
               <a href={wa} target="_blank" rel="noreferrer">

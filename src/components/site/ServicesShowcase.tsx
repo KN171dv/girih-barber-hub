@@ -33,7 +33,7 @@ export function ServicesShowcase({
           description="Escolha seu serviço e agende seu horário."
         />
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {services.map((service) => (
             <Reveal key={service.id}>
               <ServiceCard service={service} fallbackWhatsapp={whatsapp} />
@@ -46,15 +46,15 @@ export function ServicesShowcase({
 
         {showCta && (
           <Reveal>
-            <div className="mt-14 flex flex-col items-center gap-4 rounded-lg border border-border/60 bg-background/60 px-6 py-12 text-center">
-              <h3 className="text-3xl uppercase leading-tight sm:text-4xl">
+            <div className="mt-10 flex flex-col items-center gap-4 rounded-lg border border-border/60 bg-background/60 px-5 py-10 text-center sm:mt-14 sm:px-6 sm:py-12">
+              <h3 className="text-2xl uppercase leading-tight sm:text-3xl lg:text-4xl">
                 Pronto para renovar o visual?
               </h3>
               <p className="max-w-xl text-muted-foreground">
                 Escolha seu serviço e agende seu horário com a Gireh Barber.
               </p>
               {ctaHref ? (
-                <Button asChild size="lg" className="mt-2 h-12 tracking-[0.18em]">
+                <Button asChild size="lg" className="mt-2 h-12 w-full tracking-[0.18em] sm:w-auto">
                   <a href={ctaHref} target="_blank" rel="noreferrer">
                     AGENDAR MEU HORÁRIO
                   </a>

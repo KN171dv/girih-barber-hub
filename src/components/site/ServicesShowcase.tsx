@@ -24,7 +24,7 @@ export function ServicesShowcase({
   const ctaHref = whatsappLink(whatsapp, generalMessage());
 
   return (
-    <section id="servicos" className="scroll-mt-24 border-y border-border/60 bg-surface/30 py-24">
+    <section id="servicos" className="scroll-mt-24 border-y border-border/60 bg-surface/30 section-y">
       <div className="mx-auto max-w-6xl px-4">
         <SectionLabel
           index={index}

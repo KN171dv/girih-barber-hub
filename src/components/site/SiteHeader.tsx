@@ -13,6 +13,7 @@ const NAV = [
   { hash: "barbearia", label: "A Barbearia" },
   { hash: "servicos", label: "Serviços" },
   { hash: "barbeiros", label: "Barbeiros" },
+  { hash: "planos", label: "Planos" },
   { hash: "galeria", label: "Galeria" },
   { hash: "localizacao", label: "Localização" },
 ] as const;
@@ -114,7 +115,7 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Navegação principal" className="hidden items-center gap-6 lg:flex xl:gap-8">
+        <nav aria-label="Navegação principal" className="hidden items-center gap-5 lg:flex xl:gap-7">
           {NAV.map((item) => (
             <Link
               key={item.label}

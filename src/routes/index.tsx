@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Instagram, MessageCircle, Navigation, ArrowRight, View } from "lucide-react";
+import { Instagram, MessageCircle, ArrowRight, MapPin, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -10,15 +10,17 @@ import { QuickInfoBar } from "@/components/site/QuickInfoBar";
 import { ServicesShowcase } from "@/components/site/ServicesShowcase";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
 import { BarberCard } from "@/components/site/BarberCard";
-import { ExperienceSection } from "@/components/site/ExperienceSection";
-import { PlansShowcase } from "@/components/site/PlansShowcase";
+import { PlansCarousel } from "@/components/site/PlansCarousel";
 import { FinalCta } from "@/components/site/FinalCta";
 import { HeroSlideshow } from "@/components/site/HeroSlideshow";
+import { HeroVideoBackdrop } from "@/components/site/HeroVideoBackdrop";
 
 import { FaqSection } from "@/components/site/FaqSection";
-import { MapSection } from "@/components/site/MapSection";
+import { LocationBlock } from "@/components/site/LocationBlock";
 import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, onlyDigits, whatsappLink } from "@/lib/whatsapp";
+
+const HERO_VIDEO_ID = "YSxPC0wdCQI";
 
 const PHOTOS = {
   facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
@@ -121,28 +123,30 @@ function Home() {
     <SiteLayout flush>
       {/* HERO */}
       <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
-        <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
+        {heroVideo ? (
+          <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
+        ) : (
+          <HeroVideoBackdrop
+            videoId={HERO_VIDEO_ID}
+            fallbackImage={heroSlides[0]?.url ?? PHOTOS.facadeNight}
+            fallbackAlt="Ambiente da Gireh Barber Shop"
+          />
+        )}
 
         <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-32 sm:pb-20">
           <div className="fade-up flex items-center gap-4">
             <span className="h-px w-12 bg-primary sm:w-20" aria-hidden="true" />
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-xs">
-              11 anos de estilo, tradição e excelência
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
+              Gireh Barber Shop · Desde 2015
             </p>
           </div>
-          <p className="eyebrow fade-up mt-4">Gireh Barber Shop · Desde 2015</p>
-          <h1 className="fade-up mt-5 max-w-4xl text-[2.75rem] uppercase leading-[0.92] tracking-[0.01em] sm:text-7xl lg:text-8xl">
-            {settings?.brand.hero_title || (
-              <>
-                SEU ESTILO.
-                <br />
-                <span className="text-gradient-gold">SUA IDENTIDADE.</span>
-              </>
-            )}
+          <h1 className="fade-up mt-6 max-w-4xl text-[2.4rem] leading-[1.02] tracking-[0.01em] sm:text-6xl lg:text-7xl">
+            11 Anos de Estilo,
+            <br />
+            <span className="text-gradient-gold">Tradição e Excelência</span>
           </h1>
-          <p className="fade-up mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {settings?.brand.hero_subtitle ||
-              "Corte, barba e acabamento com padrão de excelência em Rio das Ostras. Um ambiente pensado para quem valoriza presença, estilo e cuidado em cada detalhe."}
+          <p className="fade-up mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            A Arte de Ser Clássico, a Liberdade de Ser Moderno
           </p>
           <div className="fade-up mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {wa && (
@@ -161,9 +165,11 @@ function Home() {
 
           {/* Linha inferior com informações reais */}
           <div className="fade-up mt-12 border-t border-border/50 pt-6">
-            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3">
-              <div className="min-w-0">
-                <dt className="text-primary">Onde estamos</dt>
+            <dl className="grid gap-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:grid-cols-3 sm:divide-x sm:divide-border/50">
+              <div className="min-w-0 sm:pr-6">
+                <dt className="flex items-center gap-2 text-primary">
+                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> Onde estamos
+                </dt>
                 <dd className="mt-2 truncate text-foreground">
                   {location?.city
                     ? `${location.city}${location.state ? ` — ${location.state}` : ""}`
@@ -171,14 +177,20 @@ function Home() {
                 </dd>
               </div>
               {heroHours && (
-                <div className="min-w-0">
-                  <dt className="text-primary">{heroHours.day}</dt>
-                  <dd className="mt-2 truncate text-foreground">{heroHours.hours}</dd>
+                <div className="min-w-0 sm:px-6">
+                  <dt className="flex items-center gap-2 text-primary">
+                    <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Horário
+                  </dt>
+                  <dd className="mt-2 truncate text-foreground">
+                    {heroHours.day}: {heroHours.hours}
+                  </dd>
                 </div>
               )}
               {contact?.whatsapp && (
-                <div className="min-w-0">
-                  <dt className="text-primary">WhatsApp</dt>
+                <div className="min-w-0 sm:pl-6">
+                  <dt className="flex items-center gap-2 text-primary">
+                    <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" /> Agendamento
+                  </dt>
                   <dd className="mt-2 truncate text-foreground">{formatPhone(contact.whatsapp)}</dd>
                 </div>
               )}
@@ -187,9 +199,6 @@ function Home() {
         </div>
       </section>
 
-
-      {/* INFORMAÇÕES RÁPIDAS */}
-      <QuickInfoBar />
 
       {/* 01 — A BARBEARIA */}
       <section id="barbearia" className="scroll-mt-24 py-24 sm:py-28">
@@ -226,9 +235,6 @@ function Home() {
         </div>
       </section>
 
-      {/* A EXPERIÊNCIA GIREH */}
-      <ExperienceSection />
-
       {/* 02 — SERVIÇOS */}
       <ServicesShowcase index="02" showCta={false} />
 
@@ -257,11 +263,14 @@ function Home() {
         </div>
       </section>
 
-      {/* 04 — GALERIA */}
+      {/* 04 — PLANOS & ASSINATURAS */}
+      <PlansCarousel index="04" />
+
+      {/* 05 — GALERIA */}
       <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="04"
+            index="05"
             eyebrow="Galeria"
             title="O ESPAÇO E O TRABALHO"
             description="Um pouco da nossa rotina, do ambiente e dos trabalhos feitos todos os dias na Gireh."
@@ -272,12 +281,12 @@ function Home() {
         </div>
       </section>
 
-      {/* 05 — INSTAGRAM */}
+      {/* 06 — INSTAGRAM */}
       <section className="py-24 sm:py-28">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
-              index="05"
+              index="06"
               eyebrow="Instagram"
               title="ACOMPANHE A GIREH"
               description="Cortes, transformações, bastidores e o dia a dia da barbearia."
@@ -305,47 +314,15 @@ function Home() {
         </div>
       </section>
 
-      {/* PLANOS */}
-      <PlansShowcase />
+      {/* FAIXA DE INFORMAÇÕES */}
+      <QuickInfoBar />
 
-      {/* 06 — LOCALIZAÇÃO */}
+      {/* 07 — LOCALIZAÇÃO */}
       <section id="contato" className="scroll-mt-24 py-24 sm:py-28">
         <div className="mx-auto max-w-6xl px-4">
-          <SectionLabel
-            index="06"
-            eyebrow="Localização"
-            title="VENHA VIVER A EXPERIÊNCIA GIREH"
-            description={
-              location?.address
-                ? `${location.address} — ${location.city}/${location.state}`
-                : "Endereço a cadastrar no painel administrativo."
-            }
-          />
+          <SectionLabel index="07" eyebrow="Localização" title="VENHA VIVER A EXPERIÊNCIA GIREH" />
           <div id="localizacao" className="mt-10 scroll-mt-24">
-            <MapSection />
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            {location?.directions_url && (
-              <Button asChild variant="gold" size="lg" className="tracking-[0.16em]">
-                <a href={location.directions_url} target="_blank" rel="noreferrer">
-                  <Navigation aria-hidden="true" /> COMO CHEGAR
-                </a>
-              </Button>
-            )}
-            {wa && (
-              <Button asChild variant="outlineGold" size="lg" className="tracking-[0.16em]">
-                <a href={wa} target="_blank" rel="noreferrer">
-                  <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
-                </a>
-              </Button>
-            )}
-            {location?.panorama_360_url && (
-              <Button asChild variant="ghost" size="lg" className="tracking-[0.16em]">
-                <a href={location.panorama_360_url} target="_blank" rel="noreferrer">
-                  <View aria-hidden="true" /> CONHEÇA NOSSO ESPAÇO EM 360°
-                </a>
-              </Button>
-            )}
+            <LocationBlock />
           </div>
         </div>
       </section>

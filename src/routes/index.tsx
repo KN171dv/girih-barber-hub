@@ -283,7 +283,7 @@ function Home() {
 
       {/* 06 — INSTAGRAM */}
       <section className="section-y">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-6 px-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
               index="06"
@@ -293,7 +293,7 @@ function Home() {
             />
           </div>
           {contact?.instagram && (
-            <Button asChild variant="outlineGold" size="xl" className="w-full tracking-[0.16em] lg:w-auto">
+            <Button asChild variant="outlineGold" size="xl" className="w-full whitespace-normal px-4 text-[10px] tracking-[0.12em] sm:text-xs lg:w-auto lg:tracking-[0.16em]">
               <a href={contact.instagram} target="_blank" rel="noreferrer">
                 <Instagram aria-hidden="true" /> SEGUIR NO INSTAGRAM
               </a>

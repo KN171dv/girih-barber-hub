@@ -1,4 +1,4 @@
-import { Check, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "./SectionLabel";
 import { Reveal } from "./Reveal";
@@ -52,16 +52,8 @@ export function PlansCarousel({ index }: { index?: string }) {
             </CarouselContent>
 
             <div className="mt-8 flex items-center justify-end gap-3">
-              <CarouselPrevious
-                className="static translate-y-0 h-11 w-11 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary"
-              >
-                <ChevronLeft />
-              </CarouselPrevious>
-              <CarouselNext
-                className="static translate-y-0 h-11 w-11 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary"
-              >
-                <ChevronRight />
-              </CarouselNext>
+              <CarouselPrevious className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
+              <CarouselNext className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
             </div>
           </Carousel>
         </Reveal>

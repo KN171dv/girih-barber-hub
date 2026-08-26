@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
  * Planos & assinaturas em carrossel horizontal premium.
  * Somente dados já cadastrados no painel são exibidos.
  */
-export function PlansCarousel({ index }: { index?: string }) {
+export function PlansCarousel({ index }: { index?: string | undefined }) {
   const { data: plans = [] } = usePlans();
   const { data: settings } = useSiteSettings();
   const whatsapp = settings?.contact.whatsapp;
@@ -32,7 +32,7 @@ export function PlansCarousel({ index }: { index?: string }) {
     >
       <div className="mx-auto max-w-6xl px-4">
         <SectionLabel
-          index={index}
+          {...(index ? { index } : {})}
           eyebrow="Planos & Assinaturas"
           title="ESCOLHA SEU PLANO GIREH"
           description="Mais praticidade para quem mantém o estilo sempre em dia. Escolha o plano que combina com a sua rotina."
@@ -62,7 +62,7 @@ export function PlansCarousel({ index }: { index?: string }) {
   );
 }
 
-function PlanSlide({ plan, whatsapp }: { plan: Plan; whatsapp?: string }) {
+function PlanSlide({ plan, whatsapp }: { plan: Plan; whatsapp?: string | undefined }) {
   const price = formatPrice(plan.price_cents, plan.price_label);
   const href = whatsappLink(whatsapp, planMessage(plan.name));
   const items = [...plan.included_services, ...plan.benefits];

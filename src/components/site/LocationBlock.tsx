@@ -23,7 +23,7 @@ export function LocationBlock() {
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
             <div className="min-w-0">
               <p className="eyebrow">Endereço</p>
-              <p className="mt-2 text-base text-foreground">
+              <p className="mt-2 break-words text-base text-foreground">
                 {location?.address || <EditableHint>Endereço a cadastrar</EditableHint>}
               </p>
               {location?.city && (
@@ -46,7 +46,7 @@ export function LocationBlock() {
                   </li>
                 )}
                 {hours.map((item, index) => (
-                  <li key={`${item.day}-${index}`} className="flex justify-between gap-6">
+                  <li key={`${item.day}-${index}`} className="flex flex-wrap justify-between gap-x-4 gap-y-0.5">
                     <span>{item.day}</span>
                     <span className="text-foreground">{item.hours}</span>
                   </li>

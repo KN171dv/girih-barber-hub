@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** Marca visualmente um conteúdo ainda não preenchido no painel administrativo. */
+/** Marca visualmente um conteúdo ainda não preenchido (edite os arquivos em src/data/). */
 export function EditableHint({
   children,
   className,

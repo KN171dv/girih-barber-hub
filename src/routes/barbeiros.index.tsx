@@ -46,7 +46,7 @@ function BarbersPage() {
             />
           ))}
           {barbers.length === 0 && (
-            <EditableHint>Barbeiros a cadastrar no painel administrativo</EditableHint>
+            <EditableHint>Barbeiros a cadastrar em src/data/barbers.ts</EditableHint>
           )}
         </div>
       </section>

@@ -50,7 +50,7 @@ function PlansPage() {
         <SectionHeading
           eyebrow="Assinaturas"
           title="Planos mensais"
-          description="Compare os planos, veja benefícios, créditos inclusos e regras. Tudo editável no painel administrativo."
+          description="Compare os planos, veja benefícios, créditos inclusos e regras."
           align="center"
         />
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,7 +58,7 @@ function PlansPage() {
             <PlanCard key={plan.id} plan={plan} onChoose={setChosen} />
           ))}
           {plans.length === 0 && (
-            <EditableHint>Planos a cadastrar no painel administrativo</EditableHint>
+            <EditableHint>Planos a cadastrar em src/data/plans.ts</EditableHint>
           )}
         </div>
 
@@ -103,7 +103,7 @@ function PlansPage() {
               </a>
             </Button>
           ) : (
-            <EditableHint>Cadastre o WhatsApp no painel para ativar a contratação</EditableHint>
+            <EditableHint>Cadastre o WhatsApp em src/data/site-settings.ts para ativar a contratação</EditableHint>
           )}
         </DialogContent>
       </Dialog>

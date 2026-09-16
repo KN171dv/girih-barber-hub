@@ -59,8 +59,8 @@ export function BarberPortfolioDialog({
                 <ImagePlus className="h-7 w-7 text-primary" aria-hidden="true" />
                 <p className="text-sm text-foreground">Portfólio em preparação</p>
                 <p className="max-w-xs text-xs text-muted-foreground">
-                  Novos trabalhos de {barber.name} podem ser adicionados a qualquer momento pelo
-                  painel administrativo.
+                  Novos trabalhos de {barber.name} podem ser adicionados a qualquer momento em
+                  src/data/media.ts.
                 </p>
               </div>
             ) : (
@@ -89,7 +89,7 @@ export function BarberPortfolioDialog({
               </Button>
             ) : (
               <Button variant="outline" className="w-full" disabled>
-                WhatsApp de {barber.name} a configurar
+                WhatsApp de {barber.name} a definir no código
               </Button>
             )}
           </div>

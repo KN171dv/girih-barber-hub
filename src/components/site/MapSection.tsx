@@ -60,7 +60,7 @@ export function MapSection({ showHours = true }: { showHours?: boolean }) {
           />
         ) : (
           <div className="flex h-[380px] items-center justify-center bg-surface/60">
-            <EditableHint>Mapa a cadastrar no painel</EditableHint>
+            <EditableHint>Mapa a cadastrar em src/data/site-settings.ts</EditableHint>
           </div>
         )}
       </div>

@@ -9,7 +9,7 @@ function formatPhone(value: string) {
   return value;
 }
 
-/** Faixa compacta: localização, horários e WhatsApp. Dados vindos do painel. */
+/** Faixa compacta: localização, horários e WhatsApp. Dados vindos de src/data/site-settings.ts. */
 export function QuickInfoBar() {
   const { data: settings } = useSiteSettings();
   const location = settings?.location;
@@ -66,7 +66,7 @@ export function QuickInfoBar() {
                 {formatPhone(phone)}
               </a>
             ) : (
-              <p className="mt-1.5 text-sm text-muted-foreground">A cadastrar no painel</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">A definir no código</p>
             )}
           </div>
         </div>

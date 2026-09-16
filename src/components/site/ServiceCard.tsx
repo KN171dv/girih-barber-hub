@@ -38,14 +38,18 @@ export function ServiceCard({
 
       {service.image_url ? (
         <div className="overflow-hidden">
-        <img
-          src={service.image_url}
-          alt={service.name || "Serviço da Gireh Barber"}
-          loading="lazy"
-          width={1200}
-          height={900}
-          className="h-44 w-full object-cover opacity-90 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:opacity-100"
-        />
+          <img
+            src={service.image_url}
+            alt={
+              service.name
+                ? `${service.name} — ${service.description || "serviço da Gireh Barber Shop"}`
+                : "Serviço da Gireh Barber Shop"
+            }
+            loading="lazy"
+            width={1200}
+            height={900}
+            className="h-44 w-full object-cover opacity-90 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:opacity-100"
+          />
         </div>
       ) : (
         <div className="flex h-24 items-end border-b border-border/60 bg-surface/40 p-6">
@@ -58,7 +62,9 @@ export function ServiceCard({
           {service.name || <EditableHint>Nome do serviço a cadastrar</EditableHint>}
         </h3>
         <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
-          {service.description || <EditableHint>Descrição a cadastrar no painel</EditableHint>}
+          {service.description || (
+            <EditableHint>Descrição a definir em src/data/services.ts</EditableHint>
+          )}
         </p>
 
         <div className="mt-2 flex items-end justify-between gap-4 border-t border-border/60 pt-4">
@@ -83,7 +89,9 @@ export function ServiceCard({
           </Button>
         ) : (
           <p className="mt-4 text-xs text-muted-foreground">
-            <EditableHint>Cadastre o WhatsApp no painel para ativar o agendamento</EditableHint>
+            <EditableHint>
+              Cadastre o WhatsApp em src/data/site-settings.ts para ativar o agendamento
+            </EditableHint>
           </p>
         )}
       </div>

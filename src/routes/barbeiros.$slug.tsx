@@ -7,23 +7,28 @@ import { EditableHint } from "@/components/site/EditableHint";
 import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { barberBookingMessage, whatsappLink } from "@/lib/whatsapp";
 import placeholder from "@/assets/placeholder-barber.jpg";
+import { barbers as staticBarbers } from "@/data/barbers";
 
 export const Route = createFileRoute("/barbeiros/$slug")({
-  head: () => ({
-    meta: [
-      { title: "Perfil do barbeiro — Girih Barbearia" },
-      {
-        name: "description",
-        content:
-          "Perfil do barbeiro da Girih Barbearia em Rio das Ostras: especialidades, apresentação, portfólio e agendamento pelo WhatsApp.",
-      },
-      { property: "og:title", content: "Perfil do barbeiro — Girih Barbearia" },
-      {
-        property: "og:description",
-        content: "Especialidades, portfólio e agendamento direto com o profissional.",
-      },
-    ],
-  }),
+  head: ({ params }) => {
+    const barber = staticBarbers.find((item) => item.slug === params.slug);
+    const title = barber
+      ? `${barber.name} — Barbeiro na Gireh Barber Shop | Rio das Ostras`
+      : "Perfil do barbeiro — Gireh Barber Shop";
+    const description = barber
+      ? `Conheça ${barber.name}, barbeiro da Gireh Barber Shop em Rio das Ostras (RJ). ${barber.bio || "Agende seu horário pelo WhatsApp."}`
+      : "Perfil do barbeiro da Gireh Barber Shop em Rio das Ostras: especialidades, apresentação, portfólio e agendamento pelo WhatsApp.";
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        ...(barber?.photo_url ? [{ property: "og:image", content: barber.photo_url }] : []),
+      ],
+    };
+  },
   component: BarberProfile,
 });
 
@@ -85,7 +90,9 @@ function BarberProfile() {
             <p className="eyebrow">{barber.role_title || "Barbeiro"}</p>
             <h1 className="mt-3 text-5xl sm:text-6xl">{barber.name}</h1>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-              {barber.bio || <EditableHint>Apresentação a cadastrar no painel</EditableHint>}
+              {barber.bio || (
+                <EditableHint>Apresentação a cadastrar em src/data/barbers.ts</EditableHint>
+              )}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
@@ -128,7 +135,9 @@ function BarberProfile() {
                   </a>
                 </Button>
               ) : (
-                <EditableHint>Cadastre o WhatsApp deste barbeiro no painel</EditableHint>
+                <EditableHint>
+                  Cadastre o WhatsApp deste barbeiro em src/data/barbers.ts
+                </EditableHint>
               )}
 
               {barber.instagram && (
@@ -148,7 +157,7 @@ function BarberProfile() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {portfolio.length === 0 && (
               <div className="surface-card flex h-56 items-center justify-center p-6 text-center">
-                <EditableHint>Portfólio a enviar pelo painel administrativo</EditableHint>
+                <EditableHint>Portfólio a cadastrar em src/data/media.ts</EditableHint>
               </div>
             )}
             {portfolio.map((item) =>

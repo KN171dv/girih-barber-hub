@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { MapSection } from "@/components/site/MapSection";
-import { VirtualTour } from "@/components/site/VirtualTour";
 import { EditableHint } from "@/components/site/EditableHint";
 import { useSiteSettings } from "@/lib/site-content";
 
@@ -46,8 +45,6 @@ function LocationPage() {
           </p>
         )}
       </section>
-
-      <VirtualTour />
     </SiteLayout>
   );
 }

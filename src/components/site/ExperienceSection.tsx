@@ -16,7 +16,7 @@ const ICONS: Record<string, typeof Sparkles> = {
 
 /**
  * "A experiência Gireh" — apresentação premium dos diferenciais.
- * Os dados continuam vindo de site_settings.experience (painel administrativo).
+ * Os dados vêm de src/data/site-settings.ts (campo experience).
  */
 export function ExperienceSection() {
   const { data: settings } = useSiteSettings();
@@ -37,7 +37,7 @@ export function ExperienceSection() {
 
         {items.length === 0 ? (
           <div className="mt-10">
-            <EditableHint>Diferenciais a cadastrar no painel administrativo</EditableHint>
+            <EditableHint>Diferenciais a cadastrar em src/data/site-settings.ts</EditableHint>
           </div>
         ) : (
           <div className="mt-14 grid gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60 sm:grid-cols-2 lg:grid-cols-3">

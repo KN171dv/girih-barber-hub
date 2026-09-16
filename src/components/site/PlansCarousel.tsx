@@ -2,7 +2,6 @@ import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionLabel } from "./SectionLabel";
 import { Reveal } from "./Reveal";
-import { EditableHint } from "./EditableHint";
 import {
   Carousel,
   CarouselContent,
@@ -17,12 +16,15 @@ import { cn } from "@/lib/utils";
 
 /**
  * Planos & assinaturas em carrossel horizontal premium.
- * Somente dados já cadastrados no painel são exibidos.
+ * Dados vêm de src/data/plans.ts. Sem planos cadastrados, a seção inteira
+ * fica oculta (não faz sentido publicar uma seção "Planos" vazia).
  */
 export function PlansCarousel({ index }: { index?: string | undefined }) {
   const { data: plans = [] } = usePlans();
   const { data: settings } = useSiteSettings();
   const whatsapp = settings?.contact.whatsapp;
+
+  if (plans.length === 0) return null;
 
   return (
     <section
@@ -37,34 +39,28 @@ export function PlansCarousel({ index }: { index?: string | undefined }) {
           description="Mais praticidade para quem mantém o estilo sempre em dia. Escolha o plano que combina com a sua rotina."
         />
 
-        {plans.length === 0 ? (
-          <div className="mt-8 sm:mt-10">
-            <EditableHint>Planos a cadastrar no painel administrativo</EditableHint>
-          </div>
-        ) : (
-          <Reveal className="mt-8 sm:mt-10 lg:mt-12">
-            <Carousel
-              opts={{ align: "start", loop: plans.length > 3, dragFree: false, containScroll: "trimSnaps" }}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-3 sm:-ml-4">
-                {plans.map((plan) => (
-                  <CarouselItem
-                    key={plan.id}
-                    className="basis-[88%] pl-3 sm:basis-1/2 sm:pl-4 lg:basis-1/3"
-                  >
-                    <PlanSlide plan={plan} whatsapp={whatsapp} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
+        <Reveal className="mt-8 sm:mt-10 lg:mt-12">
+          <Carousel
+            opts={{ align: "start", loop: plans.length > 3, dragFree: false, containScroll: "trimSnaps" }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-3 sm:-ml-4">
+              {plans.map((plan) => (
+                <CarouselItem
+                  key={plan.id}
+                  className="basis-[88%] pl-3 sm:basis-1/2 sm:pl-4 lg:basis-1/3"
+                >
+                  <PlanSlide plan={plan} whatsapp={whatsapp} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
 
-              <div className="mt-6 flex items-center justify-center gap-3 sm:mt-8 sm:justify-end">
-                <CarouselPrevious className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
-                <CarouselNext className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
-              </div>
-            </Carousel>
-          </Reveal>
-        )}
+            <div className="mt-6 flex items-center justify-center gap-3 sm:mt-8 sm:justify-end">
+              <CarouselPrevious className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
+              <CarouselNext className="static h-11 w-11 translate-y-0 border-border/70 bg-background/60 text-foreground hover:border-primary hover:text-primary" />
+            </div>
+          </Carousel>
+        </Reveal>
       </div>
     </section>
   );

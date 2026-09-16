@@ -1,4 +1,4 @@
-import { MapPin, Clock, MessageCircle, Navigation, View } from "lucide-react";
+import { MapPin, Clock, MessageCircle, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EditableHint } from "./EditableHint";
 import { useSiteSettings } from "@/lib/site-content";
@@ -13,7 +13,6 @@ export function LocationBlock() {
   const location = settings?.location;
   const hours = settings?.hours.items ?? [];
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
-  const panorama = location?.panorama_360_url;
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -46,7 +45,10 @@ export function LocationBlock() {
                   </li>
                 )}
                 {hours.map((item, index) => (
-                  <li key={`${item.day}-${index}`} className="flex flex-wrap justify-between gap-x-4 gap-y-0.5">
+                  <li
+                    key={`${item.day}-${index}`}
+                    className="flex flex-wrap justify-between gap-x-4 gap-y-0.5"
+                  >
                     <span>{item.day}</span>
                     <span className="text-foreground">{item.hours}</span>
                   </li>
@@ -74,16 +76,16 @@ export function LocationBlock() {
             </div>
           </div>
 
-          <div className="mt-auto flex flex-col gap-3 pt-2 sm:flex-row">
+          <div className="mt-auto flex flex-col gap-3 pt-2">
             {location?.directions_url && (
-              <Button asChild variant="gold" size="lg" className="tracking-[0.16em] sm:flex-1">
+              <Button asChild variant="gold" size="lg" className="tracking-[0.16em]">
                 <a href={location.directions_url} target="_blank" rel="noreferrer">
                   <Navigation aria-hidden="true" /> COMO CHEGAR
                 </a>
               </Button>
             )}
             {wa && (
-              <Button asChild variant="outlineGold" size="lg" className="tracking-[0.16em] sm:flex-1">
+              <Button asChild variant="outlineGold" size="lg" className="tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
                   <MessageCircle aria-hidden="true" /> AGENDAR HORÁRIO
                 </a>
@@ -103,30 +105,11 @@ export function LocationBlock() {
             />
           ) : (
             <div className="flex h-[360px] items-center justify-center bg-surface/60">
-              <EditableHint>Mapa a cadastrar no painel</EditableHint>
+              <EditableHint>Mapa a cadastrar em src/data/site-settings.ts</EditableHint>
             </div>
           )}
         </div>
       </div>
-
-      {panorama && (
-        <a
-          href={panorama}
-          target="_blank"
-          rel="noreferrer"
-          className="group flex items-center justify-between gap-4 rounded-2xl border border-border/70 bg-surface/25 px-6 py-5 transition-colors hover:border-primary/50"
-        >
-          <span className="flex items-center gap-3">
-            <View className="h-5 w-5 text-primary" aria-hidden="true" />
-            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-foreground">
-              Explore nosso espaço em 360°
-            </span>
-          </span>
-          <span className="text-xs uppercase tracking-[0.2em] text-primary opacity-80 transition-opacity group-hover:opacity-100">
-            Abrir
-          </span>
-        </a>
-      )}
     </div>
   );
 }

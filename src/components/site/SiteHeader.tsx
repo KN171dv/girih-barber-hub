@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Instagram, MessageCircle, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "./BrandLogo";
 import { useSiteSettings } from "@/lib/site-content";
 import { whatsappLink, generalMessage } from "@/lib/whatsapp";
-import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { plans } from "@/data/plans";
+import { subscribeHeaderVisible, getHeaderVisible } from "@/lib/headerVisibility";
 
 const NAV = [
   { hash: "", label: "Início" },
@@ -18,15 +19,22 @@ const NAV = [
   { hash: "localizacao", label: "Localização" },
 ] as const;
 
-export function SiteHeader() {
+const hasPlans = plans.some((plan) => plan.is_active);
+
+export function SiteHeader({ initialHidden = false }: { initialHidden?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const headerVisible = useSyncExternalStore(
+    subscribeHeaderVisible,
+    getHeaderVisible,
+    () => !initialHidden,
+  );
   const { data: settings } = useSiteSettings();
-  const { isAdmin } = useAuth();
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const instagram = settings?.contact.instagram;
   const location = settings?.location;
   const firstHours = settings?.hours.items?.[0];
+  const nav = NAV.filter((item) => item.hash !== "planos" || hasPlans);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -38,10 +46,11 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out",
         scrolled
           ? "border-b border-border/70 bg-background/90 backdrop-blur-xl"
           : "border-b border-border/20 bg-gradient-to-b from-background/80 to-transparent",
+        !headerVisible && "pointer-events-none opacity-0",
       )}
     >
       {/* Faixa superior informativa (some ao rolar) */}
@@ -56,7 +65,9 @@ export function SiteHeader() {
             {(location?.city || location?.address) && (
               <span className="inline-flex items-center gap-2">
                 <MapPin className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                {location?.city ? `${location.city}${location.state ? ` — ${location.state}` : ""}` : location?.address}
+                {location?.city
+                  ? `${location.city}${location.state ? ` — ${location.state}` : ""}`
+                  : location?.address}
               </span>
             )}
             {firstHours && (
@@ -115,8 +126,11 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Navegação principal" className="hidden items-center gap-5 lg:flex xl:gap-7">
-          {NAV.map((item) => (
+        <nav
+          aria-label="Navegação principal"
+          className="hidden items-center gap-5 lg:flex xl:gap-7"
+        >
+          {nav.map((item) => (
             <Link
               key={item.label}
               to="/"
@@ -129,11 +143,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          {isAdmin && (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/admin">Painel</Link>
-            </Button>
-          )}
           {wa && (
             <Button asChild variant="gold" size="sm" className="tracking-[0.16em]">
               <a href={wa} target="_blank" rel="noreferrer">
@@ -145,7 +154,12 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2 lg:hidden">
           {wa && (
-            <Button asChild variant="gold" size="sm" className="h-9 px-3 text-[10px] tracking-[0.14em]">
+            <Button
+              asChild
+              variant="gold"
+              size="sm"
+              className="h-9 px-3 text-[10px] tracking-[0.14em]"
+            >
               <a href={wa} target="_blank" rel="noreferrer">
                 AGENDAR
               </a>
@@ -166,7 +180,7 @@ export function SiteHeader() {
       {open && (
         <div className="border-t border-border/60 bg-background/98 backdrop-blur-xl lg:hidden">
           <nav aria-label="Navegação móvel" className="mx-auto flex max-w-6xl flex-col px-4 py-2">
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <Link
                 key={item.label}
                 to="/"
@@ -177,23 +191,24 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setOpen(false)}
-                className="px-1 py-4 text-sm uppercase tracking-[0.16em] text-muted-foreground"
-              >
-                Painel administrativo
-              </Link>
-            )}
             <div className="flex items-center gap-5 py-4 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               {instagram && (
-                <a href={instagram} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                <a
+                  href={instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2"
+                >
                   <Instagram className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Instagram
                 </a>
               )}
               {wa && (
-                <a href={wa} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2"
+                >
                   <MessageCircle className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> WhatsApp
                 </a>
               )}

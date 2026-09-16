@@ -7,6 +7,7 @@ import { whatsappLink, generalMessage } from "@/lib/whatsapp";
 export function FinalCta({ backgroundUrl }: { backgroundUrl: string }) {
   const { data: settings } = useSiteSettings();
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
+  const logo = settings?.brand.logo_url;
 
   return (
     <section className="relative isolate overflow-hidden border-y border-border/60">
@@ -21,6 +22,15 @@ export function FinalCta({ backgroundUrl }: { backgroundUrl: string }) {
       <div className="absolute inset-0 -z-10 bg-background/85" aria-hidden="true" />
 
       <div className="mx-auto max-w-3xl px-4 text-center section-y">
+        {logo && (
+          <img
+            src={logo}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="mx-auto mb-6 h-16 w-auto opacity-90 sm:h-20"
+          />
+        )}
         <p className="eyebrow">Seu próximo corte começa aqui.</p>
         <h2 className="mt-3 text-[2rem] uppercase leading-[1.08] sm:mt-4 sm:text-5xl sm:leading-[1.02] lg:text-6xl">
           Pronto para renovar o visual?

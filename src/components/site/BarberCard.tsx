@@ -64,14 +64,14 @@ export function BarberCard({ barber, works = [] }: { barber: Barber; works?: Med
             <Button
               variant="gold"
               onClick={() => setOpen(true)}
-              title="Cadastre o WhatsApp deste barbeiro no painel administrativo"
+              title="Cadastre o WhatsApp deste barbeiro em src/data/barbers.ts"
             >
               <MessageCircle aria-hidden="true" /> Agendar com {barber.name}
             </Button>
           )}
           {!bookingHref && (
             <p className="text-center text-[11px] text-muted-foreground">
-              WhatsApp exclusivo a configurar no painel
+              WhatsApp exclusivo a definir no código
             </p>
           )}
         </div>

@@ -24,7 +24,7 @@ export function SiteFooter() {
     <footer className="border-t border-border/60 bg-surface/25">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 text-center sm:grid-cols-2 sm:gap-10 sm:py-16 sm:text-left lg:grid-cols-[1.4fr_1fr_1fr]">
         <div className="flex min-w-0 flex-col items-center sm:items-start">
-          <BrandLogo imgClassName="max-h-12" textClassName="text-3xl" />
+          <BrandLogo imgClassName="max-h-12" textClassName="text-3xl" loading="lazy" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
             {brand?.tagline || "Barbearia em Rio das Ostras — RJ"}
           </p>

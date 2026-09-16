@@ -7,16 +7,22 @@ import { useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, whatsappLink } from "@/lib/whatsapp";
 
 /**
- * Vitrine pública de serviços e preços.
- * Fonte única de dados: tabela `services` (mesma usada pelo painel administrativo).
+ * Tabela de preços: todos os serviços cadastrados, com duração e valor.
+ * Fonte única de dados: src/data/services.ts.
  * Somente serviços com "Ativo = sim" aparecem aqui.
+ *
+ * `variant="compact"` mostra um subtítulo discreto (usado logo após o
+ * showcase individual de serviços, na home). `variant="full"` (padrão)
+ * mostra o cabeçalho completo de seção — usado na página /servicos.
  */
 export function ServicesShowcase({
-  index = "02",
+  index,
   showCta = true,
+  variant = "full",
 }: {
   index?: string;
   showCta?: boolean;
+  variant?: "full" | "compact";
 }) {
   const { data: services = [] } = useServices();
   const { data: settings } = useSiteSettings();
@@ -24,14 +30,32 @@ export function ServicesShowcase({
   const ctaHref = whatsappLink(whatsapp, generalMessage());
 
   return (
-    <section id="servicos" className="scroll-mt-24 border-y border-border/60 bg-surface/30 section-y">
-      <div className="mx-auto max-w-6xl px-4">
-        <SectionLabel
-          index={index}
-          eyebrow="Serviços"
-          title="CORTE, BARBA E CUIDADO EM CADA DETALHE"
-          description="Escolha seu serviço e agende seu horário."
-        />
+    <section
+      id={variant === "full" ? "servicos" : undefined}
+      className="scroll-mt-24 border-y border-border/60 bg-surface/30"
+    >
+      <div
+        className={
+          variant === "full"
+            ? "mx-auto max-w-6xl px-4 section-y"
+            : "mx-auto max-w-6xl px-4 section-y-sm"
+        }
+      >
+        {variant === "full" ? (
+          <SectionLabel
+            {...(index ? { index } : {})}
+            eyebrow="Serviços"
+            title="CORTE, BARBA E CUIDADO EM CADA DETALHE"
+            description="Escolha seu serviço e agende seu horário."
+          />
+        ) : (
+          <Reveal className="mx-auto max-w-2xl text-center sm:mx-0 sm:text-left">
+            <span className="eyebrow">Tabela de Preços</span>
+            <h3 className="mt-3 text-2xl uppercase tracking-[0.04em] sm:text-3xl">
+              Valores e duração
+            </h3>
+          </Reveal>
+        )}
 
         <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {services.map((service) => (
@@ -40,7 +64,7 @@ export function ServicesShowcase({
             </Reveal>
           ))}
           {services.length === 0 && (
-            <EditableHint>Serviços a cadastrar no painel administrativo</EditableHint>
+            <EditableHint>Serviços a cadastrar em src/data/services.ts</EditableHint>
           )}
         </div>
 
@@ -61,7 +85,7 @@ export function ServicesShowcase({
                 </Button>
               ) : (
                 <EditableHint>
-                  Cadastre o WhatsApp no painel para ativar o agendamento
+                  Cadastre o WhatsApp em src/data/site-settings.ts para ativar o agendamento
                 </EditableHint>
               )}
             </div>

@@ -1,5 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { siteSettings } from "@/data/site-settings";
+import { services } from "@/data/services";
+import { barbers } from "@/data/barbers";
+import { mediaItems } from "@/data/media";
+import { plans } from "@/data/plans";
+
+/**
+ * Conteúdo do site: antes vinha do Supabase (lido/editado pelo painel
+ * administrativo), agora é estático — os dados moram em `src/data/` e só
+ * mudam por edição de código. Os hooks abaixo preservam a mesma forma de
+ * uso de antes (`const { data } = useX()`) para não exigir mudanças nos
+ * componentes que os consomem; por baixo, são só os arrays estáticos.
+ */
 
 export type Brand = {
   name: string;
@@ -52,7 +63,6 @@ export type NotificationSettings = {
   expiry_message: string;
 };
 
-
 export type PaymentSettings = { provider: string; enabled: boolean; instructions: string };
 
 export type SiteSettings = {
@@ -65,52 +75,6 @@ export type SiteSettings = {
   notifications: NotificationSettings;
   payments: PaymentSettings;
 };
-
-export const defaultSettings: SiteSettings = {
-  brand: {
-    name: "Girih Barbearia",
-    tagline: "",
-    logo_url: "",
-    hero_title: "",
-    hero_subtitle: "",
-    hero_media_url: "",
-    about_title: "",
-    about_text: "",
-  },
-  contact: {
-    whatsapp: "",
-    phone: "",
-    email: "",
-    instagram: "",
-    facebook: "",
-    tiktok: "",
-    booking_url: "",
-  },
-  location: {
-    address: "",
-    city: "Rio das Ostras",
-    state: "RJ",
-    zip: "",
-    latitude: "",
-    longitude: "",
-    map_embed_url: "",
-    directions_url: "",
-    panorama_360_url: "",
-  },
-  hours: { items: [], note: "" },
-  experience: { title: "A experiência Girih", subtitle: "", items: [] },
-  faq: { items: [] },
-  notifications: {
-    enabled: false,
-    channels: [],
-    renewal_days_before: 0,
-    expiry_days_after: 0,
-    renewal_message: "",
-    expiry_message: "",
-  },
-  payments: { provider: "", enabled: false, instructions: "" },
-};
-
 
 export type Service = {
   id: string;
@@ -170,6 +134,8 @@ export type Plan = {
   is_active: boolean;
 };
 
+// Assinaturas de clientes continuam vindo do Supabase (tabela `subscriptions`,
+// lida diretamente em /minha-conta) — não fazem parte do conteúdo do site.
 export type Subscription = {
   id: string;
   user_id: string | null;
@@ -185,92 +151,28 @@ export type Subscription = {
   created_at: string;
 };
 
-export type Payment = {
-  id: string;
-  subscription_id: string;
-  amount_cents: number | null;
-  status: string;
-  method: string;
-  due_date: string | null;
-  paid_at: string | null;
-  reference: string;
-};
-
-function mergeSettings(rows: { key: string; value: Record<string, unknown> }[]): SiteSettings {
-  const merged = structuredClone(defaultSettings) as unknown as Record<string, unknown>;
-  for (const row of rows) {
-    const base = (merged[row.key] ?? {}) as Record<string, unknown>;
-    merged[row.key] = { ...base, ...(row.value ?? {}) };
-  }
-  return merged as unknown as SiteSettings;
-}
-
 export function useSiteSettings() {
-  return useQuery({
-    queryKey: ["site_settings"],
-    queryFn: async (): Promise<SiteSettings> => {
-      const { data, error } = await supabase.from("site_settings").select("key, value");
-      if (error) throw error;
-      return mergeSettings(
-        (data ?? []) as unknown as { key: string; value: Record<string, unknown> }[],
-      );
-    },
-    staleTime: 60_000,
-  });
+  return { data: siteSettings, isLoading: false as const, error: null as null };
 }
 
 export function useServices(onlyActive = true) {
-  return useQuery({
-    queryKey: ["services", onlyActive],
-    queryFn: async (): Promise<Service[]> => {
-      let query = supabase.from("services").select("*").order("sort_order");
-      if (onlyActive) query = query.eq("is_active", true);
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data ?? []) as Service[];
-    },
-    staleTime: 60_000,
-  });
+  const data = onlyActive ? services.filter((item) => item.is_active) : services;
+  return { data, isLoading: false as const, error: null as null };
 }
 
 export function useBarbers(onlyActive = true) {
-  return useQuery({
-    queryKey: ["barbers", onlyActive],
-    queryFn: async (): Promise<Barber[]> => {
-      let query = supabase.from("barbers").select("*").order("sort_order");
-      if (onlyActive) query = query.eq("is_active", true);
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data ?? []) as Barber[];
-    },
-    staleTime: 60_000,
-  });
+  const data = onlyActive ? barbers.filter((item) => item.is_active) : barbers;
+  return { data, isLoading: false as const, error: null as null };
 }
 
 export function useMedia(collection?: string) {
-  return useQuery({
-    queryKey: ["media_items", collection ?? "all"],
-    queryFn: async (): Promise<MediaItem[]> => {
-      let query = supabase.from("media_items").select("*").order("sort_order");
-      if (collection) query = query.eq("collection", collection);
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data ?? []) as MediaItem[];
-    },
-    staleTime: 60_000,
-  });
+  const data = collection
+    ? mediaItems.filter((item) => item.collection === collection)
+    : mediaItems;
+  return { data, isLoading: false as const, error: null as null };
 }
 
 export function usePlans(onlyActive = true) {
-  return useQuery({
-    queryKey: ["plans", onlyActive],
-    queryFn: async (): Promise<Plan[]> => {
-      let query = supabase.from("plans").select("*").order("sort_order");
-      if (onlyActive) query = query.eq("is_active", true);
-      const { data, error } = await query;
-      if (error) throw error;
-      return (data ?? []) as Plan[];
-    },
-    staleTime: 60_000,
-  });
+  const data = onlyActive ? plans.filter((item) => item.is_active) : plans;
+  return { data, isLoading: false as const, error: null as null };
 }

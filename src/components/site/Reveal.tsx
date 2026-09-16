@@ -1,50 +1,41 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
+import { EASE_SMOOTH } from "@/lib/motion";
 
-/** Revela o conteúdo com um fade sutil quando entra na viewport. */
+const variants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
+const TAGS = {
+  div: motion.div,
+  section: motion.section,
+  article: motion.article,
+  li: motion.li,
+} as const;
+
+/** Revela o conteúdo com fade + leve deslocamento vertical quando entra na viewport. */
 export function Reveal({
   children,
   className,
   delay = 0,
-  as: Tag = "div",
+  as = "div",
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
-  as?: "div" | "section" | "article" | "li";
+  as?: keyof typeof TAGS;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.disconnect();
-          }
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const Component = Tag as "div";
+  const Component = TAGS[as];
 
   return (
     <Component
-      ref={ref}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-      className={cn(
-        "translate-y-5 opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
-        visible && "translate-y-0 opacity-100",
-        className,
-      )}
+      className={className}
+      variants={variants}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.15, margin: "0px 0px -8% 0px" }}
+      transition={{ duration: 0.7, ease: EASE_SMOOTH, delay: delay / 1000 }}
     >
       {children}
     </Component>

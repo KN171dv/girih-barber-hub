@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion, type Variants } from "framer-motion";
 import { Instagram, MessageCircle, ArrowRight, MapPin, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -7,37 +8,84 @@ import { SectionLabel } from "@/components/site/SectionLabel";
 import { Reveal } from "@/components/site/Reveal";
 import { EditableHint } from "@/components/site/EditableHint";
 import { QuickInfoBar } from "@/components/site/QuickInfoBar";
+import { CraftSection, type CraftItem } from "@/components/site/CraftSection";
+import { ServiceStorySection } from "@/components/site/ServiceStorySection";
 import { ServicesShowcase } from "@/components/site/ServicesShowcase";
+import { StatsSection } from "@/components/site/StatsSection";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
+import { BeforeAfterGallery } from "@/components/site/BeforeAfterGallery";
 import { BarberCard } from "@/components/site/BarberCard";
 import { PlansCarousel } from "@/components/site/PlansCarousel";
+import { TestimonialsSection } from "@/components/site/TestimonialsSection";
 import { FinalCta } from "@/components/site/FinalCta";
-import { HeroSlideshow } from "@/components/site/HeroSlideshow";
-import { HeroVideoBackdrop } from "@/components/site/HeroVideoBackdrop";
+import { ScrollVideoIntro } from "@/components/site/ScrollVideoIntro";
+import { HeroAmbientVideo } from "@/components/site/HeroAmbientVideo";
 
 import { FaqSection } from "@/components/site/FaqSection";
 import { LocationBlock } from "@/components/site/LocationBlock";
-import { useBarbers, useMedia, useSiteSettings } from "@/lib/site-content";
+import { useBarbers, useMedia, useServices, useSiteSettings } from "@/lib/site-content";
 import { generalMessage, onlyDigits, whatsappLink } from "@/lib/whatsapp";
+import { EASE_SMOOTH } from "@/lib/motion";
+import { plans as staticPlans } from "@/data/plans";
 
-const HERO_VIDEO_ID = "YSxPC0wdCQI";
+const SCROLL_INTRO_VIDEO_SRC = "/upload/scroll.mp4";
+const HERO_AMBIENT_VIDEO_SRC = "/upload/poshero.mp4";
 
 const PHOTOS = {
-  facadeNight: "/__l5e/assets-v1/eb4c7fbd-3a4e-4783-a8c1-04c85d384f35/image.png",
-  bench: "/__l5e/assets-v1/5b54da88-7296-4cbd-8478-fcc2b61c675d/image-2.png",
-  salon: "/__l5e/assets-v1/054af43b-54a3-4b87-825f-54908cbcc4aa/image-3.png",
-  cut1: "/__l5e/assets-v1/9f074a80-73db-4814-96bd-b737d0023bff/image-4.png",
-  cut2: "/__l5e/assets-v1/58f19a46-f10a-4f4c-8d12-fe410b9c2369/image-5.png",
-  cut3: "/__l5e/assets-v1/9482cdef-33b6-479c-b409-abc1c811950f/image-6.png",
-  facadeDay: "/__l5e/assets-v1/f5716d88-2e85-41de-8470-d7e809ca9e0c/image-7.png",
+  facade: "/upload/shop-facade.png",
+  salon: "/upload/shop-salon-wide.png",
+  salonChairs: "/upload/shop-salon-chairs.png",
+  waitingArea: "/upload/shop-waiting-area.png",
+  benchTools: "/upload/shop-bench-tools.png",
 };
+
+// Fotos de banco de imagens gratuito (Pexels, licença de uso comercial livre)
+// — usadas onde ainda não temos fotos reais específicas pra cada item.
+const STOCK = {
+  craftTesoura: "/upload/stock/craft-tesoura.jpg",
+  craftNavalha: "/upload/stock/craft-navalha.jpg",
+  craftMaquina: "/upload/stock/craft-maquina.jpg",
+};
+
+const CRAFT_ITEMS: CraftItem[] = [
+  {
+    title: "Tesoura",
+    text: "O primeiro corte é sempre com a tesoura. Fio afiado à mão, ângulo certo, movimento contido — é isso que dá contorno e textura ao cabelo, sem atalho.",
+    image: STOCK.craftTesoura,
+    imageAlt: "Barbeiro penteando e finalizando o corte degradê de um cliente",
+  },
+  {
+    title: "Navalha",
+    text: "Depois vem a navalha, para o acabamento que só ela faz: contorno limpo na nuca, na testa, no desenho da barba. Precisão que não deixa margem para erro.",
+    image: STOCK.craftNavalha,
+    imageAlt: "Navalha de barbeiro com cabo de madeira sobre uma bancada",
+  },
+  {
+    title: "Máquina",
+    text: "Por último, a máquina entra para o degradê — a transição entre comprimentos exige calibragem de lâmina e leveza de mão para não deixar marca.",
+    image: STOCK.craftMaquina,
+    imageAlt: "Barbeiro usando máquina de corte no cabelo de um cliente",
+  },
+];
 
 function formatPhone(value: string) {
   const digits = onlyDigits(value).replace(/^55/, "");
-  if (digits.length === 11) return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-  if (digits.length === 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  if (digits.length === 11)
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  if (digits.length === 10)
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
   return value;
 }
+
+const heroContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+
+const heroItem: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_SMOOTH } },
+};
 
 const TITLE = "Gireh Barber Shop | Barbearia em Rio das Ostras – RJ";
 const DESCRIPTION =
@@ -85,27 +133,22 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { data: settings } = useSiteSettings();
   const { data: gallery = [] } = useMedia("galeria");
+  const { data: beforeAfter = [] } = useMedia("antes_depois");
   const { data: barbers = [] } = useBarbers();
   const { data: media = [] } = useMedia();
+  const { data: services = [] } = useServices();
+
+  // A seção de Planos some quando não há planos cadastrados (ver
+  // src/data/plans.ts) — as duas seções seguintes se renumeram sozinhas.
+  const hasPlans = staticPlans.some((plan) => plan.is_active);
+  const plansIndex = "07";
+  const galleryIndex = hasPlans ? "08" : "07";
+  const locationIndex = hasPlans ? "09" : "08";
 
   const wa = whatsappLink(settings?.contact.whatsapp, generalMessage());
   const location = settings?.location;
   const contact = settings?.contact;
   const heroHours = settings?.hours.items?.[0];
-  const heroMedia = settings?.brand.hero_media_url;
-  const heroVideo = heroMedia && /\.(mp4|webm|mov)(\?|$)/i.test(heroMedia) ? heroMedia : null;
-
-  const heroSlidesRaw = [
-    ...(heroMedia && !heroVideo ? [{ url: heroMedia, alt: "Gireh Barber Shop" }] : []),
-    { url: PHOTOS.facadeNight, alt: "Fachada da Gireh Barber Shop à noite" },
-    { url: PHOTOS.salon, alt: "Salão interno da Gireh Barber Shop" },
-    { url: PHOTOS.cut1, alt: "Barbeiro atendendo cliente na Gireh" },
-    { url: PHOTOS.bench, alt: "Bancada de trabalho da Gireh" },
-    { url: PHOTOS.facadeDay, alt: "Fachada da Gireh Barber Shop durante o dia" },
-  ];
-  const heroSlides = heroSlidesRaw.filter(
-    (slide, index) => heroSlidesRaw.findIndex((s) => s.url === slide.url) === index,
-  );
 
   const photos =
     gallery.length > 0
@@ -113,42 +156,55 @@ function Home() {
           .filter((item) => item.media_type !== "video")
           .map((item) => ({ url: item.url, title: item.title || "Gireh Barber Shop" }))
       : [
-          { url: PHOTOS.facadeDay, title: "Fachada" },
+          { url: PHOTOS.facade, title: "Fachada" },
           { url: PHOTOS.salon, title: "Salão" },
-          { url: PHOTOS.cut2, title: "Atendimento" },
-          { url: PHOTOS.bench, title: "Bancada" },
+          { url: PHOTOS.salonChairs, title: "Cadeiras" },
+          { url: PHOTOS.waitingArea, title: "Recepção" },
+          { url: PHOTOS.benchTools, title: "Bancada" },
         ];
 
   return (
-    <SiteLayout flush>
-      {/* HERO */}
-      <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
-        {heroVideo ? (
-          <HeroSlideshow images={heroSlides} videoUrl={heroVideo} />
-        ) : (
-          <HeroVideoBackdrop
-            videoId={HERO_VIDEO_ID}
-            fallbackImage={heroSlides[0]?.url ?? PHOTOS.facadeNight}
-            fallbackAlt="Ambiente da Gireh Barber Shop"
-          />
-        )}
+    <SiteLayout flush initialHeaderHidden>
+      {/* FASE 1 — INTRODUÇÃO EM VÍDEO (pinada, sem texto) */}
+      <ScrollVideoIntro src={SCROLL_INTRO_VIDEO_SRC} poster={PHOTOS.facade} />
 
-        <div className="mx-auto w-full max-w-6xl px-5 pb-12 pt-28 text-center sm:px-4 sm:pb-20 sm:pt-32 sm:text-left">
-          <div className="fade-up flex items-center justify-center gap-3 sm:justify-start sm:gap-4">
+      {/* FASE 2 — HERO */}
+      <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">
+        <HeroAmbientVideo src={HERO_AMBIENT_VIDEO_SRC} poster={PHOTOS.salon} />
+
+        <motion.div
+          variants={heroContainer}
+          initial="hidden"
+          animate="show"
+          className="mx-auto w-full max-w-6xl px-5 pb-12 pt-28 text-center sm:px-4 sm:pb-20 sm:pt-32 sm:text-left"
+        >
+          <motion.div
+            variants={heroItem}
+            className="flex items-center justify-center gap-3 sm:justify-start sm:gap-4"
+          >
             <span className="h-px w-12 bg-primary sm:w-20" aria-hidden="true" />
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary sm:text-[11px]">
               Gireh Barber Shop · Desde 2015
             </p>
-          </div>
-          <h1 className="fade-up mx-auto mt-5 max-w-4xl text-[2rem] leading-[1.08] tracking-[0.01em] sm:mx-0 sm:mt-6 sm:text-6xl sm:leading-[1.02] lg:text-7xl">
+          </motion.div>
+          <motion.h1
+            variants={heroItem}
+            className="mx-auto mt-5 max-w-4xl text-[2rem] leading-[1.08] tracking-[0.01em] sm:mx-0 sm:mt-6 sm:text-6xl sm:leading-[1.02] lg:text-7xl"
+          >
             11 Anos de Estilo,
             <br />
             <span className="text-gradient-gold">Tradição e Excelência</span>
-          </h1>
-          <p className="fade-up mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mx-0 sm:mt-5 sm:text-lg">
+          </motion.h1>
+          <motion.p
+            variants={heroItem}
+            className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mx-0 sm:mt-5 sm:text-lg"
+          >
             A Arte de Ser Clássico, a Liberdade de Ser Moderno
-          </p>
-          <div className="fade-up mt-7 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
+          </motion.p>
+          <motion.div
+            variants={heroItem}
+            className="mt-7 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center"
+          >
             {wa && (
               <Button asChild variant="gold" size="xl" className="tracking-[0.16em]">
                 <a href={wa} target="_blank" rel="noreferrer">
@@ -161,10 +217,13 @@ function Home() {
                 CONHECER A BARBEARIA
               </Link>
             </Button>
-          </div>
+          </motion.div>
 
           {/* Linha inferior com informações reais */}
-          <div className="fade-up mt-9 border-t border-border/50 pt-5 sm:mt-12 sm:pt-6">
+          <motion.div
+            variants={heroItem}
+            className="mt-9 border-t border-border/50 pt-5 sm:mt-12 sm:pt-6"
+          >
             <dl className="grid gap-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:grid-cols-3 sm:gap-5 sm:divide-x sm:divide-border/50 sm:text-[11px] sm:tracking-[0.2em]">
               <div className="min-w-0 sm:pr-6">
                 <dt className="flex items-center justify-center gap-2 text-primary sm:justify-start">
@@ -195,10 +254,9 @@ function Home() {
                 </div>
               )}
             </dl>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
-
 
       {/* 01 — A BARBEARIA */}
       <section id="barbearia" className="scroll-mt-24 section-y">
@@ -207,7 +265,7 @@ function Home() {
             <div className="group overflow-hidden rounded-2xl border border-border/70">
               <img
                 src={PHOTOS.salon}
-                alt="Salão interno da Gireh Barber Shop, com cadeiras de barbeiro"
+                alt="Salão da Gireh Barber Shop, com cadeiras de barbeiro e ambiente decorado"
                 loading="lazy"
                 className="h-[260px] w-full object-cover sm:h-[360px] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] sm:h-[520px]"
               />
@@ -225,7 +283,12 @@ function Home() {
               }
             />
             {wa && (
-              <Button asChild variant="gold" size="lg" className="mt-7 w-full tracking-[0.16em] sm:mt-10 sm:w-auto">
+              <Button
+                asChild
+                variant="gold"
+                size="lg"
+                className="mt-7 w-full tracking-[0.16em] sm:mt-10 sm:w-auto"
+              >
                 <a href={wa} target="_blank" rel="noreferrer">
                   AGENDAR HORÁRIO <ArrowRight aria-hidden="true" />
                 </a>
@@ -235,14 +298,26 @@ function Home() {
         </div>
       </section>
 
-      {/* 02 — SERVIÇOS */}
-      <ServicesShowcase index="02" showCta={false} />
+      {/* 02 — O OFÍCIO */}
+      <CraftSection index="02" items={CRAFT_ITEMS} />
 
-      {/* 03 — EQUIPE */}
+      {/* 03 — SERVIÇOS EM DESTAQUE + TABELA DE PREÇOS */}
+      <ServiceStorySection
+        index="03"
+        services={services}
+        fallbackImage={PHOTOS.benchTools}
+        fallbackWhatsapp={contact?.whatsapp}
+      />
+      <ServicesShowcase variant="compact" showCta={false} />
+
+      {/* 04 — NÚMEROS */}
+      <StatsSection index="04" />
+
+      {/* 05 — EQUIPE */}
       <section id="barbeiros" className="scroll-mt-24 section-y">
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="03"
+            index="05"
             eyebrow="Equipe"
             title="NOSSOS BARBEIROS"
             description="Quatro profissionais, quatro estilos. Veja os trabalhos e agende com quem combina com você."
@@ -257,43 +332,70 @@ function Home() {
               </Reveal>
             ))}
             {barbers.length === 0 && (
-              <EditableHint>Barbeiros a cadastrar no painel administrativo</EditableHint>
+              <EditableHint>Barbeiros a cadastrar em src/data/barbers.ts</EditableHint>
             )}
           </div>
         </div>
       </section>
 
-      {/* 04 — PLANOS & ASSINATURAS */}
-      <PlansCarousel index="04" />
+      {/* 06 — DEPOIMENTOS (conteúdo de exemplo — ver aviso em TestimonialsSection.tsx) */}
+      <TestimonialsSection index="06" />
 
-      {/* 05 — GALERIA */}
-      <section id="galeria" className="scroll-mt-24 border-y border-border/60 bg-surface/20 section-y">
+      {/* PLANOS & ASSINATURAS (oculta automaticamente se não houver planos) */}
+      <PlansCarousel index={plansIndex} />
+
+      {/* GALERIA */}
+      <section
+        id="galeria"
+        className="scroll-mt-24 border-y border-border/60 bg-surface/20 section-y"
+      >
         <div className="mx-auto max-w-6xl px-4">
           <SectionLabel
-            index="05"
+            index={galleryIndex}
             eyebrow="Galeria"
-            title="O ESPAÇO E O TRABALHO"
+            title="TRANSFORMAÇÕES E O DIA A DIA"
             description="Um pouco da nossa rotina, do ambiente e dos trabalhos feitos todos os dias na Gireh."
           />
-          <Reveal className="mt-8 sm:mt-12">
-            <GalleryGrid photos={photos} />
-          </Reveal>
+
+          {beforeAfter.length > 1 && (
+            <div className="mt-10 sm:mt-14">
+              <Reveal>
+                <p className="eyebrow">Antes & Depois</p>
+              </Reveal>
+              <div className="mt-5">
+                <BeforeAfterGallery items={beforeAfter} />
+              </div>
+            </div>
+          )}
+
+          <div className="mt-10 sm:mt-14">
+            <Reveal>
+              <p className="eyebrow">O Espaço e o Trabalho</p>
+            </Reveal>
+            <Reveal className="mt-5">
+              <GalleryGrid photos={photos} />
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* 06 — INSTAGRAM */}
+      {/* INSTAGRAM */}
       <section className="section-y">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-6 px-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
-              index="06"
               eyebrow="Instagram"
               title="ACOMPANHE A GIREH"
               description="Cortes, transformações, bastidores e o dia a dia da barbearia."
             />
           </div>
           {contact?.instagram && (
-            <Button asChild variant="outlineGold" size="xl" className="w-full whitespace-normal px-4 text-[10px] tracking-[0.12em] sm:text-xs lg:w-auto lg:tracking-[0.16em]">
+            <Button
+              asChild
+              variant="outlineGold"
+              size="xl"
+              className="w-full whitespace-normal px-4 text-[10px] tracking-[0.12em] sm:text-xs lg:w-auto lg:tracking-[0.16em]"
+            >
               <a href={contact.instagram} target="_blank" rel="noreferrer">
                 <Instagram aria-hidden="true" /> SEGUIR NO INSTAGRAM
               </a>
@@ -301,26 +403,35 @@ function Home() {
           )}
         </div>
         <div className="mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:mt-12 sm:grid-cols-4">
-          {[PHOTOS.cut1, PHOTOS.cut2, PHOTOS.cut3, PHOTOS.facadeDay].map((src, i) => (
-            <div key={`${src}-${i}`} className="overflow-hidden rounded-xl border border-border/70">
-              <img
-                src={src}
-                alt="Atendimento e ambiente da Gireh Barber Shop"
-                loading="lazy"
-                className="aspect-square w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]"
-              />
-            </div>
-          ))}
+          {[PHOTOS.facade, PHOTOS.salonChairs, PHOTOS.waitingArea, PHOTOS.benchTools].map(
+            (src, i) => (
+              <div
+                key={`${src}-${i}`}
+                className="overflow-hidden rounded-xl border border-border/70"
+              >
+                <img
+                  src={src}
+                  alt="Atendimento e ambiente da Gireh Barber Shop"
+                  loading="lazy"
+                  className="aspect-square w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]"
+                />
+              </div>
+            ),
+          )}
         </div>
       </section>
 
       {/* FAIXA DE INFORMAÇÕES */}
       <QuickInfoBar />
 
-      {/* 07 — LOCALIZAÇÃO */}
+      {/* LOCALIZAÇÃO */}
       <section id="contato" className="scroll-mt-24 section-y">
         <div className="mx-auto max-w-6xl px-4">
-          <SectionLabel index="07" eyebrow="Localização" title="VENHA VIVER A EXPERIÊNCIA GIREH" />
+          <SectionLabel
+            index={locationIndex}
+            eyebrow="Localização"
+            title="VENHA VIVER A EXPERIÊNCIA GIREH"
+          />
           <div id="localizacao" className="mt-8 scroll-mt-24 sm:mt-10">
             <LocationBlock />
           </div>
@@ -331,7 +442,7 @@ function Home() {
       <FaqSection />
 
       {/* CTA FINAL */}
-      <FinalCta backgroundUrl={PHOTOS.facadeNight} />
+      <FinalCta backgroundUrl={PHOTOS.facade} />
     </SiteLayout>
   );
 }

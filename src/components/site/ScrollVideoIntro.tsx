@@ -57,6 +57,15 @@ function getMode(): Mode {
  * continua com exatamente 1 viewport de altura (o `sticky` vira um no-op
  * quando pai e filho têm a mesma altura), então nada muda pra esses casos.
  *
+ * Desempenho no toque: aparelhos mais fracos engasgam (não travam, apenas
+ * soluçam) se o vídeo grande de desktop for decodificado a cada seek. Duas
+ * mitigações: (1) `mobileSrc`, quando informado, troca pra uma versão bem
+ * mais leve (resolução/bitrate menores) só no modo toque — decodificar
+ * menos pixels por quadro é o que mais pesa na CPU; (2) o loop de seek do
+ * modo toque limita a taxa de `currentTime` (ver `SEEK_DELTA`/
+ * `SEEK_INTERVAL_MS` logo abaixo) em vez de buscar a cada quadro do
+ * requestAnimationFrame.
+ *
  * `prefers-reduced-motion`: pula qualquer scroll-scrub (pinado, sticky ou
  * não) — o vídeo toca sozinho em loop, sem nenhuma animação amarrada ao
  * scroll do usuário.
@@ -67,11 +76,14 @@ function getMode(): Mode {
  */
 export function ScrollVideoIntro({
   src,
+  mobileSrc,
   poster,
   scrollDistance = 1.2,
   mobileScrollHeightVh = 250,
 }: {
   src: string;
+  /** Versão mais leve (menor resolução/bitrate) servida só no modo toque — decodificar um vídeo grande a cada seek pesa em aparelhos mais fracos. */
+  mobileSrc?: string;
   poster?: string;
   /** Distância de scroll pinada (só no desktop), em múltiplos da altura da viewport. */
   scrollDistance?: number;
@@ -87,11 +99,16 @@ export function ScrollVideoIntro({
   useIsomorphicLayoutEffect(() => {
     setHeaderVisible(false);
     const section = sectionRef.current;
+    const video = videoRef.current;
     if (section && getMode() === "touch") {
       section.style.height = `${mobileScrollHeightVh}vh`;
+      if (video && mobileSrc) {
+        video.src = mobileSrc;
+        video.load();
+      }
     }
     return () => setHeaderVisible(true);
-  }, [mobileScrollHeightVh]);
+  }, [mobileScrollHeightVh, mobileSrc]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -123,6 +140,19 @@ export function ScrollVideoIntro({
     if (mode === "touch") {
       let rafId = 0;
       let targetProgress = 0;
+      let lastSeekAt = 0;
+
+      // Cada seek força o navegador a decodificar aquele ponto do vídeo —
+      // em aparelhos mais fracos, fazer isso a cada quadro (até 120x/s em
+      // telas de alta taxa de atualização) soma trabalho suficiente pra
+      // engasgar o scroll. Dois limites evitam seeks desnecessários: só
+      // busca se o alvo mudou o bastante (SEEK_DELTA) E se já passou um
+      // intervalo mínimo desde o último seek de verdade (SEEK_INTERVAL_MS)
+      // — isso limita a taxa de decodificação sem prejudicar visivelmente a
+      // fluidez percebida (o vídeo dura ~5s; nenhum salto de ~50ms ali chega
+      // a ser perceptível).
+      const SEEK_DELTA = 0.08;
+      const SEEK_INTERVAL_MS = 80;
 
       function computeProgress() {
         if (!section) return 0;
@@ -137,16 +167,29 @@ export function ScrollVideoIntro({
         return Math.min(1, Math.max(0, raw));
       }
 
-      function onScrollOrResize() {
+      // Lê a posição da seção (getBoundingClientRect força um reflow
+      // síncrono) só dentro do próprio loop de rAF, nunca direto num
+      // handler de `scroll` — um handler de scroll dispara a taxa nativa
+      // de eventos do navegador (pode passar de 60/s no toque), enquanto o
+      // rAF já é naturalmente alinhado com a taxa de repaint da tela. Isso
+      // evita empilhar leituras de layout fora de sincronia com a pintura,
+      // que é outra fonte comum de engasgo em aparelhos mais fracos (além
+      // do custo do seek do vídeo em si).
+      function tick(now: number) {
         targetProgress = computeProgress();
         setHeaderVisible(targetProgress > 0.92);
-      }
 
-      function tick() {
         if (video && video.duration) {
           const targetTime = targetProgress * video.duration;
-          if (Math.abs(video.currentTime - targetTime) > 0.01) {
+          const delta = Math.abs(video.currentTime - targetTime);
+          const dueForSeek = now - lastSeekAt >= SEEK_INTERVAL_MS;
+          // Sempre aplica o frame final (progress 0 ou 1) mesmo fora do
+          // intervalo mínimo, pra não deixar o vídeo "preso" um pouco atrás
+          // do ponto onde o usuário parou de rolar.
+          const isEdge = targetProgress === 0 || targetProgress === 1;
+          if (delta > SEEK_DELTA && (dueForSeek || isEdge)) {
             video.currentTime = targetTime;
+            lastSeekAt = now;
           }
         }
         rafId = requestAnimationFrame(tick);
@@ -158,14 +201,19 @@ export function ScrollVideoIntro({
         // navegadores mobile (Safari iOS em especial) não decodificam/exibem
         // nenhum frame de um <video> que nunca chegou a tocar, mesmo
         // definindo currentTime diretamente — um play()+pause() rápido
-        // resolve isso sem o usuário perceber.
+        // resolve isso sem o usuário perceber. Um seek "de aquecimento" logo
+        // em seguida (fora do loop de scroll) absorve o custo de decodificar
+        // o primeiro ponto arbitrário do vídeo — em aparelhos mais fracos
+        // esse primeiro seek é mais caro que os seguintes (o decoder ainda
+        // não tinha feito esse tipo de busca), e é melhor pagar esse custo
+        // aqui, antes do usuário começar a rolar, do que no meio do scroll.
         video
           .play()
-          .then(() => video.pause())
+          .then(() => {
+            video.pause();
+            video.currentTime = Math.min(0.05, video.duration || 0.05);
+          })
           .catch(() => video.pause());
-        onScrollOrResize();
-        window.addEventListener("scroll", onScrollOrResize, { passive: true });
-        window.addEventListener("resize", onScrollOrResize);
         rafId = requestAnimationFrame(tick);
       }
 
@@ -174,8 +222,6 @@ export function ScrollVideoIntro({
 
       return () => {
         video.removeEventListener("loadedmetadata", setup);
-        window.removeEventListener("scroll", onScrollOrResize);
-        window.removeEventListener("resize", onScrollOrResize);
         if (rafId) cancelAnimationFrame(rafId);
         setHeaderVisible(true);
       };

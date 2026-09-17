@@ -29,6 +29,7 @@ import { EASE_SMOOTH } from "@/lib/motion";
 import { plans as staticPlans } from "@/data/plans";
 
 const SCROLL_INTRO_VIDEO_SRC = "/upload/scroll.mp4";
+const SCROLL_INTRO_VIDEO_MOBILE_SRC = "/upload/scroll-mobile.mp4";
 const HERO_AMBIENT_VIDEO_SRC = "/upload/poshero.mp4";
 
 const PHOTOS = {
@@ -167,7 +168,11 @@ function Home() {
   return (
     <SiteLayout flush initialHeaderHidden>
       {/* FASE 1 — INTRODUÇÃO EM VÍDEO (pinada, sem texto) */}
-      <ScrollVideoIntro src={SCROLL_INTRO_VIDEO_SRC} poster={PHOTOS.facade} />
+      <ScrollVideoIntro
+        src={SCROLL_INTRO_VIDEO_SRC}
+        mobileSrc={SCROLL_INTRO_VIDEO_MOBILE_SRC}
+        poster={PHOTOS.facade}
+      />
 
       {/* FASE 2 — HERO */}
       <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden">

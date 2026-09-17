@@ -69,7 +69,7 @@ export const services: Service[] = [
     duration_minutes: 10,
     price_cents: 1000,
     price_label: "",
-    image_url: "",
+    image_url: "/upload/stock/service-acabamento.jpg",
     whatsapp_override: "",
     highlight: false,
     highlight_label: "",

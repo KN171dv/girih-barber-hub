@@ -52,8 +52,8 @@ export function ServiceCard({
           />
         </div>
       ) : (
-        <div className="flex h-24 items-end border-b border-border/60 bg-surface/40 p-6">
-          <Scissors className="h-6 w-6 text-primary/70" aria-hidden="true" />
+        <div className="flex h-44 items-center justify-center border-b border-border/60 bg-surface/40">
+          <Scissors className="h-10 w-10 text-primary/40" aria-hidden="true" />
         </div>
       )}
 

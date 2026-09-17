@@ -57,9 +57,12 @@ export function ServicesShowcase({
           </Reveal>
         )}
 
-        <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        <div className="mt-8 flex flex-wrap justify-center gap-5 sm:mt-12 sm:gap-6">
           {services.map((service) => (
-            <Reveal key={service.id}>
+            <Reveal
+              key={service.id}
+              className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc((100%-3rem)/3)]"
+            >
               <ServiceCard service={service} fallbackWhatsapp={whatsapp} />
             </Reveal>
           ))}

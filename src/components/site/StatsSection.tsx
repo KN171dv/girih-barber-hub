@@ -58,7 +58,11 @@ export function StatsSection({ index }: { index?: string }) {
               variants={item}
               className="flex flex-col items-center gap-2 py-8 text-center first:pt-0 sm:px-8 sm:py-0 sm:first:pl-0 sm:last:pr-0"
             >
-              {stat.icon && <stat.icon className="mb-1 h-5 w-5 text-primary" aria-hidden="true" />}
+              {stat.icon ? (
+                <stat.icon className="mb-1 h-5 w-5 text-primary" aria-hidden="true" />
+              ) : (
+                <span className="mb-1 h-5 w-5" aria-hidden="true" />
+              )}
               <dt className="order-2 mt-1 text-xs uppercase tracking-[0.22em] text-muted-foreground">
                 {stat.label}
               </dt>

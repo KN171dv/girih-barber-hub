@@ -8,6 +8,18 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+type Mode = "reduced" | "touch" | "desktop";
+
+function getMode(): Mode {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "reduced";
+  const isNarrowScreen = window.matchMedia("(max-width: 767px)").matches;
+  const isTouchDevice =
+    window.matchMedia("(pointer: coarse)").matches ||
+    navigator.maxTouchPoints > 0 ||
+    "ontouchstart" in window;
+  return isNarrowScreen || isTouchDevice ? "touch" : "desktop";
+}
+
 /**
  * Fase 1 — introdução em vídeo, antes do Hero, sem nenhum texto por cima.
  *
@@ -16,63 +28,80 @@ if (typeof window !== "undefined") {
  * `scrollDistance` da altura da viewport; nesse intervalo, o progresso do
  * scroll controla o `currentTime` do vídeo.
  *
- * TOQUE (celular/tablet, qualquer largura): usa a MESMA ideia de "vídeo
- * acompanha o scroll", mas SEM pin. `pin: true` usa `position: fixed`
- * internamente, e a combinação de scroll-por-toque com elemento fixo pinado
- * teve comportamento inconsistente entre navegadores/engines mobile (Safari
- * iOS em especial — travamento visual real relatado em produção). Em vez
- * disso, calculamos o progresso "do jeito tradicional": a posição da seção
- * (`getBoundingClientRect().top`) relativa à viewport, sem prender nada — a
- * seção rola normalmente junto com o resto da página. O progresso vai de 0
- * (seção começando a entrar pela base da tela) a 1 (seção saindo pelo topo),
- * e é aplicado ao vídeo no mesmo loop de requestAnimationFrame usado no
- * desktop. Como nada é pinado, não existe `position: fixed` disputando com o
- * scroll nativo do toque — o pior caso possível é o vídeo não acompanhar o
- * scroll perfeitamente (nunca a página travar).
+ * TOQUE (celular/tablet, qualquer largura): precisa da mesma sensação de
+ * "segura a tela por um scroll mais longo antes de liberar o resto da
+ * página", mas SEM `pin: true`/`position: fixed` via JS — essa combinação
+ * com scroll por toque teve comportamento inconsistente entre engines mobile
+ * (Safari iOS em especial — travamento visual real relatado em produção).
+ * Em vez disso, usa `position: sticky` NATIVO do CSS, que o próprio navegador
+ * gerencia (não uma disputa de JS por cima do toque):
  *
- * `prefers-reduced-motion`: pula qualquer scroll-scrub (pinado ou não) — o
- * vídeo toca sozinho em loop, sem nenhuma animação amarrada ao scroll do
- * usuário.
+ *   - O wrapper externo (`sectionRef`) é esticado para `mobileScrollHeightVh`
+ *     (250vh por padrão) SÓ nesse modo — via `style.height` aplicado no
+ *     client, nunca via classe CSS fixa, porque a altura tem que nascer
+ *     exatamente do mesmo `getMode()` que decide qual branch de JS roda (ver
+ *     nota abaixo sobre isso).
+ *   - Dentro dele, um segundo `div` com `position: sticky; top: 0` preenche
+ *     a viewport (`100svh`) e "gruda" no topo enquanto o usuário rola pelo
+ *     wrapper alto — comportamento nativo do navegador, sem JS brigando com
+ *     o gesto de toque.
+ *   - O progresso do scroll é calculado como `-rect.top / (rect.height -
+ *     viewportHeight)`: 0 quando o topo do wrapper alcança o topo da
+ *     viewport (vídeo gruda e começa no primeiro frame), 1 quando o wrapper
+ *     termina de rolar por baixo do vídeo grudado (ele solta e a página
+ *     segue pro resto do conteúdo). Aplicado ao vídeo no mesmo loop de
+ *     requestAnimationFrame usado no desktop.
  *
- * Em todos os casos sem pin, um IntersectionObserver cuida da visibilidade
- * do header fixo (ver src/lib/headerVisibility.ts), revelando-o quando a
- * seção passa a ocupar menos da metade da viewport.
+ * Importante: o wrapper só fica alto quando `getMode()` (chamado uma vez,
+ * antes da pintura) diz "touch" — no modo desktop ou reduced-motion ele
+ * continua com exatamente 1 viewport de altura (o `sticky` vira um no-op
+ * quando pai e filho têm a mesma altura), então nada muda pra esses casos.
+ *
+ * `prefers-reduced-motion`: pula qualquer scroll-scrub (pinado, sticky ou
+ * não) — o vídeo toca sozinho em loop, sem nenhuma animação amarrada ao
+ * scroll do usuário.
+ *
+ * Em todos os casos sem pin do GSAP, um IntersectionObserver ou o próprio
+ * cálculo de progresso cuidam da visibilidade do header fixo (ver
+ * src/lib/headerVisibility.ts).
  */
 export function ScrollVideoIntro({
   src,
   poster,
   scrollDistance = 1.2,
+  mobileScrollHeightVh = 250,
 }: {
   src: string;
   poster?: string;
   /** Distância de scroll pinada (só no desktop), em múltiplos da altura da viewport. */
   scrollDistance?: number;
+  /** Altura do wrapper sticky no celular, em vh — controla por quanto tempo de scroll o vídeo fica preso na tela. */
+  mobileScrollHeightVh?: number;
 }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Roda antes da primeira pintura do navegador — evita um flash do header
-  // visível por uma fração de segundo antes de sumir (useEffect normal só
-  // dispara depois do primeiro paint).
+  // Roda antes da primeira pintura do navegador — evita tanto o flash do
+  // header visível quanto um "pulo" de altura do wrapper (100svh -> alto)
+  // depois que a página já apareceu pro usuário.
   useIsomorphicLayoutEffect(() => {
     setHeaderVisible(false);
+    const section = sectionRef.current;
+    if (section && getMode() === "touch") {
+      section.style.height = `${mobileScrollHeightVh}vh`;
+    }
     return () => setHeaderVisible(true);
-  }, []);
+  }, [mobileScrollHeightVh]);
 
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
     if (!section || !video) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isNarrowScreen = window.matchMedia("(max-width: 767px)").matches;
-    const isTouchDevice =
-      window.matchMedia("(pointer: coarse)").matches ||
-      navigator.maxTouchPoints > 0 ||
-      "ontouchstart" in window;
+    const mode = getMode();
 
     // prefers-reduced-motion: nenhuma animação amarrada ao scroll, pinada ou não.
-    if (reduced) {
+    if (mode === "reduced") {
       video.loop = true;
       video.play().catch(() => {
         /* autoplay pode ser bloqueado antes de qualquer interação; o poster cobre o vazio */
@@ -90,22 +119,21 @@ export function ScrollVideoIntro({
       };
     }
 
-    // Toque (celular/tablet) ou tela estreita: scroll-scrub SEM pin.
-    if (isNarrowScreen || isTouchDevice) {
+    // Toque (celular/tablet) ou tela estreita: scroll-scrub via position: sticky nativo.
+    if (mode === "touch") {
       let rafId = 0;
       let targetProgress = 0;
 
       function computeProgress() {
         if (!section) return 0;
         const rect = section.getBoundingClientRect();
-        // Essa seção é sempre a primeira coisa da página (nada acima dela
-        // pra "entrar pela base da tela"), então o progresso é simplesmente
-        // o quanto ela já rolou pra fora do topo da viewport: 0 no início
-        // (topo da seção = topo da viewport, vídeo no primeiro frame) até 1
-        // quando ela termina de sair (sem reservar espaço extra de scroll,
-        // já que não há pin — a "distância" do efeito é a própria altura da
-        // seção).
-        const raw = -rect.top / rect.height;
+        const scrollable = rect.height - window.innerHeight;
+        if (scrollable <= 0) return 0;
+        // 0 quando o topo do wrapper alto alcança o topo da viewport (o
+        // vídeo, grudado por `position: sticky`, começa no primeiro frame),
+        // 1 quando o wrapper termina de rolar por baixo dele (solta e a
+        // página segue pro resto do conteúdo).
+        const raw = -rect.top / scrollable;
         return Math.min(1, Math.max(0, raw));
       }
 
@@ -202,19 +230,18 @@ export function ScrollVideoIntro({
   }, [scrollDistance]);
 
   return (
-    <div
-      ref={sectionRef}
-      className="relative isolate h-[100svh] w-full overflow-hidden bg-background"
-    >
-      <video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+    <div ref={sectionRef} className="relative isolate h-[100svh] w-full bg-background">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
     </div>
   );
 }

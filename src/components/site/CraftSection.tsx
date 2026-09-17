@@ -66,8 +66,9 @@ function CraftBlock({ item, index }: { item: CraftItem; index: number }) {
 }
 
 /**
- * "O Ofício": conta a história da técnica por trás de cada instrumento —
- * tesoura, navalha e máquina — em blocos alternados de imagem e texto.
+ * "Na Prática": mostra resultados reais de cortes feitos na barbearia —
+ * cada um com nome, estilo e uma descrição curta — em blocos alternados de
+ * imagem e texto.
  */
 export function CraftSection({ index, items }: { index?: string; items: CraftItem[] }) {
   return (
@@ -75,9 +76,9 @@ export function CraftSection({ index, items }: { index?: string; items: CraftIte
       <div className="mx-auto max-w-6xl px-4">
         <SectionLabel
           {...(index ? { index } : {})}
-          eyebrow="O Ofício"
-          title="TÉCNICA QUE SE APRENDE COM O TEMPO"
-          description="Cada instrumento tem sua função, seu momento e seu cuidado. É essa atenção ao detalhe que separa um corte qualquer de um corte bem feito."
+          eyebrow="Na Prática"
+          title="O RESULTADO QUE FALA POR SI"
+          description="De clássicos atemporais a desenhos autorais: alguns cortes que já saíram daqui, cada um pensado pro cliente que senta na cadeira — nunca copiado de referência nenhuma."
         />
 
         <div className="mt-12 sm:mt-16 lg:mt-20">

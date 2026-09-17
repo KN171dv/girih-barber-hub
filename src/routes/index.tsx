@@ -39,32 +39,31 @@ const PHOTOS = {
   benchTools: "/upload/shop-bench-tools.png",
 };
 
-// Fotos de banco de imagens gratuito (Pexels, licença de uso comercial livre)
-// — usadas onde ainda não temos fotos reais específicas pra cada item.
+// Fotos reais de cortes feitos na barbearia.
 const STOCK = {
-  craftTesoura: "/upload/stock/craft-tesoura.jpg",
-  craftNavalha: "/upload/stock/craft-navalha.jpg",
-  craftMaquina: "/upload/stock/craft-maquina.jpg",
+  craftCorte1: "/upload/stock/craft-corte-1.jpg",
+  craftCorte2: "/upload/stock/craft-corte-2.jpg",
+  craftCorte3: "/upload/stock/craft-corte-3.jpg",
 };
 
 const CRAFT_ITEMS: CraftItem[] = [
   {
-    title: "Tesoura",
-    text: "O primeiro corte é sempre com a tesoura. Fio afiado à mão, ângulo certo, movimento contido — é isso que dá contorno e textura ao cabelo, sem atalho.",
-    image: STOCK.craftTesoura,
-    imageAlt: "Barbeiro penteando e finalizando o corte degradê de um cliente",
+    title: "Taper Clássico",
+    text: "Risca bem marcada, fade impecável nas laterais e o volume certo no topo — um corte que nunca sai de moda porque não depende de tendência, só de execução precisa.",
+    image: STOCK.craftCorte1,
+    imageAlt: "Cliente de perfil com corte taper clássico, cabelo penteado e fade nas laterais",
   },
   {
-    title: "Navalha",
-    text: "Depois vem a navalha, para o acabamento que só ela faz: contorno limpo na nuca, na testa, no desenho da barba. Precisão que não deixa margem para erro.",
-    image: STOCK.craftNavalha,
-    imageAlt: "Navalha de barbeiro com cabo de madeira sobre uma bancada",
+    title: "Volume com Atitude",
+    text: "Topo cheio, volume trabalhado e uma barba com contorno afiado até a régua do pescoço — presença que aparece antes mesmo da primeira palavra.",
+    image: STOCK.craftCorte2,
+    imageAlt: "Cliente de perfil com topo volumoso, fade nas laterais e barba com contorno definido",
   },
   {
-    title: "Máquina",
-    text: "Por último, a máquina entra para o degradê — a transição entre comprimentos exige calibragem de lâmina e leveza de mão para não deixar marca.",
-    image: STOCK.craftMaquina,
-    imageAlt: "Barbeiro usando máquina de corte no cabelo de um cliente",
+    title: "Design na Navalha",
+    text: "Traços geométricos desenhados à navalha, direto no couro cabeludo — para quem quer um corte que também é assinatura.",
+    image: STOCK.craftCorte3,
+    imageAlt: "Detalhe de desenho geométrico feito à navalha na lateral do cabelo",
   },
 ];
 

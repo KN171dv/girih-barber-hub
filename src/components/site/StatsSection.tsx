@@ -2,8 +2,7 @@ import { Star } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import { AnimatedCounter } from "./AnimatedCounter";
 import { EASE_SMOOTH } from "@/lib/motion";
-
-const FOUNDING_YEAR = 2015;
+import { STATS_CONFIG } from "@/data/stats";
 
 const container: Variants = {
   hidden: {},
@@ -17,17 +16,22 @@ const item: Variants = {
 
 /**
  * Números animados: contam de 0 até o valor final quando a seção entra
- * na tela. Anos de tradição é calculado a partir do ano de fundação;
- * clientes atendidos e avaliação média são estimativas de referência —
- * ajuste os valores abaixo quando tiver os números reais da barbearia.
+ * na tela. Os valores em si vêm de src/data/stats.ts — edite lá (não aqui)
+ * quando tiver os números reais de clientes atendidos e avaliação média.
  */
 export function StatsSection({ index }: { index?: string }) {
-  const years = Math.max(1, new Date().getFullYear() - FOUNDING_YEAR);
+  const years = Math.max(1, new Date().getFullYear() - STATS_CONFIG.foundingYear);
 
   const stats = [
     { value: years, suffix: "+", label: "Anos de tradição" },
-    { value: 5000, suffix: "+", label: "Clientes atendidos" },
-    { value: 4.9, suffix: " / 5", decimals: 1, label: "Avaliação média", icon: Star },
+    { value: STATS_CONFIG.clientsServed, suffix: "+", label: "Clientes atendidos" },
+    {
+      value: STATS_CONFIG.averageRating,
+      suffix: " / 5",
+      decimals: 1,
+      label: "Avaliação média",
+      icon: Star,
+    },
   ];
 
   return (

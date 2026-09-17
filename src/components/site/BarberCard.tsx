@@ -2,12 +2,20 @@ import { useState } from "react";
 import { Camera, Images, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarberPortfolioDialog } from "./BarberPortfolioDialog";
+import { useSiteSettings } from "@/lib/site-content";
 import type { Barber, MediaItem } from "@/lib/site-content";
 import { barberBookingMessage, whatsappLink } from "@/lib/whatsapp";
 
 export function BarberCard({ barber, works = [] }: { barber: Barber; works?: MediaItem[] }) {
   const [open, setOpen] = useState(false);
-  const bookingHref = whatsappLink(barber.whatsapp, barberBookingMessage(barber.name));
+  const { data: settings } = useSiteSettings();
+  // Sem WhatsApp próprio cadastrado, cai no WhatsApp geral da barbearia com
+  // o nome do barbeiro na mensagem — nunca mostra texto de placeholder pro
+  // visitante do site.
+  const bookingHref = whatsappLink(
+    barber.whatsapp || settings?.contact.whatsapp,
+    barberBookingMessage(barber.name),
+  );
 
   return (
     <article className="surface-card flex h-full flex-col overflow-hidden">
@@ -61,18 +69,11 @@ export function BarberCard({ barber, works = [] }: { barber: Barber; works?: Med
               </a>
             </Button>
           ) : (
-            <Button
-              variant="gold"
-              onClick={() => setOpen(true)}
-              title="Cadastre o WhatsApp deste barbeiro em src/data/barbers.ts"
-            >
+            // Só cai aqui se nem o WhatsApp geral estiver cadastrado em
+            // src/data/site-settings.ts — não deveria acontecer em produção.
+            <Button variant="gold" onClick={() => setOpen(true)}>
               <MessageCircle aria-hidden="true" /> Agendar com {barber.name}
             </Button>
-          )}
-          {!bookingHref && (
-            <p className="text-center text-[11px] text-muted-foreground">
-              WhatsApp exclusivo a definir no código
-            </p>
           )}
         </div>
       </div>

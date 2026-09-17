@@ -95,20 +95,18 @@ function BarberProfile() {
               )}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              {barber.specialties.length === 0 ? (
-                <EditableHint>Especialidades a cadastrar</EditableHint>
-              ) : (
-                barber.specialties.map((item) => (
+            {barber.specialties.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {barber.specialties.map((item) => (
                   <span
                     key={item}
                     className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs text-primary"
                   >
                     {item}
                   </span>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
 
             <div className="mt-8 surface-card space-y-4 p-6">
               <label className="block text-sm text-muted-foreground" htmlFor="servico">
@@ -135,9 +133,9 @@ function BarberProfile() {
                   </a>
                 </Button>
               ) : (
-                <EditableHint>
-                  Cadastre o WhatsApp deste barbeiro em src/data/barbers.ts
-                </EditableHint>
+                <p className="text-center text-sm text-muted-foreground">
+                  Agendamento indisponível no momento.
+                </p>
               )}
 
               {barber.instagram && (
@@ -157,7 +155,7 @@ function BarberProfile() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {portfolio.length === 0 && (
               <div className="surface-card flex h-56 items-center justify-center p-6 text-center">
-                <EditableHint>Portfólio a cadastrar em src/data/media.ts</EditableHint>
+                <p className="text-sm text-muted-foreground">Portfólio em preparação.</p>
               </div>
             )}
             {portfolio.map((item) =>

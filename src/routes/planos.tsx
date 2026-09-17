@@ -58,7 +58,9 @@ function PlansPage() {
             <PlanCard key={plan.id} plan={plan} onChoose={setChosen} />
           ))}
           {plans.length === 0 && (
-            <EditableHint>Planos a cadastrar em src/data/plans.ts</EditableHint>
+            <p className="col-span-full py-10 text-center text-sm text-muted-foreground">
+              Nenhum plano disponível no momento. Fale com a gente pelo WhatsApp pra saber mais.
+            </p>
           )}
         </div>
 
@@ -103,7 +105,9 @@ function PlansPage() {
               </a>
             </Button>
           ) : (
-            <EditableHint>Cadastre o WhatsApp em src/data/site-settings.ts para ativar a contratação</EditableHint>
+            <p className="text-center text-sm text-muted-foreground">
+              Contratação indisponível no momento.
+            </p>
           )}
         </DialogContent>
       </Dialog>

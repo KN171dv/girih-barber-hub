@@ -26,11 +26,17 @@ if (typeof window !== "undefined") {
  * quadros anteriores a cada seek, o que é a causa mais comum de "engasgo"
  * nesse tipo de efeito (mais impactante que o valor de scrub em si).
  *
- * No mobile e com prefers-reduced-motion, pula o pin/scrub: o vídeo toca
- * sozinho em loop e a seção rola normalmente, como qualquer outra — pin +
- * scrub de vídeo têm suporte inconsistente em navegadores mobile (Safari
- * iOS em especial) e a interação de "segurar a tela rolando" é bem menos
- * natural em toque do que com mouse/trackpad.
+ * Em qualquer dispositivo com TOQUE (não só telas estreitas — também
+ * tablet/notebook touch em paisagem) e com prefers-reduced-motion, pula o
+ * pin/scrub: o vídeo toca sozinho em loop e a seção rola normalmente, como
+ * qualquer outra. `pin: true` usa `position: fixed` internamente, e a
+ * combinação de scroll-por-toque com elemento fixo pinado tem
+ * comportamento inconsistente entre navegadores/engines mobile (Safari iOS
+ * em especial — problema de renderização/composição, não de lógica JS, então
+ * não é 100% reproduzível em teste automatizado por CDP). Detectar só por
+ * largura de tela não é suficiente: um tablet ou notebook touch em telas
+ * largas também cairia no pin por engano, então checamos capacidade de
+ * toque diretamente.
  *
  * O header fixo do site fica escondido (ver src/lib/headerVisibility.ts)
  * enquanto essa seção domina a tela — sem pin (desktop) isso é decidido pelo
@@ -66,9 +72,13 @@ export function ScrollVideoIntro({
     if (!section || !video) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    const isNarrowScreen = window.matchMedia("(max-width: 767px)").matches;
+    const isTouchDevice =
+      window.matchMedia("(pointer: coarse)").matches ||
+      navigator.maxTouchPoints > 0 ||
+      "ontouchstart" in window;
 
-    if (reduced || isMobile) {
+    if (reduced || isNarrowScreen || isTouchDevice) {
       video.loop = true;
       video.play().catch(() => {
         /* autoplay pode ser bloqueado antes de qualquer interação; o poster cobre o vazio */

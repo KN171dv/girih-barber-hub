@@ -90,6 +90,8 @@ const heroItem: Variants = {
 const TITLE = "Gireh Barber Shop | Barbearia em Rio das Ostras – RJ";
 const DESCRIPTION =
   "Barbearia em Rio das Ostras (RJ): corte, barba e acabamento com atendimento de alto padrão na Gireh Barber Shop. Agende seu horário pelo WhatsApp.";
+// URL real de produção — troque aqui se o domínio mudar (ex.: domínio próprio).
+const SITE_URL = "https://girih-barber-hub.vercel.app/";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -99,12 +101,12 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://girih-barber-hub.lovable.app/" },
+      { property: "og:url", content: SITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: "https://girih-barber-hub.lovable.app/" }],
+    links: [{ rel: "canonical", href: SITE_URL }],
     scripts: [
       {
         type: "application/ld+json",

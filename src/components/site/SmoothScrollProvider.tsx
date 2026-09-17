@@ -21,6 +21,14 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       autoRaf: false,
+      // Sem isso, o toque faz scroll "nativo" (passthrough) em vez de
+      // passar pelo loop do Lenis — é exatamente o que quebra a sincronia
+      // com o pin do GSAP ScrollTrigger em touch (o vídeo trava/reseta
+      // porque o ScrollTrigger não fica sabendo do progresso do toque no
+      // mesmo ritmo que sabe do wheel). Com `syncTouch`, toque passa pelo
+      // mesmo loop de scroll do wheel, mantendo tudo sincronizado.
+      syncTouch: true,
+      syncTouchLerp: 0.075,
     });
 
     lenis.on("scroll", ScrollTrigger.update);

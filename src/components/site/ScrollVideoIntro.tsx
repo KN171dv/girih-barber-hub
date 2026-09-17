@@ -62,9 +62,11 @@ function getMode(): Mode {
  * mitigações: (1) `mobileSrc`, quando informado, troca pra uma versão bem
  * mais leve (resolução/bitrate menores) só no modo toque — decodificar
  * menos pixels por quadro é o que mais pesa na CPU; (2) o loop de seek do
- * modo toque limita a taxa de `currentTime` (ver `SEEK_DELTA`/
- * `SEEK_INTERVAL_MS` logo abaixo) em vez de buscar a cada quadro do
- * requestAnimationFrame.
+ * modo toque limita a taxa de `currentTime` de forma ADAPTATIVA — mede o
+ * tempo real entre quadros do rAF e só reduz a taxa de seek se o aparelho
+ * de fato estiver demorando mais que o esperado, em vez de aplicar um teto
+ * fixo conservador pra todo mundo (ver `FAST_SEEK_INTERVAL_MS`/
+ * `SLOW_SEEK_INTERVAL_MS` logo abaixo).
  *
  * `prefers-reduced-motion`: pula qualquer scroll-scrub (pinado, sticky ou
  * não) — o vídeo toca sozinho em loop, sem nenhuma animação amarrada ao
@@ -141,18 +143,26 @@ export function ScrollVideoIntro({
       let rafId = 0;
       let targetProgress = 0;
       let lastSeekAt = 0;
+      let lastTickAt = 0;
+      // Média móvel do intervalo real entre quadros — começa otimista (60fps)
+      // e só sobe se o aparelho de fato demonstrar quadros mais lentos.
+      let avgFrameDt = 16.7;
 
-      // Cada seek força o navegador a decodificar aquele ponto do vídeo —
-      // em aparelhos mais fracos, fazer isso a cada quadro (até 120x/s em
-      // telas de alta taxa de atualização) soma trabalho suficiente pra
-      // engasgar o scroll. Dois limites evitam seeks desnecessários: só
-      // busca se o alvo mudou o bastante (SEEK_DELTA) E se já passou um
-      // intervalo mínimo desde o último seek de verdade (SEEK_INTERVAL_MS)
-      // — isso limita a taxa de decodificação sem prejudicar visivelmente a
-      // fluidez percebida (o vídeo dura ~5s; nenhum salto de ~50ms ali chega
-      // a ser perceptível).
-      const SEEK_DELTA = 0.08;
-      const SEEK_INTERVAL_MS = 80;
+      // Cada seek força o navegador a decodificar aquele ponto do vídeo, o
+      // que custa CPU. Só limitar a taxa é necessário quando o aparelho
+      // realmente não aguenta — a grande maioria roda liso a ~30 seeks/s, e
+      // um limite fixo conservador pra todo mundo deixa o vídeo com cara de
+      // "picotado" à toa nesses aparelhos. Em vez de um teto fixo, o
+      // intervalo mínimo entre seeks é calculado a partir do tempo real
+      // entre quadros do rAF (suavizado por média móvel): se os quadros
+      // estão vindo no ritmo esperado, busca perto do teto rápido (~30fps);
+      // se estão demorando mais que isso (sinal real de que o aparelho está
+      // engasgando — inclusive por causa do próprio custo do seek anterior),
+      // o intervalo cresce sozinho, na mesma proporção, até um teto mais
+      // conservador pros casos realmente fracos.
+      const SEEK_DELTA = 0.02;
+      const FAST_SEEK_INTERVAL_MS = 33; // ~30 seeks/s em aparelhos saudáveis
+      const SLOW_SEEK_INTERVAL_MS = 100; // teto pra aparelhos realmente fracos
 
       function computeProgress() {
         if (!section) return 0;
@@ -176,13 +186,26 @@ export function ScrollVideoIntro({
       // que é outra fonte comum de engasgo em aparelhos mais fracos (além
       // do custo do seek do vídeo em si).
       function tick(now: number) {
+        if (lastTickAt) {
+          const frameDt = now - lastTickAt;
+          avgFrameDt = avgFrameDt * 0.85 + frameDt * 0.15;
+        }
+        lastTickAt = now;
+
         targetProgress = computeProgress();
         setHeaderVisible(targetProgress > 0.92);
 
         if (video && video.duration) {
           const targetTime = targetProgress * video.duration;
           const delta = Math.abs(video.currentTime - targetTime);
-          const dueForSeek = now - lastSeekAt >= SEEK_INTERVAL_MS;
+          // Intervalo mínimo entre seeks, adaptado ao ritmo real dos
+          // últimos quadros (2x a média — dá margem pro custo do próprio
+          // seek sem exigir dois seeks caros consecutivos).
+          const seekInterval = Math.min(
+            SLOW_SEEK_INTERVAL_MS,
+            Math.max(FAST_SEEK_INTERVAL_MS, avgFrameDt * 2),
+          );
+          const dueForSeek = now - lastSeekAt >= seekInterval;
           // Sempre aplica o frame final (progress 0 ou 1) mesmo fora do
           // intervalo mínimo, pra não deixar o vídeo "preso" um pouco atrás
           // do ponto onde o usuário parou de rolar.

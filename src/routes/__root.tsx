@@ -105,6 +105,15 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="pt-BR" className="dark">
       <head>
         <HeadContent />
+        {/* Roda antes de qualquer restauração automática do navegador — sem
+            isso, dar F5 (ou usar voltar/avançar) reabre a página na mesma
+            posição de scroll de antes em vez do topo. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; } window.scrollTo(0, 0);",
+          }}
+        />
       </head>
       <body>
         {children}

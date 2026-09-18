@@ -1,8 +1,13 @@
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setHeaderVisible } from "@/lib/headerVisibility";
 import { useIsomorphicLayoutEffect } from "@/lib/useIsomorphicLayoutEffect";
+
+// Some assim que o progresso da Fase 1 passa disso — "nos primeiros 5-10%".
+const HINT_HIDE_AT = 0.08;
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -75,6 +80,11 @@ function getMode(): Mode {
  * Em todos os casos sem pin do GSAP, um IntersectionObserver ou o próprio
  * cálculo de progresso cuidam da visibilidade do header fixo (ver
  * src/lib/headerVisibility.ts).
+ *
+ * Dica de scroll: no primeiro instante (progresso <= `HINT_HIDE_AT`), um
+ * indicador discreto ("Role para explorar" + seta) avisa que a seção reage
+ * ao scroll — some suavemente assim que o progresso passa disso, nos dois
+ * modos (touch e desktop), e nunca aparece com prefers-reduced-motion.
  */
 export function ScrollVideoIntro({
   src,
@@ -94,6 +104,7 @@ export function ScrollVideoIntro({
 }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
 
   // Roda antes da primeira pintura do navegador — evita tanto o flash do
   // header visível quanto um "pulo" de altura do wrapper (100svh -> alto)
@@ -102,12 +113,18 @@ export function ScrollVideoIntro({
     setHeaderVisible(false);
     const section = sectionRef.current;
     const video = videoRef.current;
-    if (section && getMode() === "touch") {
+    const mode = getMode();
+    if (section && mode === "touch") {
       section.style.height = `${mobileScrollHeightVh}vh`;
       if (video && mobileSrc) {
         video.src = mobileSrc;
         video.load();
       }
+    }
+    // Evita o flash da dica de scroll pra quem já pediu menos movimento —
+    // nesse modo ela nunca é revelada por scroll mesmo (ver useEffect abaixo).
+    if (mode === "reduced" && hintRef.current) {
+      hintRef.current.style.opacity = "0";
     }
     return () => setHeaderVisible(true);
   }, [mobileScrollHeightVh, mobileSrc]);
@@ -119,8 +136,22 @@ export function ScrollVideoIntro({
 
     const mode = getMode();
 
-    // prefers-reduced-motion: nenhuma animação amarrada ao scroll, pinada ou não.
+    // Escreve o opacity direto no DOM (sem estado do React) pra não
+    // re-renderizar a cada quadro — só troca de fato quando cruza o limiar,
+    // no mesmo espírito do setHeaderVisible.
+    let hintShown = true;
+    function updateHint(progress: number) {
+      const shouldShow = progress <= HINT_HIDE_AT;
+      if (shouldShow === hintShown) return;
+      hintShown = shouldShow;
+      if (hintRef.current) hintRef.current.style.opacity = shouldShow ? "1" : "0";
+    }
+
+    // prefers-reduced-motion: nenhuma animação amarrada ao scroll, pinada ou não —
+    // a dica de "role para explorar" também some, já que rolar não muda nada
+    // no vídeo nesse modo (ele já toca sozinho em loop).
     if (mode === "reduced") {
+      if (hintRef.current) hintRef.current.style.opacity = "0";
       video.loop = true;
       video.play().catch(() => {
         /* autoplay pode ser bloqueado antes de qualquer interação; o poster cobre o vazio */
@@ -194,6 +225,7 @@ export function ScrollVideoIntro({
 
         targetProgress = computeProgress();
         setHeaderVisible(targetProgress > 0.92);
+        updateHint(targetProgress);
 
         if (video && video.duration) {
           const targetTime = targetProgress * video.duration;
@@ -278,6 +310,7 @@ export function ScrollVideoIntro({
         scrub: 1,
         onUpdate: (self) => {
           targetProgress = self.progress;
+          updateHint(self.progress);
         },
         // Header só aparece quando o pin solta (fim da Fase 1); volta a
         // sumir se o usuário rolar de volta pra dentro da introdução.
@@ -310,6 +343,26 @@ export function ScrollVideoIntro({
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
         />
+
+        {/* Dica de scroll — visível só no primeiro instante (ver HINT_HIDE_AT),
+            escrita/escondida via ref (não estado do React) pelos loops de
+            tick acima. Puramente decorativa: não captura clique/toque. */}
+        <div
+          ref={hintRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-8 z-10 flex justify-center opacity-100 transition-opacity duration-500 ease-out sm:bottom-12"
+        >
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-1.5 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-[0.28em]">
+              Role para explorar
+            </span>
+            <ChevronDown className="h-5 w-5" aria-hidden="true" />
+          </motion.div>
+        </div>
       </div>
     </div>
   );

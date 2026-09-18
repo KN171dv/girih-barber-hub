@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { WhatsAppFab } from "./WhatsAppFab";
+import { InstagramFab } from "./InstagramFab";
 import { SmoothScrollProvider } from "./SmoothScrollProvider";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export function SiteLayout({
         <main className={cn("flex-1", !flush && "pt-20")}>{children}</main>
         <SiteFooter />
         <WhatsAppFab />
+        <InstagramFab />
       </div>
     </SmoothScrollProvider>
   );

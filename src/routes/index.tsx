@@ -386,7 +386,7 @@ function Home() {
       </section>
 
       {/* INSTAGRAM */}
-      <section className="section-y">
+      <section id="instagram" className="scroll-mt-24 section-y">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-6 px-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="min-w-0">
             <SectionLabel
